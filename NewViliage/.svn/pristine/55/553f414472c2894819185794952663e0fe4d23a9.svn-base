@@ -1,0 +1,285 @@
+@charset "utf-8";
+/* CSS Document */
+
+.bus_header{
+	font: normal 1.4em "微软雅黑";
+	padding:10px 10px 10px 10px;
+}
+
+.bus_header_more{
+	display:inline;
+	float:right;
+}
+
+.bus_opt_table{	
+	background-color:#fff;
+	margin-bottom:10px;
+}
+
+.bus_opt_td{
+	text-align:center;
+	padding:14px 0px 10px 0px;
+}
+
+.bus_opt_td img{
+	height:30px;
+}
+
+.bus_opt_td_right_line{
+	width:1px;
+	height:30px;
+	background-color:#e5e5e5;
+}
+
+.bus_opt_name{
+	font: normal 1.4em "微软雅黑";
+	margin-top:6px;
+	color:#666;
+}
+
+
+
+
+.bus_list_month{
+	font: normal 1.4em "微软雅黑";
+	padding:10px 0 10px 10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.bus_list_more{
+	font: normal 1.4em "微软雅黑";
+	color:#999;
+	padding:10px 10px 10px 0;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+
+.bus_list_table{
+	background-color:#fff;
+	border-top:solid 1px #e5e5e5;
+	margin-bottom:10px;
+}
+
+.bus_list_margin{
+	width:10px;
+	
+}
+
+.bus_list_tim{
+	font: normal 1.4em "微软雅黑";
+	width:50px;
+	border-bottom:solid 1px #e5e5e5;
+	color:#CCC;
+}
+
+.bus_list_date{
+	font-size:0.7em;
+}
+
+.bus_list_icon{
+	width:50px;
+	padding:10px 0 10px 0;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.bus_list_icon img{
+	height:32px;
+		
+}
+
+.bus_list_txt{
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.bus_list_money{
+	font: normal 1.4em "微软雅黑";
+}
+
+.bus_list_use{
+	font: normal 1.4em "微软雅黑";
+	color:#666;
+}
+
+.bus_list_none{
+	font: normal 1.4em "微软雅黑";
+	color:#666;
+	padding:10px 10px 0px 10px;
+}
+
+
+
+.bus_stats_table{
+	background-color:#fff;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;
+	margin-bottom:10px;
+}
+
+.bus_stats_hd{
+	font: normal 1.6em "微软雅黑";
+	font-weight:bold;
+	padding:10px 0px 10px 0px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+
+/*经营动态首页统计饼图*/
+#stat_chart_shade{
+	display:none;
+	position:fixed;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	z-index:100;
+	width:100%;
+	height:100%;
+	background-color:#000;
+	
+	filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.5; /*Firefox私有，透明度50%*/
+	opacity:0.5;/*其他，透明度50%*/	
+}
+
+#stat_chart_bg{
+	position:fixed;
+	z-index:101;
+	width:100%;
+	height:100%;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+}
+
+#stat_chart_context{
+	z-index:102;
+	position:fixed;
+	top:50px;
+	left:50%;
+	width:80%;
+	margin-left:-42%;
+	box-shadow: 0 0 10px #999;
+	background-color:#fff;	
+	padding:10px 10px 10px 10px;
+}
+
+#stat_chart_return{
+	display:inline-block;
+	font: normal 1.6em "微软雅黑";
+	border:1px solid #e5e5e5;
+	padding:5px 20px 5px 20px;
+	margin-top:10px;
+}
+
+.stat_chart_hd{
+	font: normal 1.6em "微软雅黑";
+	font-weight:bold;
+	padding:0px 0px 10px 0px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.echarts_legend_table{
+	font: normal 1.4em "微软雅黑";
+}
+
+.bus_more_bg{
+	background-color:#FFF;
+	padding:10px 10px 10px 10px;
+	text-align:center;
+}
+
+.bus_more_txt{
+	font: normal 1.4em "微软雅黑";
+	border:solid 1px #e5e5e5;
+	padding:8px 10px 8px 10px;
+}
+
+#bus_more_pop_shade{
+	display:none;
+	position:fixed;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	z-index:100;
+	width:100%;
+	height:100%;
+	background-color:#000;
+	
+	filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.5; /*Firefox私有，透明度50%*/
+	opacity:0.5;/*其他，透明度50%*/	
+}
+
+#bus_more_pop_bg{
+	display:none;
+	position:fixed;
+	z-index:101;
+	width:100%;
+	height:100%;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+}
+
+#bus_more_pop_table{
+	margin:20px 10px 20px 10px;
+}
+
+#bus_more_input_name{
+	font:normal 1.6em "微软雅黑";
+}
+
+#bus_more_input{
+	border:solid 1px #e5e5e5;
+}
+
+#acount_time{
+	background-color:#fff;
+	font:normal 1.6em "微软雅黑";
+	text-align:right;
+	margin-right:5px;
+	border:none;
+	padding:5px 10px 5px 0px;
+}
+
+#bus_more_pop_context{
+	z-index:102;
+	position:fixed;
+	top:150px;
+	left:50%;
+	width:80%;
+	margin-left:-42%;
+	box-shadow: 0 0 10px #999;
+	background-color:#fff;	
+	padding:10px 10px 10px 10px;
+}
+
+#bus_more_pop_btn{
+	display:inline-block;
+	font: normal 1.6em "微软雅黑";
+	border:1px solid #e5e5e5;
+	padding:5px 20px 5px 20px;
+	margin-top:10px;
+}
+
+
+.bus_button2{
+	border:solid 1px #DDDDDD;
+	border-radius: 6px;	
+	margin: 10px 10px 0px 10px;
+	padding: 9px 10px 9px 10px;
+	background-color: #ffffff;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+
+.bus_button_txt2{
+	display:block;
+	text-align: center;
+	font: normal 2em "微软雅黑";
+	letter-spacing:5px;
+	color: #666666;
+}

@@ -1,0 +1,45 @@
+package com.moa.viliage.model;
+
+public class News {
+	//id
+	private   String id;
+	// 新闻标题
+	private   String title;
+	//新闻类型
+	private   String type;
+	//新闻链接
+	private  String news_url;
+	
+	private String time;
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getNews_url() {
+		return news_url;
+	}
+	public void setNews_url(String news_url) {
+		this.news_url = news_url;
+	}
+
+}

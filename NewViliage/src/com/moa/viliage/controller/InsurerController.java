@@ -1,0 +1,160 @@
+package com.moa.viliage.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+
+import org.slf4j.LoggerFactory;
+
+import com.jfinal.aop.Before;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.moa.viliage.common.Utils;
+import com.moa.viliage.db.Tables.INSApply;
+import com.moa.viliage.db.Tables.INSProd;
+import com.moa.viliage.db.Tables.TAlipayUser;
+import com.moa.viliage.interceptor.FarmerAuthInterceptor;
+import com.moa.viliage.interceptor.TokenInterceptor;
+import com.moa.viliage.loan.FiProd;
+import com.moa.viliage.mail.MailContentLoader;
+import com.moa.viliage.mail.MailUtils;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+import com.moa.viliage.result.obj.EmptyResultObj;
+import com.moa.viliage.service.LoanService;
+import com.moa.viliage.token.AlipayUserInfo;
+import com.moa.viliage.token.AlipayUserInfoCache;
+
+/**
+ * 保险控制器
+ * 
+ * @author zf21100
+ *
+ */
+public class InsurerController extends Controller {
+
+	private static final String TAG = "InsurerController";
+
+	/** 申请保险 */
+	@Before({ TokenInterceptor.class, FarmerAuthInterceptor.class })
+	public void apply() {
+		String id = getPara("id");//产品ID
+		String ins_num = getPara("ins_num");
+		String ins_term = getPara("ins_term");
+		String phone = getPara("phone");
+		String applyId = Utils.createUUID();
+		String alipayUserId = getAttr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+		int userid = Db.queryInt("SELECT id FROM alipay_user au WHERE au.alipay_user_id=?", alipayUserId);
+		Record applyRecord = new Record();
+		applyRecord.set(INSApply.COL_ID, applyId);
+		applyRecord.set(INSApply.COL_INSPROD_ID, id);
+		applyRecord.set(INSApply.COL_FARMER_ID, alipayUserId);
+		applyRecord.set(INSApply.COL_USER_ID, userid);
+		applyRecord.set(INSApply.COL_INSPROD_NUM, ins_num);
+		applyRecord.set(INSApply.COL_INSPROD_TERM, ins_term);
+		applyRecord.set(INSApply.COL_PHONE, phone);
+		applyRecord.set(INSApply.COL_APPLY_DATE, new Date());
+		applyRecord.set(INSApply.COL_INS_STATUS, 1);
+		applyRecord.set(INSApply.COL_MODIFY_DATE, new Date());
+
+		if (Db.save(INSApply.TABLE_NAME, applyRecord)) {
+        String formerInfo =  MailContentLoader.getFormInfo(alipayUserId);
+        MailUtils.sendInsureNotifyMail(applyId, formerInfo);
+		}
+		setAttr("result", 123);
+		setAttr("code", 0);
+		renderJson();
+	}
+
+	/** 产品列表 */
+	// @Before(TokenInterceptor.class)
+	public void prodList() {
+		String tokenStr = getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String userid = userInfoObj.id;
+		Record record = Db.findById(TAlipayUser.TABLE_NAME, userid);
+		if (record == null) {
+			renderJson();
+		}
+		String provice = record.getStr(TAlipayUser.COL_PROVINCE);
+		String city = record.getStr(TAlipayUser.COL_CITY);
+		String district = record.getStr(TAlipayUser.COL_DISTRICT);
+		if (district == null || city == null || district == null) {
+			setAttr("code", ResultCodes.RET_PARAM_ERROR);
+			renderJson();
+		}
+		;
+		ArrayList<FiProd> fiProdList = new ArrayList<FiProd>();
+		setAttr("result",
+				Db.find("SELECT F.* FROM insurer B INNER JOIN ins_prod F ON B.id=F.ins_id AND F.STATUS=0 AND IF(district IS NULL OR F.district='',IF(F.city IS NULL OR F.city='',IF(F.province IS NULL OR F.province='',1=1,F.province=?),F.city=?),F.district=?)",
+						provice, city, district));
+		setAttr("code", 0);
+		renderJson();
+
+	}
+
+	/** 保险公司列表 */
+	// @Before(TokenInterceptor.class)
+	public void insurerList() {
+		setAttr("code", 0);
+		setAttr("result", Db.find("SELECT * FROM insurer "));
+		renderJson();
+	}
+
+	/** 我的保险 */
+	//@Before(TokenInterceptor.class)
+	public void myInsurer() {
+		String tokenStr = getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String userid = userInfoObj.id;
+		setAttr("result",Db.find("SELECT ia.id ids, ia.*, ip.*,i.* FROM ins_apply ia LEFT JOIN ins_prod ip ON ia.insprod_id = ip.id LEFT JOIN insurer i  ON ip.ins_id=i.id WHERE ia.user_id=?",userid));
+		setAttr("code", 0);
+		renderJson();
+	}
+	public void prodDetail() {
+		String id = getPara("id");
+		setAttr("result",Db.findById(INSProd.TABLE_NAME, id));
+		setAttr("code", 0);
+		renderJson();
+	}
+	/** 新增评价信息 */
+	//@Before(TokenInterceptor.class)
+	public void saveEvaluate() {
+		String id=getPara("id");
+		String sfjjzjxq=getPara("sfjjzjxq");
+		String dkxysd=getPara("dkxysd");
+		String gzryfwtd=getPara("gzryfwtd");
+		if (Utils.isEmpty(sfjjzjxq)||Utils.isEmpty(dkxysd)||Utils.isEmpty(gzryfwtd)) {
+			
+		}
+	   //在贷款记录中新增评价项
+	  if(Db.update("update ins_apply set sfjjbxxq=?,bxxysd=?,gzryfwtd=? where id=?",sfjjzjxq,dkxysd,gzryfwtd,id)!=1){
+		  
+	  }
+	  setAttr("code", 0);
+	  renderJson();
+	}
+	/** 查询评价信息 */
+	//@Before(TokenInterceptor.class)
+	public void queryEvaluate() {
+			String id = getPara("id");
+			setAttr("result",Db.findFirst("select sfjjbxxq AS 'sfjjzjxq' ,bxxysd AS 'dkxysd',gzryfwtd AS 'gzryfwtd',a.* from ins_apply  a where a.id=?",id));
+			setAttr("code", 0);
+			renderJson();
+	}
+	/** 保险报案功能 */
+	//@Before(TokenInterceptor.class)
+	public void reportInsurer() {
+			String id = getPara("id");
+			if (Utils.isEmpty(id)) {
+				setAttr("code", ResultCodes.RET_PARAM_ERROR);
+			}
+			 if(Db.update("UPDATE ins_apply SET ins_status=6 WHERE id=?",id)!=1){
+				 setAttr("code", ResultCodes.RET_DATA_NOT_EXIST);
+			  }
+			 setAttr("code", ResultCodes.RET_SUCCESS);
+			renderJson();
+	}
+
+}

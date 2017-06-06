@@ -1,0 +1,68 @@
+package com.moa.viliage.controller;
+
+import java.util.Map;
+
+import org.slf4j.LoggerFactory;
+
+import com.jfinal.aop.Before;
+import com.jfinal.core.Controller;
+import com.moa.viliage.interceptor.TokenInterceptor;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+import com.moa.viliage.result.obj.EmptyResultObj;
+import com.moa.viliage.service.FarmerService;
+
+/**
+ * 农场主控制器
+ * @author zf21100
+ *
+ */
+public class FarmerController extends Controller {
+	private static final String TAG = "FarmerController";
+	
+	
+	/** 农场主认证 **/
+	@Before(TokenInterceptor.class)
+	public void farmerAuth() {
+		ResultInfo<EmptyResultObj> ret = new ResultInfo<EmptyResultObj>(ResultCodes.RET_UNKNOWN_ERROR);
+		try {
+			ret = FarmerService.doAuth(this);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("farmerAuth error " + e.getMessage());
+		}
+		renderText(ret.toJson());
+	}
+	
+	@Before(TokenInterceptor.class)
+	public void checkAuth() {
+		ResultInfo<EmptyResultObj> ret = new ResultInfo<EmptyResultObj>(ResultCodes.RET_UNKNOWN_ERROR);
+		try {
+			ret = FarmerService.checkIfFarmerAuthed(this);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("farmerAuth error " + e.getMessage());
+		}
+		renderText(ret.toJson());
+	}
+	
+	@Before(TokenInterceptor.class)
+	public void farmerInfo() {
+		ResultInfo<Map<String, Object>> ret = new ResultInfo<Map<String, Object>>(ResultCodes.RET_UNKNOWN_ERROR);
+		try {
+			ret = FarmerService.farmerInfo(this);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("farmerAuth error " + e.getMessage());
+		}
+		renderText(ret.toJson());
+	}
+	@Before(TokenInterceptor.class)
+	public void updateFarmerInfo() {
+		ResultInfo<Map<String, Object>> ret = new ResultInfo<Map<String, Object>>(ResultCodes.RET_UNKNOWN_ERROR);
+		try {
+			ret = FarmerService.updateFamerInfo(this);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("farmerAuth error " + e.getMessage());
+		}
+		renderText(ret.toJson());
+	}
+	
+}

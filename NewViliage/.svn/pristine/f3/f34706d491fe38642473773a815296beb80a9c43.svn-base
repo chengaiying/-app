@@ -1,0 +1,718 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>农场主、合作社认证</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<script src="../js/buttonStyle.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/fastclick.js" ></script>
+<script src="../js/ajaxfileupload.js"></script>
+<script src="../js/PictureCompress.js"></script>
+
+<link href="../picker/css/mui.picker.css" rel="stylesheet" />
+<link href="../picker/css/mui.poppicker.css" rel="stylesheet" />
+<script src="../picker/js/mui.min.js"></script>
+<script src="../picker/js/mui.picker.js"></script>
+<script src="../picker/js/mui.poppicker.js"></script>
+<script src="../picker/js/city.data-3.js" charset="utf-8"></script>
+<script src="../js/big_click.js"></script>
+<style>
+	canvas{width: 100%;border: 1px solid #000000;}
+	#big_photo,#big_photo2{
+		width:60%;
+		position:absolute;top:0;left:0;right: 0;bottom: 0;margin: auto;
+	}
+	#big_photo_div,#big_photo_div2 {
+		width:100%;
+		height:100%;
+		display: none;
+		background: black;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 1000;
+		/*opacity: 0.7;*/
+		background-color: rgba(0,0,0,0.6);
+		}
+</style>
+</head>
+
+<body>
+<div id="step1" style="display:none"><!--未认证的展示 -->
+<div class="guide_group" align="center">
+<img src="../img/indexBanner.png"/>
+<div class="guide_txt">您尚未进行认证</div>
+</div>
+<br /><br />
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="guide_help_group">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="50%" class="guide_help_title" align="center">进行认证后可享受</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="guide_help_context"><img src="../img/n1.png"/><span class="guide_help_txt">农业部提供相关优惠政策</span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="guide_help_context"><img src="../img/n2.png"/><span class="guide_help_txt">贷款，保险等增值服务&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+
+
+<div class="form_button1" onclick="myBtnClick(this,'#0091cb','./farmer_auth.html')"><div class="form_button_txt1">农场主认证</div></div>
+<div class="form_button1" onclick="myBtnClick(this,'#0091cb','./cooperative_auth.html')"><div class="form_button_txt1">合作社认证</div></div>
+<br /><br />
+</div>
+
+<div id="step2" style="display:none"><!--认证后的展示 -->
+
+<div class="form_group_no_border">
+<img id="farmer_cooperative" src="../img/auth_banner1.jpg" width="100%" />
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">姓名</td>
+<td class="form_item_content_view" align="right" id="farmer"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name cooperative_name">农场名称</td>
+<td class="form_item_content_view" align="right" id="farmerName"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">地址（省市县）</td>
+<td class="form_item_content_view_long" align="right" id="farmerAddr"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">街道、乡镇</td>
+<td class="form_item_content_view" align="right" id="farmerSubAddr"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">身份证号</td>
+<td class="form_item_content_view" align="right" id="farmerId"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">手机号码</td>
+<td class="form_item_content_view" align="right" id="farmerTel"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table id="business_licence_table"  cellpadding="0" cellspacing="0" border="0" class="form_item" style="display:none"><tr valign="top" ><td class="form_item_margin"></td>
+<td class="form_item_name">营业执照注册号</td>
+<td class="form_item_content_view" align="right" id="business_licence"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">个人照片</td>
+<td class="form_item_img_view" align="right">
+<img src="../img/nophoto.png" width="40px" id="photo1" onclick="myBtnClick(this,'#0091cb','');big_function('photo1',60);" /></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">执照</td>
+<td class="form_item_img_view" align="right">
+<img src="../img/nophoto.png" width="40px" id="photo2"  onclick="myBtnClick(this,'#0091cb','');big_function('photo2',60);" /></td>
+</tr></table>
+</div>
+<div class="border_1px_site"><div class="border_1px"></div>
+</div>
+</div>
+
+
+<div class="form_button1" id="change" style="display:none" onclick="myBtnClick(this,'#0091cb','');"><div class="form_button_txt1">编辑</div></div>
+
+
+
+<div id="editChange" style="display: none;" > <!--认证后的编辑-->
+	   <div class="form_group_no_border">
+<img id="ground_img_0" src="../img/auth_banner.jpg" width="100%" />
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>姓名</td>
+<td class="form_item_input" align="right"><input id="farmer0" type="text" placeholder="请填写" size="15"  /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name farmer_cooperative"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span><span id="gaibian">家庭农场全称</span></td>
+<td class="form_item_input" align="right"><input id="farmerName0" type="text" placeholder="请填写" size="20" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>地址（省市县）</td>
+<td class="form_item_content" align="right" style="width:50%">
+<input id="province0" type="text" style="display:none" />
+<input id="city0" type="text" style="display:none" />
+<input id="district0" type="text" style="display:none" />
+
+<div id="showCityPicker0">请选择</div>
+
+<script>
+(function($, doc){
+	$.init();
+	$.ready(function(){
+		var cityPicker3 = new $.PopPicker({layer:3});
+		cityPicker3.setData(cityData3);
+		var showCityPickerButton = doc.getElementById('showCityPicker0');
+		var cityResult3 = doc.getElementById('showCityPicker0');
+		showCityPickerButton.addEventListener('tap', function(event) {
+			cityPicker3.show(function(items) {
+				if(typeof(items[1].text)=="undefined") items[1].text="其它";
+				if(typeof(items[2].text)=="undefined") items[2].text="其它";
+				
+				doc.getElementById('province0').value=items[0].text;
+				doc.getElementById('city0').value=items[1].text;
+				doc.getElementById('district0').value=items[2].text;
+				
+				cityResult3.innerText = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;				
+				//return false;//返回 false 可以阻止选择框的关闭
+			});
+		}, false);
+	});
+})(mui, document);
+</script>
+
+</td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">&nbsp;&nbsp;</span>街道、乡镇</td>
+<td class="form_item_input" align="right"><input id="viliage0" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+
+
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>身份证号</td>
+<td class="form_item_input" align="right"><input id="farmerId0" type="text" placeholder="请填写" size="20"  /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>手机号码</td>
+<td class="form_item_input" align="right"><input id="farmerTel0" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table id="business_licence_table0" cellpadding="0" cellspacing="0" border="0" class="form_item">
+		<tr valign="top">
+			<td class="form_item_margin"></td>
+			<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>营业执照注册号</td>
+			<td class="form_item_input" align="right"><input id="business_licence0" type="text" placeholder="请填写" size="15" /></td>
+			<td class="form_item_no_unit"></td>
+	    </tr>
+	</table>
+	
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>个人照片上传</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="farmer_photo" class="form_input_file" type="file" name="farmer_photo" onChange="ajaxfile();" />
+<span id="J_photoReplace" class="form_input_file_img" ><img id="J_imgHere" src="../img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap" class="form_input_file_photo" style="display: none;"><img id="J_photoHere" src="" width="40px" /></span>
+<span id="big_click" style="display: none;font-size:14px;" >查看大图</span>
+<div id="big_photo_div" >
+ <img id="big_photo" src=""></img>
+</div>
+</td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">&nbsp;&nbsp;</span>执照上传</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="farmer_licence" class="form_input_file" type="file" name="farmer_licence" onChange="ajaxfile2();" />
+<span id="J_photoReplace2" class="form_input_file_img" ><img id="J_imgHere2" src="../img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap2" class="form_input_file_photo" style="display: none;"><img id="J_photoHere2" src="" width="40px" /></span>
+<span id="big_click2" style="display: none;font-size:14px;" >查看大图</span>
+<div id="big_photo_div2" >
+ <img id="big_photo2" src=""></img>
+</div>
+</td>
+</tr></table>
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+<div class="form_button1" id="mybtn" onclick="myBtnClick(this,'#0091cb','');doFarmerAuth();"><div class="form_button_txt1">确认修改</div></div>
+
+<br /><br />
+</div>
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth(); //检查是否已经完成支付宝授权
+	});
+	 $(function() {
+         FastClick.attach(document.body);
+     });
+    
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	var j = 0;
+	var ID = 0;
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFarmerAuth();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/auth/index.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/auth/index.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				var sCode = "" + code;
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/auth/index.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/auth/index.html";
+			}
+		}
+	}	
+	
+	
+	//获取URL中的活动id参数
+	function getUrlParam(paraName) {
+		var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var retStr = window.location.search.substr(1).match(reg); //匹配目标参数
+		if (retStr == null) {
+			return -999;
+		}
+		var ret = unescape(retStr[2]);
+		return ret;
+	}
+
+	//显示认证信息框，屏蔽跳转按钮
+	function DispFarmerInfo() {
+		
+		// 获取接口的数据/api/farmer/farmerInfo
+		$.post("/NewViliage/api/farmer/farmerInfo", {
+			alipay_user_id: localStorage.getItem('alipay_user_id'),
+			access_token: localStorage.getItem('access_token'),
+		}, function(data, textStatus) {
+
+			if(textStatus == 'success') {
+				if(data.code == 0) {
+					// alert(data.result);
+
+					var res = data.result;
+					// console.log(res);
+					//如果是合作社的话（is_hzs == 1），更改页面的文案，图片等...
+					if(res.is_hzs == 1) {
+						$(".cooperative_name").text("合作社名称");
+						$("#farmer_cooperative").attr('src','../img/auth_banner2.jpg');
+						$("#business_licence_table").show();
+						$("#business_licence").text(res.license_code);//合作社营业执照号码
+					}
+					if(res.is_hzs == 0) {
+						$(".cooperative_name").text("农场名称");
+						$("#farmer_cooperative").attr('src','../img/auth_banner1.jpg');
+						$("#business_licence_table").hide();
+					}
+					$("#farmer").text(res.farmer);//农场主姓名或者合作社姓名
+					$("#farmerName").text(res.farm_name); //家庭农场名称或合作社名称
+					$("#farmerTel").text(res.contact); //联系方式
+					$("#farmerId").text(res.id_num); //身份证号码
+					$("#farmerAddr").text(res.province+" "+res.city+" "+res.district); //城市
+					$("#farmerSubAddr").text(res.viliage); //详细地址
+					
+					j = res.is_hzs;
+					ID = res.id;
+					//console.log(j);
+					//******************编辑跳转*******************
+					$("#change").click(function(){
+						if(j == 0) {
+						  $("#gaibian").text("家庭农场全称");
+							$("#ground_img_0").attr("src","../img/auth_banner1.jpg");
+							$("#business_licence_table0").hide();
+							$("#farmerTel0").attr("readonly","readonly");
+							$("#farmerId0").attr("readonly","readonly");
+						}
+						if(j == 1){
+							$("#gaibian").text("合作社全称");
+							$("#ground_img_0").attr("src","../img/auth_banner2.jpg");
+							$("#business_licence_table0").show();
+							$("#business_licence0").val(res.license_code);//合作社营业执照号码
+							$("#farmer0").attr("readonly","readonly");
+							$("#farmerName0").attr("readonly","readonly");
+						}
+						  $("#change").hide();
+			              $("#step2").hide();
+			              $("#editChange").show();
+			              $("#farmer0").val(res.farmer);//农场主姓名或者合作社姓名
+							$("#farmerName0").val(res.farm_name); //家庭农场名称或合作社名称
+							$("#farmerTel0").val(res.contact); //联系方式
+							$("#farmerId0").val(res.id_num); //身份证号码
+							
+							$("#showCityPicker0").text(res.province+" "+res.city+" "+res.district); //城市
+							$("#viliage0").val(res.viliage); //详细地址
+							//个人照片赋值
+							$("#J_photoHere_wrap").show();//图片
+							$("#J_photoReplace").hide();
+							$("#J_photoHere").attr("src",'/storage/' + res.photo);
+							//执照照片复制
+							if(res.licence_img != '' && res.licence_img!=undefined) {
+								$("#J_photoHere_wrap2").show();//图片
+								$("#J_photoReplace2").hide();
+								$("#J_photoHere2").attr("src",'/storage/' + res.licence_img);   
+					         }
+							//省市县赋值
+				              $('#province0').val(res.province);
+				              $('#city0').val(res.city);
+				              $('#district0').val(res.district);
+					})
+					if(res.photo != '' && res.photo!=undefined) {
+						var photo1 = '/storage/' + res.photo;
+						$("#photo1").attr('src',photo1);
+					}
+					else
+					{
+						$("#photo1").attr('src','../img/nophoto.png');
+					}
+					
+					if(res.licence_img != '' && res.licence_img!=undefined) {
+						var photo2 = '/storage/' + res.licence_img;
+						$("#photo2").attr('src',photo2);                
+					}
+					else
+					{
+						$("#photo2").attr('src','../img/nophoto.png');
+					}
+
+					if(res.is_authed == 1) {
+						$("#is_authed").text('已认证');
+					} else {
+						$("#is_authed").text('未认证');
+					}
+				} else if(data.code == -2) {
+					alert('请重新获取alipay token');
+					doOauth();
+				} else {
+					alert('获取信息失败');
+				}
+			}
+		}, 'json');
+
+	}
+	
+	// 检查农场主是否已经认证
+	function checkFarmerAuth() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if(textStatus == 'success' && data != null) {
+
+				if(data.code == 0) {
+					//alert('该农场主已认证');
+					DispFarmerInfo();
+					document.getElementById('step1').style.display="none";
+					document.getElementById('step2').style.display="block";
+					document.getElementById('change').style.display="block";
+
+				} else {
+					//alert('该农场主未认证');
+					document.getElementById('step1').style.display="block";
+					document.getElementById('step2').style.display="none";
+					document.getElementById('change').style.display="none";
+				}
+			}
+		}, 'json');
+	}
+	
+	
+	
+	//****************************修改接口***********************
+	//提交表单，进行农场主认证  
+	function doFarmerAuth() {
+		var regId = new RegExp(/^[0-9]{17}[0-9|X]$/);//身份证
+	    var regPhone = new RegExp(/^1[345678]\d{9}$/);//手机号
+		var regName= new RegExp(/^[\u4E00-\u9FA5]{1,6}(?:·[\u4E00-\u9FA5]{1,6})*$/);//1到6个字的姓名+ · +1到6个汉字名称
+        var regFarmerName = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9]+$/); //中英文数字混合
+		if($("#farmer0").val() == '' || $("#farmer0").text() == '请填写') {
+			alert('请填写姓名');
+			return false;
+		}
+		if($("#farmerName0").val() == '' || $("#farmerName0").text() == '请填写') {
+			alert('请填写全称');
+			return false;
+		}
+        if($("#showCityPicker0").html() == '请选择') {
+			alert('请选择地址');
+			return false;
+		}
+
+		if($("#farmerId0").val() == '' || $("#farmerId0").text() == '请选择') {
+			alert('请填写身份证号');
+			return false;
+		}
+		if (!regId.test($("#farmerId0").val())) {
+			alert("身份证号格式错误");
+			return false;
+		}
+		
+		if($("#farmerTel0").val() == '' || $("#farmerTel0").text() == '请填写') {
+			alert('请填写手机号码');
+			return false;
+		}
+		if (!regPhone.test($("#farmerTel0").val())) {
+			alert("手机号格式错误");
+			return false;
+		}
+		  
+		if( j == 0){
+				if($("#J_photoHere").attr('src') == '') {
+			  alert('请上传个人照片');
+			  return false;
+		    }
+		$.post("/NewViliage/api/farmer/updateFarmerInfo", {
+				farmer: $('#farmer0').val(),
+				contact: $('#farmerTel0').val(),
+				farm_name: $('#farmerName0').val(),
+				id_num: $('#farmerId0').val(),
+				province: $('#province0').val(),
+				city: $('#city0').val(),
+				district: $('#district0').val(),
+				viliage: $('#viliage0').val(),
+				is_hzs:"0",
+				id:ID
+
+			}, function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						location.href = "success.html";
+						alert('修改成功');
+					} else {
+						alert('修改失败');
+					}
+				}
+			}, 'json');
+		}
+		if( j == 1){
+			if($("#business_licence0").val() == '' || $("#business_licence0").text() == '请填写'){
+				alert('请填写营业执照注册号');
+				return false;
+			}
+			   	$.post("/NewViliage/api/farmer/updateFarmerInfo", {
+				farmer: $('#farmer0').val(),
+				contact: $('#farmerTel0').val(),
+				farm_name: $('#farmerName0').val(),
+				id_num: $('#farmerId0').val(),
+				province: $('#province0').val(),
+				city: $('#city0').val(),
+				district: $('#district0').val(),
+				viliage: $('#viliage0').val(),
+				is_hzs:"1",
+				id:ID,
+				license_code:$('#business_licence0').val()
+
+			}, function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						location.href = "success.html";
+						alert('修改成功');
+					} else {
+						alert('修改失败');
+					}
+				}
+			}, 'json');
+		}
+
+
+	}
+	
+	
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+</script>
+<script>
+	//图片上传
+	function ajaxfile() {
+		
+		var files =  document.getElementById("farmer_photo").files;
+		for (var i = 0, f; f = files[i]; i++) {
+ 
+	      if (!f.type.match('image.*')) {
+	        continue;
+	      }
+	      console.log("size:" + f.size);
+		  var fsize = f.size;
+	      var reader = new FileReader();
+	      reader.onload = (function(theFile) {
+	        return function(e) {
+	          //var i = document.getElementById("J_imgHere_" + upid);
+			  var img = new Image();
+	          img.src = event.target.result;
+	          //$(i).css('width',$(i).width()/10+'px');
+			  var imgsrc = img.src;
+			  if (img.complete) {
+				  callback();
+			  }
+			  else {
+				  img.onload = callback;
+			  }
+			  function callback() {
+				  if (imgsrc.length > 102400) {
+					  imgsrc = compress(img,0.2);
+			 	  }
+				  
+				  $.post('/NewViliage/api/file/uploadByBase64' , { file:imgsrc,file_param_name:"farmer_photo"}, function(data) {
+					  if (data.code==0) {
+						  $("#J_photoHere_wrap").show();
+				  	      $("#J_photoHere").attr('src', imgsrc);
+				          $("#J_photoReplace").hide();
+				          $("#big_click").show();
+				          $("#big_click").click(function(){
+				          	$("#big_photo_div").show();
+				          	$("#big_photo").attr('src', imgsrc);
+				          	console.log("点击放大图片");
+				          	$("#big_photo_div").click(function(e){
+				          		$("#big_photo_div").hide();
+				          		console.log("消失");
+				          		e.preventDefault();
+				          	})
+				          })
+					  } 
+					  else {
+						  alert('上传失败');
+					  }
+				  }, "json");
+				  img = null;
+			  }
+	        };
+	      })(f);
+	      reader.readAsDataURL(f);
+	    }
+	}
+
+	function ajaxfile2() {
+		var files =  document.getElementById("farmer_licence").files;
+		for (var i = 0, f; f = files[i]; i++) {
+ 
+	      if (!f.type.match('image.*')) {
+	        continue;
+	      }
+	      console.log("size:" + f.size);
+		  var fsize = f.size;
+	      var reader = new FileReader();
+	      reader.onload = (function(theFile) {
+	        return function(e) {
+	          //var i = document.getElementById("J_imgHere_" + upid);
+			  var img = new Image();
+	          img.src = event.target.result;
+	          //$(i).css('width',$(i).width()/10+'px');
+			  var imgsrc = img.src;
+			  if (img.complete) {
+				  callback();
+			  }
+			  else {
+				  img.onload = callback;
+			  }
+			  function callback() {
+				  if (imgsrc.length > 102400) {
+					  imgsrc = compress(img,0.2);
+			 	  }
+				  
+				  $.post('/NewViliage/api/file/uploadByBase64' , { file:imgsrc,file_param_name:"farmer_licence"}, function(data) {
+					  if (data.code==0) {
+						  $("#J_photoHere_wrap2").show();
+				  		  //var imgsrc = compress(i,quality).src;
+				  	      $("#J_photoHere2").attr('src', imgsrc);
+				          $("#J_photoReplace2").hide();
+				          $("#big_click2").show();
+				          $("#big_click2").click(function(){
+				          	$("#big_photo_div2").show();
+				          	$("#big_photo2").attr('src', imgsrc);
+				          	console.log("点击放大图片2");
+				          	$("#big_photo_div2").click(function(e){
+				          		$("#big_photo_div2").hide();
+				          		console.log("消失");
+				          		e.preventDefault();
+				          	})
+				          })
+						  //imgMap.remove("dispaly_" + upid);
+						  //imgMap.put("dispaly_" + upid,true);
+						  //imgUpdate = true;
+						  //alert('上传成功');
+					  } 
+					  else {
+						  alert('上传失败');
+					  }
+				  }, "json");
+				  img = null;
+			  }
+	        };
+	      })(f);
+	      reader.readAsDataURL(f);
+	    }
+	}
+</script>
+</html>

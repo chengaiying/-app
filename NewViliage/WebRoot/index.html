@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" type="text/css" href="assets/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/payment.css"/>
+<title>测试首页</title>
+</head>
+
+<body>
+<p>
+	<a href="loan_apply.html">贷款申请(测试)</a>
+</p>
+
+<p>
+	<a href="web/bank/index.html">贷款模块</a>
+</p>
+
+
+<p>
+	<a href="man/html/form_info.html">直报数据查看</a>
+</p>
+
+
+<p>
+	<a href="man/html/form_stat.html">报表1</a>
+</p>
+
+表单JSon序列化文本:<input class="f_content" type="text" ><br/>
+<button onclick="updateFormDef()">更新表单结构</button>
+
+</body>
+
+<script src="web/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+	});
+	
+	function updateFormDef() {
+		$.post("api/admin/form/updateFormDef", 
+				{content : $(".f_content").val()},
+				function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					alert('update form def success');
+				} else {
+					alert(data.desc);
+				}
+				
+			}
+		}, 'json');
+	}
+	
+	function checkOauth() {
+		$.post("api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="api/oauth/publicAppAuthorize?ori_url=/index.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/menu.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'key':'value'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="api/oauth/publicAppAuthorize?ori_url=/index.html";
+			}
+		}
+	}
+	
+
+    function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    //setupWebViewJavascriptBridge(function(bridge) {
+    	//tmpBridge = bridge;
+        
+   // })
+
+         
+        
+
+</script>
+</html>
+

@@ -1,0 +1,24 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+.cls_container{width:230px;font-size:12px;height:80px;overflow:hidden;} 
+.cls_container ul{list-style-type:none;margin: 0;
+		padding: 0;} 
+	.cls_container ul li{
+		height:32px;
+		/*line-height:32px;*/
+		float:left;
+		display:inline;
+		margin-bottom: 8px;
+		
+	} 
+
+	.cls_container ul li a{
+		width:100%;
+		/*text-overflow:ellipsis; 
+		white-space:nowrap; 
+		overflow:hidden; */
+		display: block;
+		color: black;
+	}

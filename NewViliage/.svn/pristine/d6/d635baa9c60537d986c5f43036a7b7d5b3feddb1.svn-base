@@ -1,0 +1,16 @@
+			* {
+				margin: 0;
+				padding: 0;
+			}	
+			body {
+				background-color: #F0F0F0;
+			}
+			.c_agriculture{width: 100%; height: 180px; }
+			.c_sell,.c_shopping {
+				background-color: white;
+				height: 60px;
+				margin-bottom: 5px;
+				/*padding-top: 5px;*/
+			}
+			.c_shopping  img{height: 50px;width: 50px;vertical-align: middle;padding: 5px 10px;}
+			.c_sell img{height: 50px;width: 50px; vertical-align: middle;padding: 5px 10px;}

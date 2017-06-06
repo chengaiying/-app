@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>广东极飞科技公司</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-2.1.4.min.js"></script>
+		<script src="../js/jquery.animate-colors-min.js"></script>
+		<script src="../js/buttonStyle.js"></script>
+		<style type="text/css">
+			/*.loan_type_company{display:none;}*/
+			
+			.detail_type_company .loan_type_bank {
+				display: none;
+			}
+			
+			.detail_type_bank .loan_type_company {
+				display: none;
+			}
+			
+			.mtab_item .space_item,
+			.space_item_0 {
+				margin: 0;
+				height: 10px;
+				border: solid 1px #eee;
+				background-color: #eee;
+			}
+			
+			.mtab_item .detail_type {
+				margin-left: 15px;
+				overflow: hidden;
+			}
+			
+			.span_item_1 .span_item_2 {
+				display: inline-block;
+			}
+			
+			.span_item_1 {
+				float: left;
+			}
+			
+			.span_item_2 {
+				float: right;
+				margin-right: 10px;
+			}
+			
+			.loan_open_item {
+				height: 16px;
+				vertical-align: middle;
+			}
+			
+			.item_bank,
+			.item_company {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="temhtml_1">
+			<div class="loan_header">
+				<img src="../img/loan_banner.jpg" width="100%">
+				<div class="loan_goto_button" onclick="myBtnClick(this,'#577e10','')">去蚂蚁旺农贷&nbsp;&gt;</div>
+			</div>
+			<div class="form_title">
+				<span class="form_title_name">我要贷款</span>
+				<span class="form_help">&nbsp;</span>
+				<span class="form_help" onclick="myBtnClick(this,'#f0f0f0','../menu.html')">返回主菜单</span>
+			</div>
+			<div class="space_item_0"></div>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="loan_mtab">
+				<tr class="item_company">
+					<td class="mtab_item" width="33%">
+						<div class="detail_type" onclick="ClickTabSelect(this)"><span class="span_item_1">农业担保公司</span><span class="span_item_2"><img src="../img/bank_open.png" class="loan_open_item"  alt="" /></span></div>
+						<div id="" class="detail_type_company" style="display: none;">
+						</div>
+						<div class="space_item"></div>
+					</td>
+				</tr>
+				<tr class="item_bank">
+					<td class="mtab_item" width="33%">
+						<div class="detail_type" style="border-right:solid 1px #eee;" onclick="ClickTabSelect(this)"><span class="span_item_1">金融机构贷款</span><span class="span_item_2"><img src="../img/bank_open.png" class="loan_open_item" alt="" /></span></div>
+						<div id="" class="detail_type_bank" style="display: none;">
+						</div>
+						<div class="space_item"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="mtab_item" width="33%">
+						<div class="detail_type" style="border-right:solid 1px #eee;" onclick="ClickTabSelect(this)">旺农贷</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!--temhtml_1 -->
+
+		<div id="wang_loan" style="display:none">
+			<div class="wang_loan_group" align="center">
+				<img src="../img/wang_loan.jpg" width="100%" />
+				<div class="wang_loan_bg"><img src="../img/wang_loan_bg.jpg" width="100%" />
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="wang_loan_content">
+						<tr>
+							<td colspan="3" align="center">
+								<div class="form_button1" onclick="myBtnClick(this,'#0091cb','https://q.mybank.cn/?scheme=mybank%3A%2F%2Flauncher%3Furl%3Dmybank%253A%252F%252Fh5app%252Foffline%253FappId%253D20000223')" style="width:70%">
+									<div class="form_button_txt1">立即申请</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td width="50%" class="wang_loan_txt"><img src="../img/n1.png" /><span class="guide_help_txt">申请的借款将直接发放至个人支付宝余额</span></td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td class="wang_loan_txt"><img src="../img/n2.png" /><span class="guide_help_txt">还款方便，支持支付宝自动扣款</span></td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td class="wang_loan_txt"><img src="../img/n3.png" /><span class="guide_help_txt">保持良好的还款记录，有助于信用的提升</span></td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!--wang_loan_group -->
+		</div>
+		<!--wang_loan -->
+
+	</body>
+
+	<script type="text/javascript" src="../js/swiper.min.js"></script>
+	<script type="text/javascript" src="../js/qswteckMap.js"></script>
+
+	<script type="text/javascript">
+		
+	</script>
+
+</html>

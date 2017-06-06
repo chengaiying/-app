@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农场主认证</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/buttonStyle.js"></script>
+		<style>
+			canvas {
+				width: 100%;
+				border: 1px solid #000000;
+			}
+			
+			#big_photo {
+				width: 150px;
+				height: 150px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -75px;
+				margin-top: -75px
+			}
+			
+			#big_photo_div {
+				width: 100%;
+				height: 100%;
+				display: none;
+				background: black;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 1000;
+				/*opacity: 0.7;*/
+				background-color: rgba(0, 0, 0, 0.6);
+			}
+		</style>
+
+		<script src="../js/jquery-2.1.4.min.js"></script>
+		<script src="../js/ajaxfileupload.js"></script>
+		<script src="../js/PictureCompress.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/control.css"/>		
+		<link href="../picker/css/mui.picker.css" rel="stylesheet" />
+		<link href="../picker/css/mui.poppicker.css" rel="stylesheet" />
+		<script src="../picker/js/mui.min.js"></script>
+		<script src="../picker/js/mui.picker.js"></script>
+		<script src="../picker/js/mui.poppicker.js"></script>
+		<script src="../picker/js/city.data-3.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="../js/stepBar.js"></script>
+	</head>
+
+	<body>
+		<div class="form_group_no_border">
+			<img src="../img/auth_banner.jpg" width="100%" />
+			<div id="stepBar" class="ui-stepBar-wrap">
+				<div class="ui-stepBar">
+					<div class="ui-stepProcess"></div>
+				</div>
+				<div class="ui-stepInfo-wrap">
+					<table class="ui-stepLayout" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">1</a>
+								<p class="ui-stepName">填写基本信息</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">2</a>
+								<p class="ui-stepName">选择用户类型</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">3</a>
+								<p class="ui-stepName">填写采集信息</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">4</a>
+								<p class="ui-stepName">完成注册</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>姓名</td>
+					<td class="form_item_input" align="right"><input id="farmer" type="text" placeholder="请填写" size="15" /></td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>养殖场（小区）名称</td>
+					<td class="form_item_input" align="right"><input id="farmerName" type="text" placeholder="请填写" size="20" /></td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>地址（省市县）</td>
+					<td class="form_item_content" align="right" style="width:50%">
+						<input id="province" type="text" style="display:none" />
+						<input id="city" type="text" style="display:none" />
+						<input id="district" type="text" style="display:none" />
+
+						<div id="showCityPicker">请选择</div>
+
+						<script>
+							(function($, doc) {
+								$.init();
+								$.ready(function() {
+									var cityPicker3 = new $.PopPicker({
+										layer: 3
+									});
+									cityPicker3.setData(cityData3);
+									var showCityPickerButton = doc.getElementById('showCityPicker');
+									var cityResult3 = doc.getElementById('showCityPicker');
+									showCityPickerButton.addEventListener('tap', function(event) {
+										cityPicker3.show(function(items) {
+											if(typeof(items[1].text) == "undefined") items[1].text = "其它";
+											if(typeof(items[2].text) == "undefined") items[2].text = "其它";
+
+											doc.getElementById('province').value = items[0].text;
+											doc.getElementById('city').value = items[1].text;
+											doc.getElementById('district').value = items[2].text;
+
+											cityResult3.innerText = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+											//return false;//返回 false 可以阻止选择框的关闭
+										});
+									}, false);
+								});
+							})(mui, document);
+						</script>
+
+					</td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">&nbsp;&nbsp;</span>街道、乡镇</td>
+					<td class="form_item_input" align="right"><input id="viliage" type="text" placeholder="请填写" size="15" /></td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+
+		</div>
+		<div class="border_1px_site">
+			<div class="border_1px"></div>
+		</div>
+
+		<div class="form_group">
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>身份证号</td>
+					<td class="form_item_input" align="right"><input id="farmerId" type="text" placeholder="请填写" size="20" /></td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td class="form_item_name"><span style="color: red;margin-right: 10px;vertical-align: middle;">*</span>手机号码</td>
+					<td class="form_item_input" align="right"><input id="farmerTel" type="text" placeholder="请填写" size="15" /></td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="border_1px_site">
+			<div class="border_1px"></div>
+		</div>
+
+		<div class="form_button1" id="mybtn" onclick="myBtnClick(this,'#0091cb','');doFarmerAuth();">
+			<div class="form_button_txt1">下一步</div>
+		</div>
+
+		<br /><br />
+	</body>
+
+	<script type="text/javascript">
+		$(function(){
+
+			stepBar.init("stepBar", {
+				step : 1,
+				change : false,
+				animation : true
+			});
+		
+		});
+		$(document).ready(function() {
+			checkOauth(); //检查是否已经完成支付宝授权
+		});
+
+		//检查是否已经完成支付宝授权
+		//	function checkOauth() {
+		//		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+		//			if(textStatus == 'success' && data != null) {
+		//				if(data.code == 0) {
+		//					//DispStorageData();
+		//				} else if (data.code == -2){
+		//					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/auth/farmer_auth.html";
+		//				}
+		//				else
+		//				{
+		//					alert('未知错误');
+		//				}
+		//			}
+		//		}, 'json');
+		//	}
+
+		function checkOauth() {
+			$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					onCheckOauth(data.code);
+				}
+			}, 'json');
+		}
+
+		function onCheckOauth(code) {
+			if(code == 0) {
+				GetUser();
+				fixedInputBlur();
+			}
+			var userAgent = navigator.userAgent; //浏览器标识
+			if(userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+				if(code == -2) {
+					//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+					location.href = "/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/auth/scale_farm.html";
+				}
+			} else if((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) { //android 客户端
+				window.androidJsObj.onCheckOauth(code, '/web/auth/scale_farm.html');
+			} else if((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1) && userAgent.indexOf("MoaClient") > -1) {
+				//alert("is IOS app");
+				if(code == -2) {
+					tmpBridge.callHandler('AuthCallback', {
+						'url': '/web/auth/scale_farm.html'
+					}, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				}
+
+			} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+				//alert("is pc or other device");
+				if(code == -2) {
+					console.log("is pc or other device");
+					location.href = "/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/auth/scale_farm.html";
+				}
+			}
+		}
+
+		function GetUser() {
+			$.post("/NewViliage/api/oauth/userInfo", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					var value = data.result;
+					if(value != null) {
+						if(value.idNum != null && value.idNum != undefined) {
+							$("#farmerId").val(value.idNum);
+						}
+						if(value.realName != null && value.realName != undefined) {
+							$("#farmer").val(value.realName);
+						}
+					}
+
+				}
+			}, 'json');
+		}
+
+		function fixedInputBlur() {
+			var beforeIpt = null;
+			$("input").on("focus", function(e) {
+				beforeIpt = this;
+			});
+			$(document).on("tap", function(e) {
+				if(e.target.nodeName.toLowerCase() != "input") {
+					if(beforeIpt) {
+						beforeIpt.blur();
+						beforeIpt = null;
+					}
+					// a标签也能获取焦点，但是用代码模拟点击事件却不能触发键盘隐藏
+				}
+			});
+		}
+
+		
+
+		//提交表单，进行规模养殖场主认证  
+		function doFarmerAuth() {
+			var regId = new RegExp(/^[0-9]{17}[0-9|X]$/); //身份证
+			var regPhone = new RegExp(/^1[345678]\d{9}$/); //手机号
+			var regName = new RegExp(/^[\u4E00-\u9FA5]{1,6}(?:·[\u4E00-\u9FA5]{1,6})*$/); //1到6个字的姓名+ · +1到6个汉字名称
+			var regFarmerName = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9]+$/); //中英文数字混合
+
+			if($("#farmer").val() == '' || $("#farmer").text() == '请填写') {
+				alert('请填写养殖场场主姓名');
+				return false;
+			}
+
+			else if($("#farmerName").val() == '' || $("#farmerName").text() == '请填写') {
+				alert('请填写养殖场（小区）名称全称');
+				return false;
+			}
+
+			else if($("#showCityPicker").html() == '请选择') {
+				alert('请选择地址');
+				return false;
+			}
+
+			else if($("#farmerId").val() == '' || $("#farmerId").text() == '请选择') {
+				alert('请填写身份证号');
+				return false;
+			}
+			else if(!regId.test($("#farmerId").val())) {
+				alert("身份证号格式错误");
+				return false;
+			}
+
+			else if($("#farmerTel").val() == '' || $("#farmerTel").text() == '请填写') {
+				alert('请填写手机号码');
+				return false;
+			}
+			else if(!regPhone.test($("#farmerTel").val())) {
+				alert("手机号格式错误");
+				return false;
+			}
+
+			 else {
+				//请求api验证
+				$.post("/NewViliage/api/farmer/farmerAuth", {
+					farm_auth: $('#farmer').val(),
+					contact: $('#farmerTel').val(),
+					farm_name: $('#farmerName').val(),
+					id_num: $('#farmerId').val(),
+					province: $('#province').val(),
+					city: $('#city').val(),
+					district: $('#district').val(),
+					viliage: $('#viliage').val(),
+					is_hzs: "2"
+
+				}, function(data, textStatus) {
+					if(textStatus == 'success' && data != null) {
+						$(".log").text(JSON.stringify(localStorage))
+						if(data.code == 0) {
+							location.href = "./selectIndustryType.html";
+							
+						} else if(data.code == -2) {
+							alert('请重新获取alipay token');
+							doOauth();
+						} else if(data.code == 2) {
+							alert('您已认证，无需重复操作');
+						} else if(data.code >= 100 && data.code < 200) {
+							alert('参数错误:' + data.desc);
+						} else {
+							alert('规模养殖场(小区)认证失败');
+						}
+					}
+				}, 'json');
+			}
+
+		}
+	</script>
+
+	<script>
+
+		function setupWebViewJavascriptBridge(callback) {
+			if(window.WebViewJavascriptBridge) {
+				return callback(WebViewJavascriptBridge);
+			}
+			if(window.WVJBCallbacks) {
+				return window.WVJBCallbacks.push(callback);
+			}
+			window.WVJBCallbacks = [callback];
+			var WVJBIframe = document.createElement('iframe');
+			WVJBIframe.style.display = 'none';
+			WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+			document.documentElement.appendChild(WVJBIframe);
+			setTimeout(function() {
+				document.documentElement.removeChild(WVJBIframe)
+			}, 0)
+		}
+
+		var tmpBridge;
+
+		setupWebViewJavascriptBridge(function(bridge) {
+			tmpBridge = bridge;
+
+		})
+	</script>
+
+</html>

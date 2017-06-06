@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>商水县天华种植专业合作社</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-2.1.4.min.js"></script>
+		<script src="../js/jquery.animate-colors-min.js"></script>
+		<script src="../js/buttonStyle.js"></script>
+		<style type="text/css">
+			#wrapBox{
+				font-size: 14px;
+				text-indent:2em ;
+			}
+			.titleHeader{
+				color: #039FE7;
+			}
+			p{
+				margin: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrapBox">
+			<h3 class="titleHeader">全托管-商水县天华种植专业合作社</h3>
+			<p>
+				<strong>公司介绍：</strong>
+				商水县天华种植专业合作社2009年成立，现在已发展为综合性农民专业合作社。目前，合作社成员336户，固定资产达1400万元；粮食耕种面积已由初期的400亩发展到现在的5000多亩。</p>
+			<p><strong>服务区域：河南省周口市</strong></p>
+			<p><strong>服务对象：</strong>倾向于为成方连片的地块进行托管服务。对于分散地块的托管也接受托管，会采取购买服务的方式，把分散地块的环节委托给有小型机械的合作社。
+			</p>
+			<p>
+				<strong>服务标准：</strong>
+				合作社以统一技术标准进行管理，合作社与农户约定农作物（小麦、玉米）产量在1000斤以上，大豆350斤以上，如果因合作社技术失误而造成减产，达不到保障产量由合作社进行产量包赔。
+			</p>
+			<p><strong>联系人：刘天华</strong>13838617558</p>
+				
+			
+		</div>
+	
+
+	</body>
+
+	<script type="text/javascript" src="../js/swiper.min.js"></script>
+	<script type="text/javascript" src="../js/qswteckMap.js"></script>
+
+	<script type="text/javascript">
+		
+	</script>
+
+</html>

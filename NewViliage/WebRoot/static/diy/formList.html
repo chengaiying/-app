@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/ui-box.css">
+		<link rel="stylesheet" href="iconfont/iconfont.css">
+		<link rel="stylesheet" href="css/swiper.min.css" />
+		<link rel="stylesheet" href="css/index.css">
+		<title>农场主认证</title>
+
+	</head>
+
+	<body style="background-color: #ececec;" ontouchstart="">
+		<div style="background: #FFFFFF;border-top: 1px solid #e5e5e5;border-bottom: 1px solid #e5e5e5;">
+			<div>
+			<img src="images/1.png" width="35px" style="vertical-align: middle;margin: 20px;"/><span class="title">家庭基本信息</span>
+			<span style="float: right;font-size: 14px;background: #feeecd;color: #ffae07;padding: 3px 5px 3px 5px;margin-top: 20px;margin-right: 10px ;border-radius: 6px;">农户</span>
+			<span style="float: right;float: right;font-size: 14px;background: #feeecd;color: #ffae07;padding: 3px 5px 3px 5px;margin-top: 20px;margin-right: 6px ;border-radius: 4px;">养殖户</span>
+			</div>
+			<div style="background: #e5e5e5;height: 1px;width: 85%;margin-left: 15%;">
+				
+			</div>
+			<p style="margin:10px 20px 10px 20px;color: #a5a5a5;font-size: 16px;font-family: '微软雅黑';">家庭信息信息家庭信息信息家信息家庭信息信息家庭信息信息</p>
+			<
+			
+		</div>
+	</body>
+
+	<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/swiper.min.js"></script>
+	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			GetFormListData(); //检查是否已经完成农场主认证
+		});
+
+		function GetFormListData() {
+			$.post("http://srv.qswteck.com:8700/NewViliage/api/form/formList", {
+				
+			}, function(data, textStatus) {
+				console.log(data)
+				
+			}, 'json');
+
+		}
+	</script>
+
+</html>

@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>家庭农场主认证</title>
+<link href="../info_/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../info_/info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+
+<div id="step1" style="display:none"><!--未认证的展示 -->
+<div class="guide_group" align="center">
+<img src="img/indexBanner.png"/>
+<div class="guide_txt">您尚未进行农场主认证</div>
+</div>
+<br /><br />
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="guide_help_group">
+  <tr>
+    <td>&nbsp;</td>
+    <td width="50%" class="guide_help_title" align="center">进行认证后可享受</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="guide_help_context"><img src="img/1.png"/><span class="guide_help_txt">农业部提供相关优惠政策</span></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="guide_help_context"><img src="img/2.png"/><span class="guide_help_txt">贷款，保险等增值服务&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<div class="form_button1" id="mybtn" onclick="formJumpBtn();"><div class="form_button_txt1">开始认证</div></div>
+<script type="text/javascript">
+function formJumpBtn(){
+    document.getElementById('mybtn').style.backgroundColor="#0091cb";  
+	window.location.href="farmer_auth.html";
+}
+</script>
+
+<br /><br />
+</div>
+
+<div id="step2" ><!--style="display:none"认证后的展示 -->
+
+<div class="form_group_no_border">
+<img src="img/auth.png" width="100%" />
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场主姓名</td>
+<td class="form_item_content_view" align="right" id="farmer"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场名称</td>
+<td class="form_item_content_view" align="right" id="farmerName"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场地址（省市县）</td>
+<td class="form_item_content_view" align="right" id="farmerAddr"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">街道、乡镇</td>
+<td class="form_item_content_view" align="right" id="farmerSubAddr"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+</div>
+<div class="border_top_1px"></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">身份证号</td>
+<td class="form_item_content_view" align="right" id="farmerId"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">手机号码</td>
+<td class="form_item_content_view" align="right" id="farmerTel"></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+</div>
+<div class="border_top_1px"></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场主个人照片</td>
+<td class="form_item_img_view" align="right">
+<img src="./img/nophoto.png" width="40px" id="photo1"/></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">家庭农场执照</td>
+<td class="form_item_img_view" align="right">
+<img src="./img/nophoto.png" width="40px" id="photo2"/></td>
+</tr></table>
+</div>
+<div class="border_top_1px"></div>  
+
+<br /><br /><br />
+</div>
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth(); //检查是否已经完成农场主认证
+	});
+
+
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					GetInfo();
+				} else if (data.code == -2) {
+					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/info/index.html";
+				}
+			}
+		}, 'json');
+	}
+	
+	//检查是否已经完成农场主认证
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if(textStatus == 'success' && data != null) {
+				if(data.code == 0) {
+					alert('支付宝已经授权');
+					checkFarmerAuth();
+				} else if (data.code == -2){
+					alert('支付宝未授权');
+					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/auth/index.html";
+				}
+				else
+				{
+					alert('未知错误');
+				}
+			}
+		}, 'json');
+	}	
+	
+	
+	//获取URL中的活动id参数
+	function getUrlParam(paraName) {
+		var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var retStr = window.location.search.substr(1).match(reg); //匹配目标参数
+		var ret = unescape(retStr[2]);
+		return ret;
+	}
+
+	//显示认证信息框，屏蔽跳转按钮
+	function DispFarmerInfo() {
+		
+		// 获取接口的数据/api/farmer/farmerInfo
+		$.post("/NewViliage/api/farmer/farmerInfo", {
+			alipay_user_id: localStorage.getItem('alipay_user_id'),
+			access_token: localStorage.getItem('access_token'),
+		}, function(data, textStatus) {
+
+			if(textStatus == 'success') {
+				if(data.code == 0) {
+					// alert(data.result);
+
+					var res = data.result;
+					// console.log(res);
+					
+					$("#farmer").text(res.farmer);//农场主姓名
+					$("#farmerName").text(res.farm_name); //家庭农场名称
+					$("#farmerTel").text(res.contact); //联系方式
+					$("#farmerId").text(res.id_num); //身份证号码
+					$("#farmerAddr").text(res.province+" "+res.city+" "+res.district); //城市
+					$("#farmerSubAddr").text(res.viliage); //详细地址
+					
+					if(res.photo != '' && res.photo!=undefined) {
+						var photo1 = '/storage/' + res.photo;
+						$("#photo1").attr('src',photo1);
+					}
+					else
+					{
+						$("#photo1").attr('src','./img/nophoto.png');
+					}
+					
+					if(res.licence_img != '' && res.licence_img!=undefined) {
+						var photo2 = '/storage/' + res.licence_img;
+						$("#photo2").attr('src',photo2);                
+					}
+					else
+					{
+						$("#photo2").attr('src','./img/nophoto.png');
+					}
+
+					if(res.is_authed == 1) {
+						$("#is_authed").text('已认证');
+					} else {
+						$("#is_authed").text('未认证');
+					}
+				} else if(data.code == -2) {
+					alert('请重新获取alipay token');
+					doOauth();
+				} else {
+					alert('获取信息失败');
+				}
+			}
+		}, 'json');
+
+	}
+
+	// 检查农场主是否已经认证
+	function checkFarmerAuth() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if(textStatus == 'success' && data != null) {
+
+				if(data.code == 0) {
+					//alert('该农场主已认证');
+					DispFarmerInfo();
+					document.getElementById('step1').style.display="none";
+					document.getElementById('step2').style.display="block";
+
+				} else {
+					//alert('该农场主未认证');
+					document.getElementById('step1').style.display="block";
+					document.getElementById('step2').style.display="none";
+				}
+			}
+		}, 'json');
+	}
+</script>
+
+</html>

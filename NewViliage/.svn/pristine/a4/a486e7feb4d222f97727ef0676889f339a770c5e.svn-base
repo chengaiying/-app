@@ -1,0 +1,48 @@
+package com.moa.viliage.model;
+
+import java.io.Serializable;
+
+public class FarmerDynamic implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String farmer;
+	private int amount;
+	private String title;
+	private String newsUrl;
+
+	public String getFarmer() {
+		return farmer;
+	}
+
+	public void setFarmer(String farmer) {
+		this.farmer = farmer;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getNewsUrl() {
+		return newsUrl;
+	}
+
+	public void setNewsUrl(String newsUrl) {
+		this.newsUrl = newsUrl;
+	}
+
+}

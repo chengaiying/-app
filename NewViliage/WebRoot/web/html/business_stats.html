@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>经营动态</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/business.css" rel="stylesheet" type="text/css" />
+<script src="../js/buttonStyle.js"></script>
+
+<script src="../../echarts/echarts.min.js"></script>
+<script src="../../echarts/themes/macarons.js"></script>
+<script src="../../echarts/themes/infographic.js"></script>
+<script src="../../echarts/themes/shine.js"></script>
+</head>
+
+<body>
+<div class="bus_header">09/2016<div class="bus_header_more">收支统计</div></div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="bus_stats_table">
+  <tr>
+    <td width="10px"></td>
+    <td class="bus_stats_hd">收入支出对比</td>
+  </tr>
+  <tr>
+    <td colspan="2" id="main_echarts1" height="250px"></td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="bus_stats_table">
+  <tr>
+    <td width="10px"></td>
+    <td class="bus_stats_hd">收入情况</td>
+  </tr>
+  <tr>
+    <td colspan="2" id="main_echarts2" height="250px"></td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="bus_stats_table">
+  <tr>
+    <td width="10px"></td>
+    <td class="bus_stats_hd">支出情况</td>
+  </tr>
+  <tr>
+    <td colspan="2" id="main_echarts3" height="250px"></td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main_echarts1'),'macarons');
+
+option = {
+    tooltip: {
+        trigger: 'axis',
+		formatter: '{b0}<br />{a0}: {c0}元<br />{a1}: {c1}元'
+    },
+	grid:{
+		left:20,
+		right:20,
+		top:40,
+		bottom:40,
+	},
+    legend: {
+		top:15,
+        data:['收入','支出']
+    },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+		axisLine:{
+			lineStyle:{
+				color:'#ccc',				
+				},
+			},
+        data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月']
+    },
+    yAxis: {		
+        type: 'value',
+        show:false,
+		interval:20000,
+    },
+	
+    series: [
+        {
+            name:'支出',
+            type:'line',
+			smooth:false,
+			itemStyle: {normal: {color:'#ff8108'}},
+            data:[18560, 17568, 20398, 23971, 19871, 14589, 25986,14851,11568],
+        },
+        {
+            name:'收入',
+            type:'line',
+			smooth:false,
+			itemStyle: {normal: {color:'#00aaee'}},
+            data:[21562, 28895, 54771, 36511, 68721, 26871, 26232,12656,23698],
+        },
+    ]
+};
+
+
+myChart.setOption(option);
+</script>
+
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main_echarts2'),'macarons');
+
+option = {
+	color:[	'#71c000',
+			'#00aaee',
+			'#ff9c00', 
+			'#d074ff', 
+			'#74b5ff',
+			'#ff6496',
+			'#999999',],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'horizontal',
+        bottom:10,
+        data: ['产品销售','设施转让','场地转租','其他']
+    },
+    series : [
+        {
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '40%'],
+			data:[
+                {value:1025603, name:'产品销售'},
+                {value:58195, name:'设施转让'},
+                {value:135698, name:'场地转租'},
+                {value:30804, name:'其他'},
+            ]
+        }
+    ]
+};
+myChart.setOption(option);
+</script>
+
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main_echarts3'),'macarons');
+
+option = {
+	color:[	'#71c000',
+			'#00aaee',
+			'#ff9c00', 
+			'#d074ff', 
+			'#74b5ff',
+			'#ff6496',
+			'#999999',],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'horizontal',
+        bottom:10,
+        data: ['开耕维护','设备设施','人力水电','场地租用','饲料苗种','化肥农药','其他']
+    },
+    series : [
+        {
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '40%'],
+			data:[
+                {value:125673, name:'开耕维护'},
+                {value:568595, name:'设备设施'},
+                {value:352698, name:'人力水电'},
+                {value:327984, name:'场地租用'},
+                {value:58593, name:'饲料苗种'},
+				{value:76098, name:'化肥农药'},
+				{value:15418, name:'其他'},
+            ]
+        }
+    ]
+};
+myChart.setOption(option);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br />
+
+
+</body>
+</html>

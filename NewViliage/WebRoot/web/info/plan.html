@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>我的待办</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+</body>
+
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/swiper.min.js"></script>
+<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+    });
+	
+//	function checkOauth() {
+//		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+//			if (textStatus == 'success' && data != null) {
+//				if (data.code==0) {
+//					GetInfo();
+//				} else if (data.code == -2) {
+//					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/plan.html";
+//				}
+//			}
+//		}, 'json');
+//	}
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			GetInfo();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/plan.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/info/plan.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/info/plan.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/plan.html";
+			}
+		}
+	}
+	
+	//获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+	
+	//点击DIV跳转，带formid参数
+	function ClickDiv(formId) {
+		location.href="/NewViliage/web/info/form.html?form_id=" + formId;
+	}
+	
+	function GetInfo() {
+		$.post("/NewViliage/api/form/myReportedInfo?filter_type=2", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$(document.body).empty();
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<div class=\"info_table\" onclick=" + "ClickDiv(" + value.formId + ")" + ">";
+							tmphtml = tmphtml + "<div class=\"info_img\"><center><img src=\"" + "/storage/" + value.icon + "\" width=\"40px\"/></center></div>";
+							tmphtml = tmphtml + "<div class=\"info_title\">";
+							tmphtml = tmphtml + "<span class=\"info_title_txt\">" + value.formName + "</span>";
+							if (value.fitFarmer == 0) {
+								tmphtml = tmphtml + "<div class=\"info_role\">种植户</div><div class=\"info_role\">养殖户</div>";
+							}
+							else if (value.fitFarmer == 1) {
+								tmphtml = tmphtml + "<div class=\"info_role\">种植户</div>";
+							}
+							else if (value.fitFarmer == 2) {
+								tmphtml = tmphtml + "<div class=\"info_role\">养殖户</div>";
+							}
+							tmphtml = tmphtml + "</div>";
+							tmphtml = tmphtml + "<div class=\"info_msg\">" + value.formDesc + "</div>";
+							tmphtml = tmphtml + "<div class=\"info_tips\">";
+							tmphtml = tmphtml + "<span class=\"info_tips_time\">截止 " + FormatDate(value.endDate) + "</span>";
+							//if (value.count == 0) {
+							//	tmphtml = tmphtml + "<div class=\"info_state\">未填写</div></div></div>";
+							//}
+							//else {
+							//	tmphtml = tmphtml + "<div class=\"info_state\">已填写</div></div></div>";
+							//}
+							$(document.body).append(tmphtml);
+						}
+					});
+					$(document.body).append("<br /><br />");
+				} 
+			}
+		}, 'json');
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+	
+</script>
+
+</html>

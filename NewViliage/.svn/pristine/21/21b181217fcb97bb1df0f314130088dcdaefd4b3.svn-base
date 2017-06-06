@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>收支列表</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/business.css" rel="stylesheet" type="text/css" />
+<script src="../js/buttonStyle.js"></script>
+<script src="../js/PublicFunc.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+
+<script src="../../echarts/echarts.min.js"></script>
+<script src="../../echarts/themes/macarons.js"></script>
+<script src="../../echarts/themes/infographic.js"></script>
+<script src="../../echarts/themes/shine.js"></script>
+</head>
+
+<body>
+
+<!--弹出统计图表 -->
+<div id="stat_chart_shade"></div>
+<div id="stat_chart_bg"><center>
+<div id="stat_chart_context">
+<div class="stat_chart_hd">收入支出对比</div>
+<div id="main_echarts1" style="height:250px;"></div>
+<table width="80%" border="0" cellspacing="0" cellpadding="0" align="center" class="echarts_legend_table">
+  <tr>
+  	<td width="10px" height="30px"></td>
+    <td><span style="border-radius:6px;background-color:#00aaee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;</td>
+    <td id="echarts_out"></td>
+  </tr>
+  <tr>
+  	<td height="30px"></td>
+    <td><span style="border-radius:6px;background-color:#eb4f38">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;</td>
+    <td id="echarts_in"></td>
+  </tr>
+  <tr>
+  <td height="30px"></td>
+  <td><span style="border-radius:6px;background-color:#e0e0e0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;</td>
+  <td id="echarts_profit"></td>
+  </tr>
+</table>
+<div id="stat_chart_return" onClick="PopStatChart(0)">返回</div>
+</div></center></div>
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main_echarts1'),'macarons');
+
+var chartOption = {
+	color:[	'#00aaee',
+			'#eb4f38',],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    series:[
+        {
+            type: 'pie',
+            radius : '90%',
+            center: ['50%', '50%'],
+			data:[
+                {value:100, name:'支出'},
+                {value:100, name:'收入'},
+            ]
+        }
+    ]
+};
+
+</script>
+<!--弹出统计图表 结束 -->
+
+
+
+<table id="table_record" width="100%" border="0" cellspacing="0" cellpadding="0" class="bus_list_table">
+
+</table>
+
+<div class="bus_button2" onclick="myBtnClick(this,'#f8f8f8','-1')"><div class="bus_button_txt2">返回</div></div>
+<br />
+
+</body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		PopStatChart(0);
+		checkOauth() 
+    });	
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if(data.code == 0) {
+					//checkFramer();					
+					getRecord();
+					return;
+				}			
+				CheckOauthPublic(data.code,"/web/html/business.html");
+			}
+		}, 'json');
+	}
+			
+	
+	//弹出统计菜单
+	function PopStatChart(on)
+	{
+		if(on)
+		{
+			$("#stat_chart_shade").show();
+			$("#stat_chart_bg").show();
+			
+			var Sum=outTotal+inTotal;
+			var Sub=inTotal-outTotal;
+			$("#echarts_out").html("支出："+outTotal+"元&nbsp;("+caclPercent(outTotal,Sum)+")");
+			$("#echarts_in").html("支出："+inTotal+"元&nbsp;("+caclPercent(inTotal,Sum)+")");
+			$("#echarts_profit").html("利润："+Sub+"元");			
+			
+			chartOption.series[0].data[0].value=outTotal;
+			chartOption.series[0].data[1].value=inTotal;
+			myChart.setOption(chartOption);
+		}
+		else
+		{
+			$("#stat_chart_shade").hide()
+			$("#stat_chart_bg").hide();
+		}
+	}
+	
+	var inTotal=0,outTotal=0;//支出和收入的总金额
+	function getRecord() {
+		var date = new Date(getUrlParam("acountDate"));
+		var datetmp = date.getFullYear() + "-" + (date.getMonth() + 1);
+		$.post("/NewViliage/api/biz/recordList?year_and_month=" + datetmp, function(data, textStatus) {
+			if (textStatus == 'success') {
+				if (data.code==0) {
+					var tmphtml = "<tr>";
+					tmphtml = tmphtml + "<td colspan=\"3\" class=\"bus_list_month\">" + (date.getMonth() + 1) + "月记录</td>";
+					tmphtml = tmphtml + "<td class=\"bus_list_more\" align=\"right\" onClick=\"myBtnClick(this,'#fff','');PopStatChart(1)\">查看收支统计&gt;</td></tr>";
+					
+					inTotal=0;
+					outTotal=0;
+					$.each(data.result,function(n,value) {
+						if (value != null) {
+								tmphtml = tmphtml + "<tr valign=\"middle\">";
+								tmphtml = tmphtml + "<td class=\"bus_list_margin\"></td>";
+								var tmpText = new Date(value.create_date).getDay();
+								switch (tmpText){
+									case 1:
+									tmpText = "周一";
+									break;
+									case 2:
+									tmpText = "周二";
+									break;
+									case 3:
+									tmpText = "周三";
+									break;
+									case 4:
+									tmpText = "周四";
+									break;
+									case 5:
+									tmpText = "周五";
+									break;
+									case 6:
+									tmpText = "周六";
+									break;
+									case 7:
+									tmpText = "周日";
+									break;
+									default:
+									tmpText = "周一";
+									break;
+								}
+								tmphtml = tmphtml + "<td class=\"bus_list_tim\">" + tmpText + "<div class=\"bus_list_date\">" + value.create_date.slice(5,10) + "</div></td>";
+								tmphtml = tmphtml + "<td class=\"bus_list_icon\"><img src=\"icon/bus_" + value.scene + ".png\"></td>";
+								if (value.in_or_exp == 1) {
+									inTotal = inTotal + value.total;
+									tmphtml = tmphtml + "<td class=\"bus_list_txt\"><div class=\"bus_list_money\">" + value.total + "</div><div class=\"bus_list_use\">" + value.scene_name + "</div></td>";
+								}
+								else {
+									outTotal = outTotal + value.total;
+									var total = -value.total;
+									tmphtml = tmphtml + "<td class=\"bus_list_txt\"><div class=\"bus_list_money\">" + total + "</div><div class=\"bus_list_use\">" + value.scene_name + "</div></td>";
+								}
+								
+						}
+						
+					});
+					
+					if (inTotal == 0 && outTotal == 0) {//说明没有记录
+						tmphtml = tmphtml + " <tr><td class=\"bus_list_none\">没有相关记录</td></tr>";
+					}
+					
+					tmphtml = tmphtml + " <tr><td colspan=\"4\">&nbsp;</td></tr></table>";
+					$("#table_record").append(tmphtml);			
+				}
+				else {
+					alert('表单结构获取失败' + data.desc);
+				}
+			}
+			
+		}, 'json');
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+	
+</script>
+</html>

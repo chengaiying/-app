@@ -1,0 +1,305 @@
+@charset "utf-8";
+/* CSS Document */
+
+.menu_faq_bg{
+	position:absolute;
+	z-index:100;
+	top:10px;
+	right:15px;
+	padding:4px 10px 4px 10px;	
+	color:#000;
+	background-color:#000;
+	border-radius:10px;
+	font: normal 1.2em "微软雅黑";
+	letter-spacing:1px;
+
+	filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.5; /*Firefox私有，透明度50%*/
+	opacity:0.5;/*其他，透明度50%*/			
+}
+.menu_faq{
+	position:absolute;
+	z-index:101;
+	top:10px;
+	right:15px;
+	padding:4px 10px 4px 10px;
+	color:#fff;		
+	font: normal 1.2em "微软雅黑";
+	letter-spacing:1px;
+}
+.menu_faq a{
+	color:#fff;
+}
+
+.menu_grid_table{
+	position:relative;
+	background-color:#FFF;
+}
+
+.menu_grid_td{
+	text-align:center;
+	padding:14px 0px 10px 0px;
+}
+
+.menu_grid_td img{
+	height:30px;
+}
+
+.menu_grid_td_right_line{
+	width:1px;
+	height:30px;
+	background-color:#e5e5e5;
+}
+
+.menu_grid_name{
+	font: normal 1.2em "微软雅黑";
+	margin-top:6px;
+	color:#666;
+}
+
+#fmenu_click_bg{
+	display:none;
+	position:fixed;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	z-index:199;
+	background-color:#000;
+	
+	filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.5; /*Firefox私有，透明度50%*/
+	opacity:0.5;/*其他，透明度50%*/	
+}
+
+.fmenu_table{
+	width:100%;
+	position:fixed;
+	z-index:200;
+	bottom:0px;
+	text-align:center;
+}
+
+.fmenu_td{
+	background-color:#FFF;
+	padding-top:6px;
+}
+
+.fmenu_td img{
+	height:24px;
+}
+
+.fmenu_td_shadow{
+	-webkit-box-shadow:0 -1px 1px #ccc;  
+	-moz-box-shadow:0 -1px 1px #ccc;  
+	box-shadow:0 -1px 1px #ccc; 
+	height:1px;
+	background-color:#fff;
+}
+
+.fmenu_name{
+	font: normal 1em "微软雅黑";
+	color:#00aaee;
+	margin:3px 0px 4px 0px;
+}
+
+.fmenu_box_table{
+	position:fixed;
+	bottom:0px;
+}
+.fmenu_box{
+	display:none;
+	width:99%;
+	font: normal 1.4em "微软雅黑";
+	background-color:#fff;
+	padding:0px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+}
+
+.fmenu_box a,
+.fmenu_box a:link,
+.fmenu_box a:visited,
+.fmenu_box a:hover,
+.fmenu_box a:active{
+	color:#333333;
+}
+
+.fmenu_box li{
+	padding:12px 10px 12px 10px;
+	text-align:center;
+	border-bottom:solid 1px #e5e5e5;
+	border-left:solid 1px #e5e5e5;
+	border-right:solid 1px #e5e5e5;
+}
+
+#body_content{
+	margin-top:10px;
+	width:100%;
+}
+
+
+
+.disp_table{
+	width:100%;
+	background-color:#fff;
+	margin-bottom:10px;
+	border-top:solid 1px #e5e5e5;
+}
+
+.disp_img{
+	padding:10px 10px 0px 10px;
+	width:1%;
+}
+
+.disp_img img{
+	width:100%;
+}
+
+.disp_title{
+	font: normal 1.6em "微软雅黑";
+	color:#000;
+	padding:10px 10px 0px 10px;
+}
+
+.disp_title img{
+	height:18px;
+	padding-right:2px;
+	vertical-align:top;
+}
+
+.disp_introduce{
+	font: normal 1.4em "微软雅黑";
+	color:#a5a5a5;
+	padding:5px 10px 10px 10px;
+}
+
+
+.cr_app_name{
+	font: normal 1.2em "微软雅黑";
+	color:#ccc;
+}
+
+.cr_info{
+	font: normal 1.2em "微软雅黑";
+	color:#ccc;
+}
+
+
+
+
+
+
+
+
+
+
+
+#banner{ 
+	position: relative; 
+	width: 100%;
+}
+
+#banner_list{
+
+}
+
+#banner_list a{
+	position:absolute;
+	top:0px;
+	width:100%;
+	z-index:100;
+}
+
+#banner_bg_site{
+	position: relative;
+}
+
+#banner_bg{	
+	position:absolute;
+	top:0px;
+	z-index:101;
+	width:100%;
+	background-color:#000;
+	
+	font: normal 1.4em "微软雅黑";
+	padding:6px 0px 6px 0px;
+	
+	filter:alpha(opacity=40); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.4; /*Firefox私有，透明度50%*/
+	opacity:0.4;/*其他，透明度50%*/		
+}
+
+#banner_info{
+	position:absolute; 
+	top:0px;
+	z-index:102;
+	width:100%;
+	color:#fff;
+	
+	font: normal 1.4em "微软雅黑";
+	padding:6px 0px 6px 0px;
+}
+
+#banner ul{
+	padding:0;
+	margin:6px 0px 0px 0px;
+	height:2px;
+	overflow:hidden;
+	position:absolute;	
+	top:0px;
+	left:0px;
+	z-index:103;
+	width:100%;
+	text-align:center;
+}
+
+#banner ul li{
+	display:inline;
+	background-color:#fff;
+	color:#fff;
+	padding:0px 15px 0px 0px;
+	margin-right:10px;
+	overflow:hidden;
+	
+	filter:alpha(opacity=20); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.2; /*Firefox私有，透明度50%*/
+	opacity:0.2;/*其他，透明度50%*/	
+}
+
+#banner ul li.on{
+	background-color:#fff;
+	color:#fff;
+	
+	filter:alpha(opacity=70); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.7; /*Firefox私有，透明度50%*/
+	opacity:0.7;/*其他，透明度50%*/	
+}
+
+
+.headline_table{
+	background-color:#fff;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.headline_icon img{
+	height:36px;
+	padding:0px 10px 0px 10px;
+	margin:10px 10px 10px 0;
+	/*border-right:solid 1px #e5e5e5;*/
+}
+
+.headline_content{
+	padding:10px 12px 10px 0;
+}
+
+.headline_one{
+	font: normal 1.4em "微软雅黑";
+	color:#333;	
+}
+
+.headline_one img{
+	height:16px;
+	vertical-align:middle;
+	padding-right:6px;
+}

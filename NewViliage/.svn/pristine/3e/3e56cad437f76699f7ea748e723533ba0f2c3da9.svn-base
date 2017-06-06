@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>保险申请</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/jquery-html5Validate.js"></script>
+<script src="../js/buttonStyle.js"></script>
+<style type="text/css">
+	.form_item_name{padding: 10px 0px;}
+	.form_item{padding:0};
+	.form_item_unit{width: 5px;}
+	/*.border_0 td{border: 0;}*/
+	.form_item_input select{color: black;}
+	.detail_content{margin: 0 10px; }
+</style>
+</head>
+
+<body>
+
+
+<div class="form_title">
+<span class="form_title_name_blue">填写保险申请信息</span>
+</div>
+
+
+<form>
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+    <tr valign="middle">
+		<td class="form_item_margin"></td>
+		<td class="form_item_name">投保数量</td>
+		<td class="form_item_input" align="right"><input id="ins_num" name="ins_num" type="number" step="1" placeholder="亩" size="15"  required /></td>
+		<td class="form_item_unit"></td>
+		<!--onblur= "if(! /^d+$/.test(this.value)){alert('只能整数');this.value='';}"-->
+    </tr>
+    <tr valign="middle">
+		<td class="form_item_margin"></td>
+		<td class="form_item_name">保障时间</td>
+		<td class="form_item_input" align="right"><input id="ins_term" name="ins_term" type="number" step="1" placeholder="年" size="15" required /></td>
+		<td class="form_item_unit"></td>
+    </tr>
+    <tr valign="middle" class="border_0">
+		<td class="form_item_margin"></td>
+		<td class="form_item_name">联系手机</td>
+		<td class="form_item_input" align="right"><input id="phone" name="phone" type="tel" placeholder="手机号" size="15" required /></td>
+		<td class="form_item_no_unit"></td>
+    </tr>
+  </table>
+</div>
+</form>
+    <div class="form_item_gap" style="border: 0;"></div>
+	<div class="detail_content">
+		<!--<span>查看</span><a href="##">《投保须知》</a><a href="##">《保险条例》</a> -->
+		<p>本页面保单信息仅供参考，实际保单状态以保险公司核心业务系统中记载为准</p>
+	</div>
+
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+<div class="form_button1" id="mybtn" onclick="doSumbit()"><div class="form_button_txt1">提交保险申请</div></div>
+<script language="javascript" type="text/javascript">
+
+   $(document).ready(function(){
+   	  detail_num();
+   })
+  function detail_num(){
+  	if(getUrlParam("price_unit") == 0){
+  		$("#ins_num").attr("placeholder","亩")
+  	}else if(getUrlParam("price_unit") == 1){
+  		$("#ins_num").attr("placeholder","头")
+  	}else{
+  		$("#ins_num").attr("placeholder","亩/头")
+  	}
+  }
+  //获取URL中的活动id参数
+function getUrlParam(paraName) {
+	var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+	var ret = unescape(retStr[2]);
+	return ret;
+}
+
+	function doSumbit(){
+		if ($.html5Validate.isAllpass($("form"))) {
+			$.post("/NewViliage/api/insurer/apply", getParams(window.location.search,"id")+"&" + $("form").serialize(), function(data, textStatus){
+				if (textStatus == 'success' && data != null) {
+					if (data.code == 0) {
+						var btn = document.getElementById("mybtn");
+						myBtnClick(btn,'#0091cb','./result.html')
+					}
+					else if (data.code == -2) {
+						alert("提交超时，请回到首页重新选择产品");
+					}
+					else {
+						alert("提交失败：" + data.desc);
+					}
+				}
+			}, "json");
+		}
+		
+		
+	}
+</script>
+
+
+
+<br /><br />
+
+
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+    });
+
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFramer();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/index.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/bank/index.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/bank/index.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/index.html";
+			}
+		}
+	}
+	
+	function checkFramer() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+//					var amount = getUrlParam("amount");
+//					if (amount != null && amount != undefined) {
+//						$("#amount").val(amount);
+//					}
+				} else if (data.code == -1) {
+					alert("您尚未通过家庭农场主认证，请进行家庭农场主认证！");
+					location.href = "/NewViliage/web/auth/index.html"
+				}
+			}
+		}, 'json');
+	}
+	
+	
+	//获取URL中的活动id参数
+	function getParams(url,paraName) {
+		if(url === undefined || typeof(url) != 'string'){
+			return null;
+		}
+  		items = url.split('?')[1].split('&');
+ 		var json = "";
+  		for(var i=0; i<items.length; i++) {
+    		var item = items[i].split('=');
+			if (item[0] == paraName)
+			{
+				json = json + item[0] + "=" + item[1];
+				if (i < items.length - 2) {
+					var item2 = items[i + 1].split('=');
+					if (item2[0] == paraName) {
+						json = json + "&";
+					}
+				}
+			}
+  		}
+  		return json;
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })	
+	
+</script>
+
+</html>

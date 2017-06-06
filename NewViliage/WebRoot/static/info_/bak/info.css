@@ -1,0 +1,258 @@
+@charset "utf-8";
+/* CSS Document */
+
+.info_table
+{
+	background-color: #FFF;
+	display: block;
+	margin: 10px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;	
+}
+
+.info_img{
+	display: inline;
+	float: left;
+	overflow: hidden;
+	width:15%;
+	padding-top:10px;
+}
+
+.info_title{
+	display: inline-block;
+	overflow: hidden;
+	width: 85%;
+	padding-top: 15px;
+	padding-bottom: 12px;
+	border-bottom: solid 1px #e5e5e5;
+}
+.info_title_txt{
+	font: normal 1.8em "微软雅黑";
+}
+
+.info_role{
+	font-size: 1.2em;
+	color: #FF8108;
+	display: inline;
+	float: right;
+	witdh: 15%;
+	margin-right: 10px;
+	background-color: #FEEECC;
+	padding:3px;
+	border-radius:3px;
+}
+
+.info_msg{
+	display:block;
+	font-size: 1.4em;
+	color: #CCC;
+	padding-top:10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.info_tips{
+	display:block;
+	padding-top:10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom:10px;
+	font-size: 1.4em;
+	color: #000;
+}
+
+.info_tips_time
+{
+	background-image: url(./img/tim.png);
+	background-repeat: no-repeat;
+	padding-left:18px;
+}
+
+.info_state{
+	color: #F60;
+	display: inline;
+	float: right;
+	witdh: 15%;
+}
+
+.form_img{
+	width:100%;
+}
+
+.form_title{
+	background-color: #FFF;
+	padding-top: 15px;
+	padding-bottom: 12px;
+	border-bottom: solid 1px #e5e5e5;
+	padding-right: 12px;
+	padding-left: 12px;
+}
+
+.form_title_name{
+	font: normal 1.8em "微软雅黑";
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: #CCC;
+	padding-left: 10px;
+}
+
+.form_help{
+	display: inline;
+	float: right;
+	font:normal 1.2em "微软雅黑";
+	color: #FF8108;
+}
+
+.form_group{
+	background-color: #FFF;
+	margin: 10px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+	width:100%;
+	overflow:hidden;
+}
+
+.form_item{
+	padding-top:12px;
+	overflow:hidden;
+	width:100%;
+}
+
+.form_item_name{
+	font:normal 1.6em "微软雅黑";
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_input{
+	width:30%;
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_margin{
+	width:10px;
+}
+
+.form_item_input input{
+	font:normal 1.6em "微软雅黑";
+	text-align:right;
+	margin-right:5px;
+	border:0 none;
+}
+
+.form_item_unit{
+	font:normal 1.6em "微软雅黑";
+	width:1%;
+	padding-right:10px;
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_jump{
+	width:30%;
+	padding-right:10px;
+	padding-bottom:12px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_button1{
+	border-radius: 6px;	
+	margin: 10px 10px 0px 10px;
+	padding: 10px 10px 10px 10px;
+	background-color: #00AAEE;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+
+.form_button_txt1{
+	display:block;
+	text-align: center;
+	font: normal 2em "微软雅黑";
+	letter-spacing:5px;
+	color: #ffffff;
+}
+
+.form_button2{
+	border:solid 1px #DDDDDD;
+	border-radius: 6px;	
+	margin: 10px 10px 0px 10px;
+	padding: 10px 10px 10px 10px;
+	background-color: #ffffff;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+
+.form_button_txt2{
+	display:block;
+	text-align: center;
+	font: normal 2em "微软雅黑";
+	letter-spacing:5px;
+	color: #666666;
+}
+
+.form_sel_group_bg{
+	width:100%;
+	height:100%;
+	background:#333;
+	position:absolute;
+	z-index:10;
+	top:0px;
+	left:0px;
+	padding-top:100px;
+	margin:0px;
+	filter: alpha(opacity=70); 
+	opacity:0.7;
+	-moz-opacity:0.7; 
+	display:none;
+}
+	
+.form_sel_group{
+	border-radius:5px;
+	padding:10px 10px 10px 10px;
+	background-color:#ffffff;	
+	position:absolute;
+	z-index:999;
+	top:100px;
+	margin:0px 20px 0px 20px;
+	display:none;
+}
+
+.form_sel_item{
+	width:100%;
+	height:2em;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_sel_name{
+	font: normal 1.6em "微软雅黑";
+	padding:10px 0px 10px 0px;
+}
+
+.form_sel_icon{
+	width:1%;
+	padding:10px 0px 10px 0px;
+}
+
+.form_item_file{
+	position: relative;
+}
+
+.form_input_file{
+	filter: alpha(opacity=0); 
+	opacity:0;
+	-moz-opacity:0;
+	width:120px;
+	height:35px;
+	position: absolute;
+	top:0;
+	right:-60px;
+	z-index:999;
+}
+
+.form_input_file_img{
+	
+}
+
+.form_input_file_photo{
+
+}

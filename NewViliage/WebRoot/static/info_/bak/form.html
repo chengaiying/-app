@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>农业信息采集</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+
+
+<img src="img/1.jpg" width="100%" />
+<div class="form_title">
+<span class="form_title_name">土地信息</span>
+<span class="form_help">填报帮助</span>
+</div>
+
+
+<div class="form_group">
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr><td class="form_item_margin"></td>
+<td class="form_item_name">土地总面积</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_unit">亩</td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr><td class="form_item_margin"></td>
+<td class="form_item_name">土地记啊九点十分快啦总面积</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_unit">亩</td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr><td class="form_item_margin"></td>
+<td class="form_item_name">土地记啊九点十分快啦总面积</td>
+<td class="form_item_jump" align="right"><img src="./img/arrow.png" onclick="showDiv();" /></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr><td class="form_item_margin"></td>
+<td class="form_item_name">土地记啊九点十分快啦总面积</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="file1" class="form_input_file" type="file" name="file1" onChange="ajaxfile();" />
+<span id="J_photoReplace" class="form_input_file_img" ><img id="J_imgHere" src="./img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap" class="form_input_file_photo" style="display: none;"><img id="J_photoHere" src="" width="40px" /></span>
+</td>
+</tr></table>
+
+
+</div>
+<script>
+	//图片上传
+	function ajaxfile() {
+		$.ajaxFileUpload({
+			url: '/NewViliage/api/farmer/uploadPhoto/', //处理图片脚本
+			secureuri: false,
+			fileElementId: 'file1', //file控件id
+			dataType: 'json',
+			success: function(data, status) {
+				if(data.code == 0) {
+					var h = "http://srv.qswteck.com:8700/storage/"
+					alert('上传成功');
+					$("#J_photoHere_wrap").show();
+					$("#J_photoHere").attr('src', h+data.result);
+					$("#J_photoReplace").hide();
+					
+
+				} else {
+					alert("图片过大");
+				}
+			},
+			error: function(data, status, e) {
+				alert(e);
+			}
+		})
+	}
+</script>
+
+
+
+
+
+<div class="form_button1" id="mybtn" onclick="formJumpBtn();"><div class="form_button_txt1">提交</div></div>
+<script type="text/javascript">
+function formJumpBtn(){
+    var mydiv = document.getElementById('mybtn');
+    mydiv.style.backgroundColor="#0091cb";  
+}
+</script>
+
+
+
+<div id="form_sel_group_bg" class="form_sel_group_bg" onclick="closeDiv();"></div>
+<div id="form_sel_group" class="form_sel_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_sel_item"><tr>
+<td class="form_sel_name">选项选项选项一二三</td>
+<td class="form_sel_icon"><img src="img/sel_icon.png" width="24px" /></td>
+</tr>
+</table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_sel_item"><tr>
+<td class="form_sel_name">选项选项选项一二三</td>
+<td class="form_sel_icon"><img src="img/sel_icon_.png" width="24px" /></td>
+</tr>
+</table>
+
+<div class="form_button2" id="sel_btn" onclick="formJumpSelBtn();"><div class="form_button_txt2">确定</div></div>
+<script type="text/javascript">
+function formJumpSelBtn(){
+    var mydiv = document.getElementById('sel_btn');
+    mydiv.style.backgroundColor="#f8f8f8";  
+}
+</script>
+
+</div>
+
+<script language="javascript" type="text/javascript">
+function showDiv(){
+document.getElementById('form_sel_group_bg').style.display='block';
+document.getElementById('form_sel_group').style.display='block';
+}
+function closeDiv(){
+document.getElementById('form_sel_group_bg').style.display='none';
+document.getElementById('form_sel_group').style.display='none';
+}
+</script>
+
+
+</body>
+</html>

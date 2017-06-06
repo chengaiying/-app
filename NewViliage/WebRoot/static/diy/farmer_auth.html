@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/ui-box.css">
+		<link rel="stylesheet" href="iconfont/iconfont.css">
+		<link rel="stylesheet" href="css/swiper.min.css" />
+		<link rel="stylesheet" href="css/index.css">
+		<title>农业信息采集</title>
+
+	</head>
+	<style>
+		.font1 {
+			display: block;
+			text-align: right;
+			color: #141414;
+			background: none;
+		}
+		
+		:-moz-placeholder {
+			/* Mozilla Firefox 4 to 18 */
+			color: #b4b4b4;
+			font-size: 16px;
+		}
+		
+		::-moz-placeholder {
+			/* Mozilla Firefox 19+ */
+			color: #b4b4b4;
+			font-size: 14px;
+		}
+		
+		input:-ms-input-placeholder,
+		textarea:-ms-input-placeholder {
+			color: #b4b4b4;
+			font-size: 14px;
+		}
+		
+		input::-webkit-input-placeholder,
+		textarea::-webkit-input-placeholder {
+			color: #b4b4b4;
+			font-size: 14px;
+		}
+	</style>
+
+	<body style="background-color: #f5f5f9;" ontouchstart="">
+
+		<div class="ub ub-ac farmTit1" style="background: #75c6df;color: #FFFFFF;">
+			<em class="ub ub-ac ub-pc iconfont">&#xe609;</em>
+			<h2>请填写认证信息</h2>
+		</div>
+
+		<div class="ub ub-ver farmList">
+			<ul>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>农场主姓名</h3><input type="text" style="font-size: 14px;" class="ub-f1 font1" id="farmer" placeholder="请填写姓名" /><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub ub-ac farmName" id="name2">
+					<div class="ub ub-ac">
+						<h3>家庭农场名称</h3><input class="ub-f1 font1" style="font-size: 14px;" id="farmerName" placeholder="请填写农场名称" /><em class="ub ub-ac ub-pc iconfont"></em></div>
+				</li>
+				<li class="ub ub-ac farmAdd" id="address">
+					<div class="ub ub-ac">
+						<h3>家庭农场所在区域</h3><span class="ub-f1 font1" style="color:#b4b4b4 ;font-size: 14px;" id="farmerAdd">请选择地址</span><em class="ub ub-ac ub-pc iconfont">&#xe602;</em></div>
+				</li>
+				<li class="ub ub-ac farmAddDet" id="addressDet">
+					<div class="ub ub-ac">
+						<h3>详细地址</h3><input class="ub-f1 font1" id="xxadd" style="font-size: 14px;" placeholder="请填写详细地址" /><em class="ub ub-ac ub-pc iconfont"></em></div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="ub ub-ver farmList">
+			<ul>
+				<li class="ub ub-ac farmId" id="userId">
+					<div class="ub ub-ac">
+						<h3>身份证号</h3><input class="ub-f1 font1" id="farmerId" style="font-size: 14px;" placeholder="请填写身份证号" /><em class="ub ub-ac ub-pc iconfont"></em></div>
+				</li>
+				<li class="ub ub-ac farmCon" id="telCon">
+					<div class="ub ub-ac">
+						<h3>电话号码</h3><input class="ub-f1 font1" id="farmerTel" style="font-size: 14px;" placeholder="请填写电话号码" /><em class="ub ub-ac ub-pc iconfont"></em></div>
+				</li>
+
+			</ul>
+		</div>
+
+		<div class="ub ub-ver farmList2">
+			<ul>
+				<li class="ub ub-ac farmImg" id="J_exampleTrigger">
+					<div class="ub ub-ac">
+						<h3 class="ub-f1">农场主个人照片上传</h3> <input id="file1" class="dfile" type="file" name="file1" onChange="ajaxfile();" /><span class="img1" id="J_photoReplace"></span><span class="photo1" id="J_photoHere_wrap" style="display: none;"><img id="J_photoHere" src="" save_data=""/></span></div>
+				</li>
+				<li class="ub ub-ac farmImg" id="J_exampleTrigger2">
+					<div class="ub ub-ac">
+						<h3 class="ub-f1">家庭农场执照上传<span style="color: #b3b3b3;">（选填）</span></h3> <input id="file2" class="dfile" type="file" name="file2" onChange="ajaxfile2();" /><span class="img1" id="J_photoReplace2"></span><span class="photo1" id="J_photoHere_wrap2" style="display: none;"><img id="J_photoHere2" src="" save_data=""/></span></div>
+				</li>
+			</ul>
+		</div>
+		<!--<div id="test">
+		</div>-->
+		<!--<div class="ub ub-ver farmList addselect" style="position: fixed;margin-top: 1.75rem;z-index: 10000000;">
+			<ul>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				<li class="ub name" id="name1">
+					<div class="ub ub-ac">
+						<h3>武汉</h3><em class="ub ub-ac ub-pc iconfont"></em> </div>
+				</li>
+				
+
+			</ul>
+		</div>-->
+		<!--
+<input type="button" class="ub ub-ac ub-pc rzBtn" value="立即认证" /> -->
+		<a href="javascript:doFarmerAuth();" class="ub ub-ac ub-pc rzBtn cur">立即认证</a>
+		<p class="rzTxt font2">认证成功后，可享受贷款，保险等服务</p>
+		<!--<p class="log">ghgf</p>-->
+
+		<p style="min-height: 3rem;"></p>
+
+	</body>
+	<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/swiper.min.js"></script>
+	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+
+	<script>
+	
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var windowsWidth = $(window).width() + "px"
+			var windowsHeight = $(window).height() + "px"
+			var headHeight = $(".farmTit1").height() + "px"
+			$(".addselect").css("left", windowsWidth)
+			$(".addselect").css("top", headHeight)
+			
+			$(".addselect").css("height", windowsHeight)
+			$(".name").click(function(){
+				
+				$(".addselect").animate({
+					left: windowsWidth,
+				},function(){
+					
+					$(".addselect").css("display","none")
+				});
+			})
+				//checkOauth();
+			localStorage.setItem('count', "1");
+			//地址
+			$("#address").click(function() {
+				var uadd = $("#xxadd").val();
+				localStorage.uadd = uadd;
+				alert("地址选择")
+				$(".addselect").css("display","block")
+				$(".addselect").animate({
+					left: '0px',
+				});
+			});
+
+			var name = localStorage.name;
+			var farmer = localStorage.farmer;
+			var ftel = localStorage.ftel;
+			var uid2 = localStorage.uid2;
+			var addD = localStorage.fadd;
+			var xxadd = localStorage.xxadd;
+			$("#farmerName").val(name); //家庭农场名称
+			$("#farmer").val(farmer); //农场主姓名
+			$("#farmerTel").val(ftel); //联系方式
+			$("#farmerId").val(uid2); //身份证号码
+			$("#farmerAdd").text(addD); //城市
+			$("#xxadd").val(xxadd); //详细地址
+		});
+
+		//农场主认证  测试用，不做输入校验
+		function doFarmerAuth() {
+			
+			if($("#farmer").attr("value") == '' || $("#farmer").text() == '请填写') {
+				alert('请填写农场主姓名');
+				return false;
+			}
+			if($("#farmerName").attr("value") == '' || $("#farmerName").text() == '请填写') {
+				alert('请填写家庭农场主姓名');
+				return false;
+			}
+			if($("#farmerId").attr("value") == '' || $("#farmerId").text() == '请填写') {
+				alert('请填写身份证号');
+				return false;
+			}
+			if($("#farmerTel").attr("value") == '' || $("#farmerTel").text() == '请填写') {
+				alert('请填写联系方式');
+				return false;
+			} else {
+				
+				localStorage.fname1 = $('#farmer').attr("value");
+				localStorage.fname = $("#farmerName").attr("value");
+				localStorage.tel = $("#farmerTel").attr("value");
+				localStorage.fid = $("#farmerId").attr("value");
+				
+					//请求api验证
+				$.post("/NewViliage/api/farmer/farmerAuth", {
+					farmer: $('#farmer').attr("value"),
+					contact: $('#farmerTel').attr("value"),
+					farm_name: $('#farmerName').attr("value"),
+					id_num: $('#farmerId').attr("value"),
+					addr: "湖北省武汉市",
+					alipay_user_id: localStorage.getItem('alipay_user_id'),
+					access_token: localStorage.getItem('access_token'),
+					photo : $("#J_photoHere").attr('src'),
+					licence_img : $('#J_photoHere2').attr('src')
+
+				}, function(data, textStatus) {
+					if(textStatus == 'success' && data != null) {
+						$(".log").text( JSON.stringify(localStorage))
+						if(data.code == 0) {
+							location.href = "success.html";
+							alert('农场主认证成功');
+						} else if(data.code == -2) {
+							alert('请重新获取alipay token');
+							doOauth();
+						} else if(data.code == 2) {
+							alert('您已认证，无需重复操作');
+						} else if(data.code >= 100 && data.code < 200) {
+							alert('参数错误:' + data.desc);
+						} else {
+							alert('农场主认证失败');
+						}
+					}
+				}, 'json');
+			}
+
+		}
+	</script>
+	<script>
+		//图片上传
+		function ajaxfile() {
+			$.ajaxFileUpload({
+				url: '/NewViliage/api/farmer/uploadPhoto/', //处理图片脚本
+				secureuri: false,
+				fileElementId: 'file1', //file控件id
+				dataType: 'json',
+				success: function(data, status) {
+					if(data.code == 0) {
+						var h = "http://srv.qswteck.com:8700/storage/"
+						alert('上传成功');
+						$("#J_photoHere_wrap").show();
+						$("#J_photoHere").attr('src', h+data.result);
+						$("#J_photoReplace").hide();
+						
+
+					} else {
+						alert("图片过大");
+					}
+				},
+				error: function(data, status, e) {
+					alert(e);
+				}
+			})
+		}
+
+		function ajaxfile2() {
+			$.ajaxFileUpload({
+				url: '/NewViliage/api/farmer/uploadLicenceImg/', //处理图片脚本
+				secureuri: false,
+				fileElementId: 'file2', //file控件id
+				dataType: 'json',
+				success: function(data, status) {
+				
+					if(data.code == 0) {
+						var h = "http://srv.qswteck.com:8700/storage/"
+						alert('上传成功');
+						$("#J_photoHere_wrap2").show();
+						$("#J_photoHere2").attr('src', h+data.result);
+						
+						$("#J_photoReplace2").hide();
+
+					} else {
+						alert('failed');
+					}
+				},
+				error: function(data, status, e) {
+					alert(e);
+				}
+			})
+		}
+	</script>
+
+</html>

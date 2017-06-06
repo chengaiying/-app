@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农业信息采集</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-2.1.4.min.js"></script>
+		<script src="../js/fastclick.js"></script>
+		<script src="../js/buttonStyle.js"></script>
+	</head>
+
+	<body>
+
+		<img src="image/training.jpg" width="100%" />
+		
+		<div class="form_title">
+			<span class="form_title_name">我要培训</span>
+			<span class="form_help">&nbsp;</span>
+			<!--<span class="form_help" onclick = "myBtnClick(this,'#f0f0f0','./Training_history.html');trainFn()">历史记录</span>-->
+		</div>
+		<div class="form_item_gap"></div>
+        <form id="form_group" style="background-color:white">
+				<table  cellpadding="0" cellspacing="0" border="0" class="form_item">
+					<tr valign="top">
+						<td class="form_item_margin">
+						</td>
+						<td class="form_item_name"><strong>我已参加的培训：</strong></td>
+					</tr>
+				</table>
+				<table  cellpadding="0" cellspacing="0" border="0" class="form_item">
+					<tr valign="top">
+						<td class="form_item_margin"></td>
+						<td class="form_item_name">时间</td>
+						<td class="form_item_input" align="right"><input id="input0" name="input0" type="text"  placeholder="请选择日期" onfocus="(this.type='date')" onblur="if(this.value=='') this.type='text'" size="15" /></td>
+						<td class="form_item_no_unit"></td>
+					</tr>
+				</table>
+				<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+					<tr valign="top">
+						<td class="form_item_margin"></td>
+						<td class="form_item_name">培训名称（内容）</td>
+						<td class="form_item_input" align="right"><input name="input1" type="text"  placeholder="请填写" size="15" /></td>
+						<td class="form_item_no_unit"></td>
+					</tr>
+				</table>
+			</form>
+		
+		<div class="border_1px_site">
+			<div class="border_1px"></div>
+		</div>
+
+		<div class="form_button1" id="mybtn" onclick="myBtnClick(this,'#0091cb','');trainSubmit()">
+			<div class="form_button_txt1">确认修改</div>
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	</body>
+<script>
+$(function() {
+         FastClick.attach(document.body);
+     });
+function GetQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+var updateId=GetQueryString("trainingId");	
+
+$.post("/NewViliage/api/training/queryTrainingInfo",{training_id:updateId}, function(data, textStatus) {
+	var data = JSON.parse(data);
+	//时间
+	var trainingTime = data.result[0].trainingTime;
+	var trainingName = data.result[0].trainingName;
+	$("input[name='input0']").val(trainingTime);
+	$("input[name='input1']").val(trainingName);
+	
+});
+
+
+
+
+function trainSubmit(){
+	var input0 = $("input[name='input0']").val();
+	var input1 = $("input[name='input1']").val();
+	if(input0 == '' || input1 == '' ){
+		alert("请填写");
+	  	return false;
+	}
+    $.post("/NewViliage/api/training/updateTrainingById" , 
+    {
+    	training_id:updateId,
+    	training_time:$("input[name='input0']").val(),
+    	training_name:$("input[name='input1']").val()
+    }, function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					alert("修改成功");
+					window.location.href = "Training_history.html"
+				} 
+			}
+		}, 'json');
+	
+	
+}
+	
+	
+</script>
+</html>

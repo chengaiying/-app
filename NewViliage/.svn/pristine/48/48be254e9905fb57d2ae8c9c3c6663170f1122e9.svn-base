@@ -1,0 +1,351 @@
+package com.moa.viliage.service;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.moa.viliage.common.Utils;
+import com.moa.viliage.db.Tables.TAlipayUser;
+import com.moa.viliage.db.Tables.TFormData;
+import com.moa.viliage.db.Tables.TFormDef;
+import com.moa.viliage.db.Tables.TableResource;
+import com.moa.viliage.form.FormDef;
+import com.moa.viliage.form.FormDefLoader;
+import com.moa.viliage.form.WordDef;
+import com.moa.viliage.interceptor.TokenInterceptor;
+import com.moa.viliage.model.TableResourceModel;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+import com.moa.viliage.token.AlipayUserInfo;
+import com.moa.viliage.token.AlipayUserInfoCache;
+
+public class FormService {
+	
+	private static final String TAG = "FormService";
+	
+	public static final String PARAM_FORM_ID = "form_id";
+	
+	public static final String PARAM_FORM_CONTENT = "form_content";
+	
+	public static final String PARAM_FILTER_TYPE = "filter_type";
+	
+	public static ResultInfo<FormDef> formDefDetail(Controller controller) {
+		try {
+			//农场主id
+			int formId = controller.getParaToInt(PARAM_FORM_ID);
+			FormDef formDef = FormDefLoader.getInstance().findForm(formId);
+			if (formDef == null) {
+				return new ResultInfo<FormDef>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+			return new ResultInfo<FormDef>(ResultCodes.RET_SUCCESS, "success", formDef);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("query FormDefDetail error:" + e.getMessage());
+			return new ResultInfo<FormDef>(ResultCodes.RET_PARAM_ERROR, "form id must be a num");
+		}
+	}
+	
+	public static ResultInfo<FormDef> historyReportQuery(Controller controller) {
+		int formId = -1;
+		try{
+			formId = controller.getParaToInt(PARAM_FORM_ID);
+			FormDef formDef = FormDefLoader.getInstance().findForm(formId);
+			if (formDef == null) {
+				return new ResultInfo<FormDef>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+			formDef = formDef.copy();
+//			String alipayUserId = controller.getAttr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+			String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+			String userId = userInfoObj.id;
+			if(!Utils.isEmpty(userInfoObj.principalId)) {
+				userId = userInfoObj.principalId;
+			}			
+			Record record = Db.findFirst("select * from form_data where form_id=? and user_id=? order by date desc limit 0, 1", formId, userId);
+			if (record != null) {
+				formDef.submitDate = record.getStr(TFormData.COL_DATE);
+				WordDef[] words = formDef.getWordDefs();
+				for (int i = 0; i < words.length; i++) {
+					if (words[i] == null) {
+						continue;
+					}
+					words[i].value = record.getStr(TFormData.COL_DATA_ARRAY[i]);
+				}
+				List<WordDef> list = new ArrayList<WordDef>();
+				List<WordDef> copyList = new ArrayList<WordDef>();
+				for(int i=0;i<words.length; i++){
+					if (null != words[i]) {
+						list.add(words[i]);
+					}
+				}
+				for(int i=0;i<list.size(); i++){
+					if(Utils.isEmpty(list.get(i).value) || "null".equals(list.get(i).value)){
+						break;
+					}
+					copyList.add(list.get(i));
+				}
+				WordDef[] wordefs = new WordDef[copyList.size()];
+				for(int i=0;i<wordefs.length;i++){
+					wordefs[i] = copyList.get(i); 
+				}
+				formDef.setWordDefs(wordefs);
+				return new ResultInfo<FormDef>(ResultCodes.RET_SUCCESS, "success", formDef);
+			} else {
+				return new ResultInfo<FormDef>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("historyReportQuery error:" + e.getMessage());
+			return new ResultInfo<FormDef>(ResultCodes.RET_PARAM_ERROR, "form id must be a num");
+		}
+	}
+	/**
+	 * 最近的一条表单数据（指定表单类型）
+	 * @return
+	 */
+	public static ResultInfo<FormDef> formDetail(Controller controller) {
+		
+		int formId = -1;
+		try {
+			formId = controller.getParaToInt(PARAM_FORM_ID);
+			FormDef formDef = FormDefLoader.getInstance().findForm(formId);
+			if (formDef == null) {
+				return new ResultInfo<FormDef>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+			formDef = formDef.copy();
+//			String alipayUserId = controller.getAttr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+			String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+			String userId = userInfoObj.id;
+			if(!Utils.isEmpty(userInfoObj.principalId)) {
+				userId = userInfoObj.principalId;
+			}			
+			Record record = Db.findFirst("select * from form_data where form_id=? and user_id=? order by date desc limit 0, 1", formId, userId);
+			if (record != null) {
+				formDef.submitDate = record.getStr(TFormData.COL_DATE);
+				WordDef[] words = formDef.getWordDefs();
+				for (int i = 0; i < words.length; i++) {
+					if (words[i] == null) {
+						continue;
+					}
+					words[i].value = record.getStr(TFormData.COL_DATA_ARRAY[i]);
+				}
+				return new ResultInfo<FormDef>(ResultCodes.RET_SUCCESS, "success", formDef);
+			} else {
+				return new ResultInfo<FormDef>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+			
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("query FormDetail error:" + e.getMessage());
+			return new ResultInfo<FormDef>(ResultCodes.RET_PARAM_ERROR, "form id must be a num");
+		}
+	}
+	
+	/**
+	 * 所有表单数据（指定表单类型）
+	 * @return
+	 */
+	public static ResultInfo<List<FormDef>> allFormDetail(Controller controller) {
+		int formId = -1;
+		try {
+			formId = controller.getParaToInt(PARAM_FORM_ID);
+			FormDef oriFormDef = FormDefLoader.getInstance().findForm(formId);
+			if (oriFormDef == null) {
+				return new ResultInfo<>(ResultCodes.RET_DATA_NOT_EXIST);
+			}
+			String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+			String userId = userInfoObj.id;
+			if(!Utils.isEmpty(userInfoObj.principalId)) {
+				userId = userInfoObj.principalId;
+			}
+//			String alipayUserId = controller.getAttr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+			
+			List<FormDef> results = new ArrayList<>();
+			
+			List<Record> list = Db.find("select * from form_data where form_id=? and user_id=? order by date desc ", formId, userId);
+			for (Record record : list) {
+				FormDef formDef = oriFormDef.copy();
+				formDef.submitDate = record.getStr(TFormData.COL_DATE);
+				WordDef[] words = formDef.getWordDefs();
+				for (int i = 0; i < words.length; i++) {
+					if (words[i] == null) {
+						continue;
+					}
+					words[i].value = record.getStr(TFormData.COL_DATA_ARRAY[i]);
+				}
+				results.add(formDef);
+			}
+			
+			return new ResultInfo<>(ResultCodes.RET_SUCCESS, "ok", results); 
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TAG).error("query FormDetail error:" + e.getMessage());
+			return new ResultInfo<>(ResultCodes.RET_PARAM_ERROR, "form id must be a num");
+		}
+	}
+	
+	
+	/**
+	 * 我的上报
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<List<Map<String, Object>>> myReportedInfos(Controller controller) {	
+		//select form_id, count(form_id) as count, max(date) as date from form_data where alipay_user_id='456'  GROUP BY form_id 
+//		String alipayUserId = controller.getAttrForStr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+		String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+	    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String userId = userInfoObj.id;
+		if(!Utils.isEmpty(userInfoObj.principalId)) {
+			userId = userInfoObj.principalId;
+		}
+		
+		String sql = "select def.id  as formId, def.form_name as formName, def.end_date as endDate, def.form_desc as formDesc, def.icon, def.fit_farmer as fitFarmer, def.form_type as formType," +
+				" if (g.count > 0, g.count, 0) as count, g.lastDate from form_def def \n" +
+				"left join(\n" +
+				"select form_id, count(form_id) as count, max(date) as lastDate from form_data where user_id=? GROUP BY form_id \n" +
+				") g on def.id=g.form_id where 1=1 ";
+		
+		
+		List<Object> sqlParams = new ArrayList<Object>();
+		sqlParams.add(userId);		
+		if (! controller.isParaBlank(TFormDef.COL_FORM_TYPE)) {
+			try {
+				int formType = controller.getParaToInt(TFormDef.COL_FORM_TYPE, 1);
+				sql += "and def.form_type=? ";
+				sqlParams.add(formType);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		Object isHzsObj = controller.getRequest().getSession().getAttribute(TAlipayUser.COL_IS_HZS);
+		if (isHzsObj != null) {
+			String flag = "1".equals(isHzsObj.toString()) ? "2" : "1";
+			sql += "and (def.flag=0 or def.flag=?) ";
+			sqlParams.add(flag);
+		}
+		
+		String filterStr = controller.getPara(PARAM_FILTER_TYPE);
+		if ("1".equals(filterStr)) {
+			sql += "and def.end_date > ? "; 
+			sqlParams.add(Utils.getCurrentTimeStr());
+		} if ("2".equals(filterStr)) {
+			//未填报过，且在周期内（我的待报）
+			sql += "and def.end_date > ? and if (g.count > 0, g.count, 0) = 0 ";
+			sqlParams.add(Utils.getCurrentTimeStr());
+		} else if ("3".equals(filterStr)){
+			//填报过，且在周期内（我的上报）
+			sql += "and def.end_date > ? and g.count > 0 ";
+			sqlParams.add(Utils.getCurrentTimeStr());
+		}
+		
+		//根据seq字段排序
+		sql += " order by def.seq";
+		
+		Object[] paramArray = new Object[sqlParams.size()];
+		paramArray = sqlParams.toArray(paramArray);
+		
+		Utils.showSqlInfo(sql, sqlParams);
+		
+		List<Record> list = Db.find(sql, paramArray);
+		if (list == null) {
+			return new ResultInfo<List<Map<String, Object>>>(ResultCodes.RET_FAILED, "failed"); 
+		}
+		
+		List<Map<String, Object>> retList = new ArrayList<Map<String, Object>>();
+		for (Record record : list) {
+			if(!"雇工信息".equals(record.getColumns().get("formName"))){
+				retList.add(record.getColumns());
+			}
+		}
+		return new ResultInfo<List<Map<String, Object>>>(ResultCodes.RET_SUCCESS, "ok", retList);
+	}
+	/**
+	 * 获取各级目录（从二级目录开始获取）
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<List<TableResourceModel>> getMul(
+			Controller controller) {
+        //目录名字
+		String Name = controller.getPara("Name");
+        //目录级别
+		String type = controller.getPara("type");
+		// 农场主id
+		int formId = Integer.parseInt(controller.getPara(PARAM_FORM_ID));
+		try {
+			// 参数非空校验
+			checkParam(controller);
+			String parentName = new String(Name.getBytes("iso8859-1"), "utf-8");
+			int mulType = Integer.parseInt(type);
+			// 根据前台选定的首级目录获取二级目录
+			List<Record> fRecord = Db
+					.find("SELECT * FROM table_resource where form_Id=? and type=? and parent_name=?",
+							formId, mulType, parentName);
+
+			List<TableResourceModel> list = new ArrayList<TableResourceModel>();
+           //如果查询结果为空直接返回页面成功
+			if (fRecord == null) {
+
+				return new ResultInfo<List<TableResourceModel>>(
+						ResultCodes.RET_SUCCESS);
+
+			}
+            //只有3号表单和12和8号表单下拉选项框，进行操作
+			if (formId == 3 || formId == 12 || formId == 8) {
+				// 二,三级级目录获取
+				for (Record sdRecord : fRecord) {
+					TableResourceModel fModel = new TableResourceModel();
+					fModel.setTableResourceId(sdRecord.get(TableResource.COL_ID).toString());
+					// 目录名称
+					fModel.setTableResourceName(sdRecord.get(TableResource.COL_NAME).toString());
+					// 目录id
+					fModel.setTableResourceParentName(sdRecord.get(TableResource.COL_PARENT_NAME).toString());
+					// 目录code
+					fModel.setTableResourceCode(sdRecord.get(TableResource.COL_CODE).toString());
+					// 目录级别
+					fModel.setType(sdRecord.get(TableResource.COL_TYPE).toString());
+					list.add(fModel);
+
+				}
+			}
+			
+			return new ResultInfo<List<TableResourceModel>>(
+					ResultCodes.RET_SUCCESS, "ok", list);
+		} catch (Exception e) {
+            //打印错误日志错误栈
+			e.printStackTrace();
+			//返回成功信息
+			return new ResultInfo<List<TableResourceModel>>(
+					ResultCodes.RET_FAILED, e.getMessage());
+		}
+
+	}
+	/**
+	 * 页面参数校验
+	 * @throws Exception 
+	 */
+	private static void checkParam(Controller controller) throws Exception {
+        //目录名字是否为空校验
+		if (controller.getPara("Name") == null) {
+
+			throw new Exception("目录名称不能为空");
+		}
+		//目录级别是否为空校验
+		if (controller.getPara("type") == null) {
+
+			throw new Exception("目录级别不能为空");
+		}
+	}
+}

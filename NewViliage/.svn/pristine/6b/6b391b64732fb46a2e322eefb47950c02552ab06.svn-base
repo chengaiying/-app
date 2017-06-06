@@ -1,0 +1,297 @@
+package com.moa.viliage.service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.LoggerFactory;
+
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.moa.viliage.common.Utils;
+import com.moa.viliage.db.Tables.TFiProd;
+import com.moa.viliage.db.Tables.TLoanApply;
+import com.moa.viliage.interceptor.TokenInterceptor;
+import com.moa.viliage.loan.FiProd;
+import com.moa.viliage.loan.FiProdLoader;
+import com.moa.viliage.mail.MailContentLoader;
+import com.moa.viliage.mail.MailUtils;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+import com.moa.viliage.result.obj.EmptyResultObj;
+import com.moa.viliage.token.AlipayUserInfo;
+import com.moa.viliage.token.AlipayUserInfoCache;
+
+
+public class LoanService {
+	
+	private static final String TAG = "LoanService";
+	
+	/** 贷款状态:待处理 */
+	public static final int LOAN_STATUS_PENDING = 0;
+	
+	/** 贷款状态: 拒绝 */
+	public static final int LOAN_STATUS_DENY = 1;
+	
+	/** 贷款状态: 取消*/
+	public static final int LOAN_STATUS_CANCEL = 2;
+	
+	/** 贷款状态: 同意*/
+	public static final int LOAN_STATUS_ACCEPT = 3;
+	
+	/** 贷款状态: 完成*/
+	public static final int LOAN_STATUS_FINISHED = 4;
+	
+	public static ResultInfo<EmptyResultObj> apply(Controller controller) {
+		
+		String[] prodIds = controller.getParaValues(TLoanApply.COL_PROD_ID);
+		if (prodIds == null || prodIds.length == 0) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "产品id不能为空");
+		}
+		HashSet<String> prodIdSets = new HashSet<String>();
+		//剔除无效id
+		for (String prodId : prodIds) {
+			if (Utils.isEmpty(prodId) || !FiProdLoader.getInstance().contains(prodId)) {
+				continue;
+			}
+			prodIdSets.add(prodId);
+		}
+		if (prodIdSets.size() == 0) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "产品id不能为空");
+		}
+		
+		int amount = 0;
+		int period = 0;
+		
+		try {
+			amount =  controller.getParaToInt(TLoanApply.COL_AMOUNT);
+			period = controller.getParaToInt(TLoanApply.COL_PERIOD);
+		} catch (Exception e) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "数字类型参数填写错误");
+		}
+		String phone = controller.getPara(TLoanApply.COL_PHONE);
+		if (! Utils.checkCellphoneFormat(phone)) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "手机号填写错误");
+		}
+		
+		
+		String alipayUserId = controller.getAttr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+		if (checkHasApplied(alipayUserId, prodIdSets)) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_DATA_HAS_EXIST, "你已申请过所选择贷款中的一项或多项");
+		}
+		
+		Record applyRecord = new Record();
+		applyRecord.set(TLoanApply.COL_FARMER_ID, alipayUserId);
+		applyRecord.set(TLoanApply.COL_AMOUNT, amount);
+		applyRecord.set(TLoanApply.COL_PERIOD, period);
+		applyRecord.set(TLoanApply.COL_PHONE, phone);
+		String[] purposes = controller.getParaValues(TLoanApply.COL_PURPOSE);
+		applyRecord.set(TLoanApply.COL_PURPOSE, Utils.toJson(purposes));
+		applyRecord.set(TLoanApply.COL_BIZ_NUM, controller.getPara(TLoanApply.COL_BIZ_NUM));
+		
+		String nowStr = Utils.getCurrentTimeStr();
+		applyRecord.set(TLoanApply.COL_APPLY_DATE, nowStr);
+		applyRecord.set(TLoanApply.COL_MODIFY_DATE, nowStr);
+		applyRecord.set(TLoanApply.COL_STATUS, 0);
+		//把创建人放入record中
+		String tokenStr =controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+	    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+	    //判断是否是合作社 1-合作社 0-农场主
+	    String uid = "";
+  		if(!Utils.isEmpty(userInfoObj.principalId)){
+  			uid = userInfoObj.principalId;
+  		}else{
+  			uid = userInfoObj.id;  			
+  		}
+  		applyRecord.set(TLoanApply.COL_USER_ID, uid);
+	    applyRecord.set(TLoanApply.COL_CREATEOR, userInfoObj.id);
+		int count = 0;
+		for (String prodId : prodIdSets) {
+			String otherInfoStr = null;
+			applyRecord.set(TLoanApply.COL_PROD_ID, prodId);
+			String applyId = Utils.createUUID();
+			applyRecord.set(TLoanApply.COL_ID, applyId);
+			try {
+				if (Db.save(TLoanApply.TABLE_NAME, applyRecord)) {
+					count ++;
+					if (otherInfoStr == null) {
+						otherInfoStr = MailContentLoader.getFormInfo(alipayUserId);
+					}
+					sendNotifyMail(applyId, otherInfoStr);
+				}
+			} catch (Exception e) {
+				LoggerFactory.getLogger(TAG).error("save LoanApply error: " + e.getMessage());
+			}
+		}
+		if (count > 0) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS);
+		}
+		return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED);
+		
+	}
+	
+	
+	private static void sendNotifyMail(String applyId, String otherInfoStr) {
+		String[] strs = MailContentLoader.getLoanApplyContent(applyId);
+		if (strs == null || strs.length == 0 || Utils.isEmpty(strs[0]) || Utils.isEmpty(strs[1])) {
+			return;
+		}
+		
+		MailUtils.sendSimpleMail(strs[1], "贷款申请通知（来源：农业部新农人直报平台）", strs[0] + otherInfoStr);
+	}
+	
+	private static final String PARAM_START_DATE = "start_date";
+	
+	private static final String PARAM_END_DATE = "end_date";
+	
+	/**
+	 * 查询我的贷款记录，可以根据贷款当前状态与申请时间来查询
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<List<Map<String, Object>>> myLoans(Controller controller) {
+		
+//		String alipayUserId = controller.getAttrForStr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+		String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+	    AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String userId = userInfoObj.id;
+		if(!Utils.isEmpty(userInfoObj.principalId)) {
+			userId = userInfoObj.principalId;
+		}
+		String startDate = controller.getPara(PARAM_START_DATE);
+		String endDate = controller.getPara(PARAM_END_DATE);
+		String status = controller.getPara(TLoanApply.COL_STATUS);
+		
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql =new StringBuilder("select apply.id as loanId, apply.prod_id as prodId, prod.prod_icon as prodIcon, prod.prod_name as prodName, apply.amount, apply.period, apply.phone, \n" +
+				"apply.purpose, apply.apply_date as applyDate, apply.status, \n" +
+				"bank.id as bankId, bank.bank_name as bankName, bank.bank_icon as bankIcon\n" +
+				"from loan_apply apply\n" +
+				"left join fi_prod prod on prod.id = apply.prod_id \n" +
+				"left join bank on bank.id=prod.bank_id where apply.user_id=?");
+		params.add(userId);
+		
+		if (Utils.getDateByStr(startDate) != null) {
+			params.add(startDate + " 00:00:00");
+			sql.append("and apply.apply_date >=? ");
+		}
+		
+		if (Utils.getDateByStr(endDate) != null) {
+			params.add(endDate + " 23:59:59");
+			sql.append("and apply.apply_date <? ");
+		}
+		
+		if (! Utils.isEmpty(status)) {
+			params.add(status);
+			sql.append("and apply.status=? ");
+		}
+		
+		sql.append("order by apply.apply_date desc");
+		
+		List<Record> loanRecords = Db.find(sql.toString(), params.toArray());
+		if (loanRecords == null || loanRecords.size() == 0) {
+			return new ResultInfo<>(ResultCodes.RET_DATA_NOT_EXIST, "您没有贷款记录");
+		}
+		
+		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		for (Record record : loanRecords) {
+			Map<String, Object> map = record.getColumns();
+			map.remove(TLoanApply.COL_FARMER_ID);
+			mapList.add(map);
+		}
+		
+		return new ResultInfo<>(ResultCodes.RET_SUCCESS, "ok", mapList);
+	}
+	
+	
+	/**
+	 * 产品详细信息
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<FiProd> prodDetail(Controller controller) {
+		String prodId = controller.getPara(TFiProd.COL_ID);
+		if (Utils.isEmpty(prodId)) {
+			return new ResultInfo<FiProd>(ResultCodes.RET_PARAM_ERROR, "id cannot be empty");
+		}
+		FiProd prod = FiProdLoader.getInstance().findProd(prodId);
+		if (prod == null) {
+			return new ResultInfo<FiProd>(ResultCodes.RET_DATA_NOT_EXIST, "no data");
+		}
+		return new ResultInfo<FiProd>(ResultCodes.RET_SUCCESS, "ok", prod); 
+	}
+	
+	
+	public static ResultInfo<EmptyResultObj> cancel(Controller controller) {
+		String loanAppId = controller.getPara(TLoanApply.COL_ID);
+		String alipayUserId = controller.getAttrForStr(TokenInterceptor.PARAM_ALIPAY_USER_ID);
+		if (Utils.isEmpty(loanAppId)) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "apply id cannot be empty");
+		}
+		//修改中新增修改时间，修改者参数（ 取消贷款功能未开发，该参数暂时设定为空）
+		int count = Db.update("update loan_apply set status=?, modify_date=? where id=? and status=? and farmer_id=? and modify=?", LOAN_STATUS_CANCEL, Utils.getCurrentTimeStr(), loanAppId, LOAN_STATUS_PENDING, alipayUserId,"");
+		if (count <= 0) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED, "cancel apply failed");
+		}
+		
+		
+		return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS, "ok");
+	}
+	
+	/**
+	 * 新增评价信息
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<EmptyResultObj> saveEvaluateById(Controller controller) {
+
+		String id=controller.getPara("id");
+		String evaluate=controller.getPara("evaluate");
+	   //在贷款记录中新增评价项
+	  if(Db.update("update loan_apply set evaluate=? where id=?",evaluate,id)!=1){
+		return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED, "更新评价信息失败");
+	}
+	return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS, "ok");
+	}
+	/**
+	 * 查询评价信息
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<String> queryEvaluateById(Controller controller) {
+
+		String id=controller.getPara("id");
+	   //在贷款记录中新增评价项
+      Record loadEvaluateRecord=Db.findFirst("select * from loan_apply where id=?",id);
+	return new ResultInfo<String>(ResultCodes.RET_SUCCESS, "ok",loadEvaluateRecord.getStr("evaluate"));
+	}
+	
+	
+	
+	/**
+	 * 判断用户是否已经申请指定贷款
+	 * @param userId	用户id
+	 * @param prodIds	产品id 格式为: 1,2,3
+	 * @return
+	 */
+	private static boolean checkHasApplied(String userId, Set<String> prodIdSet) {
+		List<Record> list = Db.find("select prod_id from loan_apply where farmer_id=? and status=?", userId, 0);
+		if (list == null || list.size() == 0) {
+			return false;
+		}
+		
+		for (Record record : list) {
+			String prodId = record.getStr(TLoanApply.COL_PROD_ID);
+			if (prodIdSet.contains(prodId)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>农业信息采集</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+
+
+
+<img src="img/1.jpg" width="100%" />
+<div class="form_title">
+<span class="form_title_name">土地信息</span>
+<span class="form_help">填报帮助</span>
+</div>
+
+
+<div class="form_group">
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">单选项选择</td>
+<td class="form_item_input" align="right">
+<select>
+    <option value="" disabled selected>请选择</option>
+    <option value="email">农户</option>
+    <option value="twitter">养殖户</option>
+    <option value="linkedin">农民</option>
+</select>
+</td>
+</tr></table>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">多选项选择</td>
+<td class="form_item_content" align="right" onclick="checkSel()">请勾选</td></tr></table>
+
+<div id="form_check_group" class="form_check_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">多选项一</td><td align="right" class="form_check_input"><input type="checkbox" name="checkbox2" value="layer1" /></td></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">多选项二</td><td align="right" class="form_check_input" ><input type="checkbox" name="checkbox2" value="layer2"/></td></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">多选项三</td><td align="right" class="form_check_input"><input type="checkbox" name="checkbox2" value="layer3" /></td></tr></table>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+function checkSel(){
+	 $("#form_check_group").slideToggle(100);
+}
+</script>
+
+
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">单选择框选择总面积</td>
+<td class="form_item_content" align="right" onclick="selFinish()">请选择</td>
+</tr></table>
+
+<script language="javascript" type="text/javascript">
+function selFinish(){
+	$("#form_selt_group").slideToggle(100);
+}
+</script>
+<div class="form_selt_group" id="form_selt_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_selt_item"><tr valign="top"><td class="form_selt_margin"></td>
+<td class="form_selt_name">单选项一</td>
+<td class="form_selt_input" align="right"><input type="radio" name="selone" value="sel1" /></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_selt_item"><tr valign="top"><td class="form_selt_margin"></td>
+<td class="form_selt_name">单选项二</td>
+<td class="form_selt_input" align="right"><input type="radio" name="selone" value="sel2" /></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_selt_item"><tr valign="top"><td class="form_selt_margin"></td>
+<td class="form_selt_name">单选项二</td>
+<td class="form_selt_input" align="right"><input type="radio" name="selone" value="sel3" /></td>
+</tr></table>
+</div>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">土地总面积</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">土地总面监控组件快等发酵了看法见</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_unit">平方</td>
+</tr></table>
+
+
+<div class="form_item_gap"></div>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">日期日期选择</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请选择日期" onfocus="(this.type='date')" onblur="if(this.value=='') this.type='text'" size="15"/></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">图片上传示例示例示例</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="file1" class="form_input_file" type="file" name="file1" onChange="ajaxfile();" />
+<span id="J_photoReplace" class="form_input_file_img" ><img id="J_imgHere" src="./img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap" class="form_input_file_photo" style="display: none;"><img id="J_photoHere" src="" width="40px" /></span>
+</td>
+</tr></table>
+
+</div>
+<div class="border_top_1px"></div>
+
+<script>
+	//图片上传
+	function ajaxfile() {
+		$.ajaxFileUpload({
+			url: '/NewViliage/api/farmer/uploadPhoto/', //处理图片脚本
+			secureuri: false,
+			fileElementId: 'file1', //file控件id
+			dataType: 'json',
+			success: function(data, status) {
+				if(data.code == 0) {
+					var h = "http://srv.qswteck.com:8700/storage/"
+					alert('上传成功');
+					$("#J_photoHere_wrap").show();
+					$("#J_photoHere").attr('src', h+data.result);
+					$("#J_photoReplace").hide();
+					
+
+				} else {
+					alert("图片过大");
+				}
+			},
+			error: function(data, status, e) {
+				alert(e);
+			}
+		})
+	}
+</script>
+
+
+
+
+
+<div class="form_button1" id="mybtn" onclick="formJumpBtn();"><div class="form_button_txt1">提交</div></div>
+<script type="text/javascript">
+function formJumpBtn(){
+    $('#mybtn').css("backgroundColor","#0091cb");  
+}
+</script>
+
+
+<div class="form_button2" id="sel_btn" onclick="formJumpSelBtn();"><div class="form_button_txt2">确定</div></div>
+<script type="text/javascript">
+function formJumpSelBtn(){
+    $('#sel_btn').css("backgroundColor","#f8f8f8");  
+}
+</script>
+
+</div>
+
+<br /><br />
+
+</body>
+</html>

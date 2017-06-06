@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我要服务</title>
+		<link rel="stylesheet" type="text/css" href="../picker/css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/control.css" />
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../picker/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+		<script src="../js/jquery.animate-colors-min.js"></script>
+		<script src="../js/buttonStyle.js"></script>
+		<style type="text/css">
+			.menu_list {
+				width: 100%;
+				margin-top: 10px;
+			}
+			
+			.menu_head {
+				height: 47px;
+				line-height: 47px;
+				padding-left: 38px;
+				font-size: 14px;
+				color: #525252;
+				cursor: pointer;
+				border: 1px solid #e1e1e1;
+				position: relative;
+				margin: 0px;
+				font-weight: bold;
+			}
+			
+			.menu_list .current {
+				color: white;
+				background: #00aaee;
+			}
+			
+			.menu_body {
+				line-height: 38px;
+				border-left: 1px solid #e1e1e1;
+				backguound: #fff;
+				border-right: 1px solid #e1e1e1;
+			}
+			
+			.menu_body a {
+				display: block;
+				font-size: 16px;
+				color: #777777;
+				background: #fff;
+				text-decoration: none;
+				border: 1px solid #e1e1e1;
+			}
+			
+			.menu_body a:hover {
+				text-decoration: none;
+			}
+			
+			.form_item_name {
+				display: inline-block;
+				border-bottom: none;
+			}
+			
+			.form_item {
+				border-bottom: solid 1px #e5e5e5;
+			}
+			
+			.form_title {
+				height: 18px;
+			}
+			.mui-table-view-cell{
+				line-height: 30px;
+    			font-size: 16px;
+			}
+			#span0{
+				line-height: 24px;
+				padding: 10px;
+				border-left: 1px solid #e1e1e1;
+				background: #fff;
+				border-right: 1px solid #e1e1e1;
+
+			}
+		</style>
+	</head>
+
+	<body>
+		<img src="../img/loan_banner.jpg" width="100%"><div class="loan_goto_button" onclick="myBtnClick(this,'#577e10','')">去蚂蚁旺农贷&nbsp;&gt;</div></div>
+		
+		<div id="span0" >
+			<span class="Sform_title_name form_title_name">我要服务</span>
+			<span class="form_help">&nbsp;</span>
+			<span class="form_help" onclick="myBtnClick(this,'#f0f0f0','../menu.html')">返回主菜单</span>
+		</div>
+		<div id="firstpane" class="menu_list">
+			<h3 class="menu_head sMenu_head" style="margin-bottom: 10px;">农机植保<img class="sImg" src="../img/bank_open.png" class="loan_open_item" alt="" /></h3>
+			<div style="display:none" class="menu_body">
+				<a href="#popover" id="openPopover" class="mui-btn mui-btn-primary mui-btn-block mui">植保</a>
+				<a href="#popover1" id="openPopover1" class="mui-btn mui-btn-primary mui-btn-block mui">深松</a>
+				<a href="#popover2" id="openPopover2" class="mui-btn mui-btn-primary mui-btn-block mui">播种插秧</a>
+				<a href="#popover3" id="openPopover3" class="mui-btn mui-btn-primary mui-btn-block mui">收割</a>
+				<a href="#popover4" id="openPopover4" class="mui-btn mui-btn-primary mui-btn-block mui">全托管</a>
+				<a href="#popover5" id="openPopover5" class="mui-btn mui-btn-primary mui-btn-block mui">半托管</a>
+			</div>
+			<h3 class="menu_head sMenu_head"style="margin-bottom: 10px;">烘干仓储<img class="sImg" src="../img/bank_open.png" class="loan_open_item" alt="" /></h3>
+			<div style="display:none" class="menu_body">
+				<a href="#" class="mui-btn mui-btn-primary mui-btn-block mui">暂未开发</a>
+			</div>
+
+			<h3 class="menu_head sMenu_head" style="margin-bottom: 10px;">农业技术推广<img class="sImg" src="../img/bank_open.png" class="loan_open_item" alt="" /></h3>
+			<div style="display:none" class="menu_body">
+				<a href="#" class="mui-btn mui-btn-primary mui-btn-block mui">暂未开发</a>
+			</div>
+		</div>
+		<div id="popover" class="mui-popover">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="http://112.124.5.104:8080/payment/alipay/indexHtml.html?app_id=2016060701490546">广东极飞科技公司</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="./popoverQiLi1.html"> 山东齐力新农业服务公司</a>
+				</li>
+			
+			</ul>
+		</div>
+		<div id="popover1" class="mui-popover">
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<a href="./popover1QiLi.html">山东齐力新农业服务公司</a>
+				</li>
+				
+			</ul>
+		</div>
+		<div id="popover2" class="mui-popover">
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<a href="./popover2Qili.html">山东齐力新农业服务公司</a>
+				</li>
+			
+			</ul>
+		</div>
+		<div id="popover3" class="mui-popover">
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<a href="#">无</a>
+				</li>
+				
+			</ul>
+		</div>
+		<div id="popover4" class="mui-popover">
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<a href="./popover4Tian.html">商水县天华种植专业合作社</a>
+				</li>
+				
+			</ul>
+		</div>
+		<div id="popover5" class="mui-popover">
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<a href="./popover5Tian.html">商水县天华种植专业合作社</a>
+				</li>
+				
+			</ul>
+		</div>
+	</body>
+	<script type="text/javascript">
+		/*$("#span0").click(function() {
+			$("#firstpane").slideToggle(300);
+		})*/
+//		$("#firstpane .menu_body:eq(0)").show();
+		$("#firstpane h3.menu_head").click(function() {
+			$(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().removeClass("current");
+		});
+
+		$("#secondpane .menu_body:eq(0)").show();
+		$("#secondpane h3.menu_head").mouseover(function() {
+			$(this).addClass("current").next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().removeClass("current");
+		});
+	</script>
+	<script type="text/javascript">
+		
+	
+	$(document).ready(function() {
+		checkOauth();
+    });
+
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFramer();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/insurance/index.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/insurance/index.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/insurance/index.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/insurance/index.html";
+			}
+		}
+	}
+	
+	function checkFramer() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+				checkIndustryType()
+					
+				} else if (data.code == -1) {
+					alert("您尚未通过家庭农场主认证，请进行家庭农场主认证！!");
+					location.href = "/NewViliage/web/auth/index.html"
+				}
+			}
+		}, 'json');
+	}
+	//检测是否选取产业类型和是否填写信息采集必填项
+	function checkIndustryType(){
+		$.post("/NewViliage/api/farmer/farmerInfo", function(data, textStatus) {
+					if(textStatus == 'success' && data != null) {
+						if(data.code == 0) {
+							var User = data.result;
+							if(User.industry_type==""||User.industry_type==null||User.industry_type==undefined){
+								alert("尚未选择产业类型.请选择产业类型后继续操作")
+								window.location.href="../auth/selectIndustryType.html"
+							}else{
+								if(User.required_type==0||User.required_type==undefined||User.required_type==null){
+									window.location.href="../info/index.html"
+								}
+							}		
+						}
+					}
+		}, 'json');
+	}
+</script>
+</html>

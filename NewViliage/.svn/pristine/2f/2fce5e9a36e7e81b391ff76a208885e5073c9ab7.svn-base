@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+body {
+	margin: 0px;
+	font: normal 62.5% "微软雅黑";
+	background-color:#f6f5fa;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+li { list-style:none; }
+a,img,input { border:none; }
+a { text-decoration:none; outline:none; }
+a:hover,a:link,a:visited { text-decoration:none; }
+a:focus,input:focus {outline:none;}
+
+input,textarea,button,select,a{
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+} 
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ccc;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ccc;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #ccc;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #ccc;
+}
+
+
+select{	
+	border:0;/*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+	/*很关键：将默认的select选择框样式清除*/
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+
+.border_top_1px{
+	border-top: solid 1px #e5e5e5;
+	position:relative;
+	top:-1px;
+}

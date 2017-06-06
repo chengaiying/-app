@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/ui-box.css">
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link rel="stylesheet" href="css/swiper.min.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <title>农场主信息</title>
+
+</head>
+<body style="background-color: #f5f5f9;">
+
+<div class="ub ub-ver farmList">
+   <ul>
+       <li class="ub ub-ac farmAdd"><div class="ub ub-ac"><h3>农场主姓名</h3><input type="text" class="ub-f1 font1 addinput" placeholder="请输入"  /> <em class="ub ub-ac ub-pc iconfont" id="reset" style="margin-right: 0.4rem;">&#xe608;</em></div></li>
+   </ul>
+</div>
+
+<!--
+<input type="button" class="ub ub-ac ub-pc rzBtn" value="立即认证" /> -->
+<a href="javascript:void (0);"  class="ub ub-ac ub-pc rzBtn cur" id="submit">保存</a>
+<p style="min-height: 3rem;"></p>
+
+
+</body>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+
+<script type="text/javascript">
+ $(function(){
+    $("#reset").click(function(){
+        $(".addinput").attr("value","");
+    });
+     var fname1 = localStorage.fname1;
+     $(".addinput").val(fname1);
+    $("#submit").click(function(){
+        if($(".addinput").val() == '' || $(".addinput").val() == '请填写'){
+             alert("请输入农场主姓名！");
+        }else{
+            var vald = $(".addinput").val();
+           // alert(name);
+         //   localStorage.setItem(name, vald);
+            localStorage.farmer=vald;
+            location.href ="index.html";
+        }
+    });
+
+
+
+
+ });
+</script>
+
+</html>

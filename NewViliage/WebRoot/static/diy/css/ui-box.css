@@ -1,0 +1,279 @@
+.ub
+{
+	display: -webkit-box !important;
+	display: box !important;
+	display: -moz-box !important;
+	display: -ms-flexbox !important;
+	position:relative;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+
+}
+@-moz-document url-prefix() { /*支持火狐*/
+	.ub { width: 100%; }
+	.headerContent{width: 98%; margin: 0 1%;}
+	.circleLogo{margin:1em 0 0 1em;}
+}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {  head~body  /*Opera*/
+    .ub { width: 100%;}
+}
+
+
+.ub-rev
+{
+	-webkit-box-direction:reverse;
+	-moz-box-direction:reverse;
+	-ms-flex-direction:row-reverse;
+	-o-box-direction:reverse;
+	box-direction:reverse;
+}
+
+.ub-fh
+{
+	width:100%;
+}
+
+.ub-fv
+{
+	height:100%;
+}
+
+.ub-con
+{
+	position:absolute;
+	width:100%;
+	height:100%;
+}
+
+.ub-ac
+{
+	-webkit-box-align:center;
+	-moz-box-align:center;
+	-ms-flex-align: center;
+	-o-box-align:center;
+	box-align:center;
+}
+.ub-ae
+{
+	-webkit-box-align:end;
+	-moz-box-align:end;
+	-ms-flex-align: end;
+	-o-box-align:end;
+	box-align:end;
+}
+
+.ub-pc
+{
+	-webkit-box-pack:center;
+	-moz-box-pack:center;
+	-ms-flex-pack:center;
+	-o-box-pack:center;
+	box-pack:center;
+}
+.ub-pe
+{
+	-webkit-box-pack:end;
+	-moz-box-pack:end;
+	-ms-flex-pack: end;
+	-o-box-pack:end;
+	box-pack:end;
+}
+.ub-pj
+{
+	-webkit-box-pack:justify;
+	-moz-box-pack:justify;
+	-ms-flex-pack:justify;
+	-o-box-pack:justify;
+	box-pack:justify;
+}
+
+.ub-ver
+{
+	-webkit-box-orient:vertical;
+	-moz-box-orient:vertical;
+	-ms-flex-direction:column;
+	-o-box-orient:vertical;
+	box-orient:vertical;
+}
+
+.ub-f1
+{
+	position:relative;
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	-ms-flex:1;
+	-o-box-flex: 1;
+	box-flex: 1;
+}
+
+.ub-f2
+{
+	position:relative;
+	-webkit-box-flex: 2;
+	-moz-box-flex: 2;
+	-ms-flex: 2;
+	-o-box-flex: 2;
+	box-flex: 2;
+}
+
+.ub-f3
+{
+	position:relative;
+	-webkit-box-flex: 3;
+	-moz-box-flex: 3;
+	-ms-flex: 3;
+	-o-box-flex: 3;
+	box-flex: 3;
+}
+
+.ub-f4
+{
+	position:relative;
+	-webkit-box-flex: 4;
+	-moz-box-flex: 4;
+	-ms-flex: 4;
+	-o-box-flex: 4;
+	box-flex: 4;
+}
+
+.ub-img
+{
+	-webkit-background-size:contain;
+	-moz-background-size:contain;
+	-o-background-size:contain;
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.ub-img1
+{
+	-webkit-background-size:cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	background-size:cover;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+.ub-img2
+{
+	background-repeat:repeat-x;
+	background-size:auto 100%
+}
+.ub-img3
+{
+	background-repeat:repeat-y;
+	background-size:100% auto
+}
+
+.ub-img4
+{
+	-webkit-background-size:100% auto;
+	-moz-background-size:100% auto;
+	-ms-background-size:100% auto;
+	-o-background-size:100% auto;
+	background-size:100% auto;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+.ub-img5
+{
+	-webkit-background-size:auto 100%;
+	-moz-background-size:auto 100%;
+	-ms-background-size:auto 100%;
+	-o-background-size:auto 100%;
+	background-size:auto 100%;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.ub-img6
+{
+	background-repeat:no-repeat;
+	background-position:center;
+}
+.ub-img7
+{
+	-webkit-background-size:100% 100%;
+	-moz-background-size:100% 100%;
+	-ms-background-size:100% 100%;
+	-o-background-size:100% 100%;
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.uh .btn-l,.uf .btn-l {
+	position: absolute;
+	left: 10px;
+	top: .55em
+}
+
+.uh .btn-r,.uf .btn-r {
+	position: absolute;
+	right: 10px;
+	top: .55em
+}
+
+
+.uh .btn,.uf .btn{
+	display: inline-block;
+	font-size: .8125em;
+	margin: 0
+}
+
+.btn
+{
+	font-size: 0.8em;
+	text-align:center;
+}
+
+
+.btn-act
+{
+	opacity:0.4
+	-webkit-box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);
+	-moz-box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);
+	-ms-box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);
+	-o-box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);
+	box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.btn-act1
+{
+	opacity:0.4
+}
+
+
+/*通用样式*/
+
+/*字体样式*/
+.ulev1{font-size: 1em;}
+.ulev2{font-size: 1.25em;}
+.ulev-0{font-size: 0.92em;}
+.ulev-1{font-size: 0.82em;}
+.ulev-2{font-size: 0.72em;}
+.ulev-3{font-size: 0.62em;}
+
+/*字体颜色*/
+.text-color1{color: #cc0000;}
+.text-color2{color: #1e1e1e;}
+.text-color3{color: #585858;}
+.text-color4{color: #fff;}
+.text-color5{color: #5d5d5d;}
+.text-color6{color: #888;}
+
+/*边框*/
+.ubt{border-top:1px solid;}
+.ubb{border-bottom:1px solid;}
+.ubr{border-right:1px solid;}
+.ubl{border-left:1px solid;}
+
+.border-color1{border-color: #d94646;}
+.border-color2{border-color: #dadada;}
+
+
+

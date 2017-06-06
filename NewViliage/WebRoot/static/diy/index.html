@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/public.css">
+		<link rel="stylesheet" href="css/ui-box.css">
+		<link rel="stylesheet" href="iconfont/iconfont.css">
+		<link rel="stylesheet" href="css/swiper.min.css" />
+		<link rel="stylesheet" href="css/index.css">
+		<title>农场主认证</title>
+
+	</head>
+	<style>
+		.bg_image {
+			display: block;
+			margin-top: 80px;
+			margin-bottom: 30px;
+		}
+		
+		.pp * {
+			margin-top: 5px;
+			margin-bottom: 5px;
+			color: #fdab2c;
+		}
+		
+		.authentication_page {
+			display: none;
+		}
+		
+		.person_page {
+			display: none;
+		}
+		
+		h3 {
+			margin-right: 20px;
+		}
+		.farmList span{
+			color: #141414;
+			
+			
+		}
+	</style>
+
+	<body style="background-color: #ececec;" ontouchstart="">
+
+		<center class="authentication_page">
+			<img class="bg_image" src="images/indexBanner.png" width="45%" />
+			<p style="color: #333333;font-weight: 500;font-size: 18px;margin-bottom: 20px;">您尚未进行家庭农场认证</p>
+			<div class="pp" style="font-size: 13px;">
+				<p style="color: #999999;">进行认证后可享受&emsp;&emsp;&emsp;&emsp;</p>
+				<p><img src="images/1.png" style="vertical-align:middle;height: 15px;margin-right: 5px;" />农业部提供相关优惠政策</p>
+				<p><img src="images/2.png" style="vertical-align:middle;height: 15px;margin-right: 5px;" />贷款，保险等增值服务&emsp;</p>
+				<a href="farmer_auth.html" target="_self" style="color: #ffffff">
+					<p style="margin: 5%;padding: 10px;background: #00aaee;color: #FFFFFF;border-radius: 5px;">开始认证</p>
+				</a>
+			</div>
+
+		</center>
+
+		<div class="person_page">
+			<div class="ub ub-ac farmTit1" style="background: #75c6df;color: #FFFFFF;">
+				<em class="ub ub-ac ub-pc iconfont">&#xe609;</em>
+				<h2 class="farmerName"></h2>
+			</div>
+
+			<div class="ub ub-ver farmList" style="margin-top: 0px;">
+				<ul>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>农场主姓名&emsp;&emsp;</h3>
+							<span class="ub-f1 font1 farmer"></span>
+							<em class="ub ub-ac ub-pc iconfont"></em>
+						</div>
+					</li>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>家庭农场地址&emsp;</h3><span class="ub-f1 font1 addr"></span><em class="ub ub-ac ub-pc iconfont"></em> </div>
+					</li>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>身份证号&emsp;&emsp;&emsp;</h3><span class="ub-f1 font1 farmerId"></span><em class="ub ub-ac ub-pc iconfont"></em> </div>
+					</li>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>电话号码&emsp;&emsp;&emsp;</h3><span class="ub-f1 font1 farmerTel"></span><em class="ub ub-ac ub-pc iconfont"></em> </div>
+					</li>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>农场主个人照片</h3>
+							<span class="ub-f1 font1">
+							<img class=" photo1" style="margin: 5px;height: 100px;" src="images/addimg.png" />
+							</span>
+							<em class="ub ub-ac ub-pc iconfont"></em> </div>
+					</li>
+					<li class="ub">
+						<div class="ub ub-ac">
+							<h3>家庭农场执照&emsp;</h3>
+							<span class="ub-f1 font1">
+							<img class="ub-f1 font1 photo2" style="margin: 5px;height: 100px;" src="images/addimg.png" />
+							</span>
+							<em class="ub ub-ac ub-pc iconfont"></em> </div>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+
+	</body>
+
+	<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/swiper.min.js"></script>
+	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			checkOauth(); //检查是否已经完成农场主认证
+		});
+
+		//获取URL中的活动id参数
+		function getUrlParam(paraName) {
+			var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+			var retStr = window.location.search.substr(1).match(reg); //匹配目标参数
+			var ret = unescape(retStr[2]);
+			return ret;
+		}
+
+		//检查是否已经完成农场主认证
+		function checkOauth() {
+			$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						checkFarmerAuth();
+					} else {
+						doOauth();
+					}
+				}
+			}, 'json');
+		}
+
+		//显示认证信息框，屏蔽跳转按钮
+		function DispFarmerInfo() {
+			
+				// 获取接口的数据/api/farmer/farmerInfo
+			$.post("/NewViliage/api/farmer/farmerInfo", {
+				alipay_user_id: localStorage.getItem('alipay_user_id'),
+				access_token: localStorage.getItem('access_token'),
+			}, function(data, textStatus) {
+
+				if(textStatus == 'success') {
+					if(data.code == 0) {
+						// alert(data.result);
+
+						var res = data.result;
+						// console.log(res);
+						
+						$(".farmer").text(res.farmer);
+						$(".farmerName").text(res.farm_name); //家庭农场名称
+						$(".addr").text(res.addr); //农场主姓名
+						$(".farmerTel").text(res.contact); //联系方式
+						$(".farmerId").text(res.id_num); //身份证号码
+						// $("#farmerAdd").text(addD); //城市
+						// $("#xxadd").val(xxadd); //详细地址
+						if(res.photo != '') {
+							var photo1 = '/storage/' + res.photo;
+							$('.photo1').attr('src', photo1);
+							
+						}
+						if(res.licence_img != '') {
+							var photo2 = '/storage/' + res.licence_img;
+							$('.photo2').attr('src', photo2);                
+						}
+
+						if(res.is_authed == 1) {
+							$('.is_authed').text('已认证');
+						} else {
+							$('.is_authed').text('未认证');
+						}
+					} else if(data.code == -2) {
+						alert('请重新获取alipay token');
+						doOauth();
+					} else {
+						alert('获取信息失败');
+					}
+				}
+			}, 'json');
+
+		}
+
+		//现在跳转按钮，屏蔽信息显示
+		function DispAuthButton() {
+			document.getElementById('farmInfo').style.display = "none";
+			document.getElementById('authButton').style.display = "block";
+
+		}
+
+		// 检查农场主是否已经认证
+		function checkFarmerAuth() {
+			$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+
+					if(data.code == 0) {
+//						alert('该农场主已认证');
+						$(".authentication_page").css("display", "none")
+						$(".person_page").css("display", "block")
+							//$(".fram_name").text(JSON.stringify(localStorage))
+
+						DispFarmerInfo();
+
+					} else {
+//						alert('该农场主未认证');
+						$(".authentication_page").css("display", "block")
+						$(".person_page").css("display", "none")
+
+						DispAuthButton();
+					}
+				}
+			}, 'json');
+		}
+
+		//支付宝授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+		function doOauth() {
+			location.href = "/NewViliage/api/oauth/publicAppAuthorize?ori_url=/diy/dummy.html";
+		}
+	</script>
+
+</html>

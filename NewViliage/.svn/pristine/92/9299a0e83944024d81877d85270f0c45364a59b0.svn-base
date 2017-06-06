@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>我的保险</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+	.lace_table {
+		background-image: url("../img/lace_table.png");
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
+	.list_button {
+		border: 1px solid #eee;
+	    letter-spacing: 2px;
+	    padding: 0 4px 0 4px;
+	    border-radius: 5px;
+	    margin-right: 4px;
+	}
+
+	ul{padding: 0;margin: 0;}
+	li{list-style: none;text-align: center;margin-bottom: 10px;}
+	.wait{border: 1px solid #eee;padding: 10px;border-radius: 30px;background-color: #777;color: white;}
+	.active{background-color: #019875;color: white;}
+	.end {background-color: red;color: white;}
+	.li_white{color: white;}
+	.list_button{border: 1px solid gray;color: black;font-size: 13px;margin-left: 10px;}
+	.loan_list_div{margin-top: 10px;padding-bottom: 10px;}
+	/*.loan_rate{padding-top: 20px;}*/
+	.lace_table{padding-top: 10px;margin-bottom: 20px;}
+	.list_time{float: right;margin-right: 10px;}
+	.loan_list_txt2{vertical-align: middle;}
+	#ins_name{font-size:16px}
+	.loan_list_bank{padding-bottom:10px}
+</style>
+</head>
+<body>
+        <div class="form_null_tips">暂无保险记录</div>
+        <ul style="display: none;">
+			<li><span class="wait">已申请</span></li>
+			<li class="li_white">|</li>
+			<li><span class="wait">审核中</span><span class="wait end" style="display: none;">审核未通过</span></li>
+			<li class="li_white">|</li>
+			<li><span class="wait">尽调中</span><span class="wait end" style="display: none;">尽调未通过</span></li>
+			<li class="li_white">|</li>
+			<li><span class="wait">签订保险合同</span></li>
+			<li class="li_white">|</li>
+			<li><span class="wait">查勘定损</span></li>
+			<li class="li_white">|</li>
+			<li><span class="wait">履行赔款义务</span><span class="wait end" style="display: none;">超出保险范围</span></li>
+			<li class="show li_white" >|</li>
+			<li><span class="wait">赔款成功</span></li>
+			<div class="message" style="display: none;"></div>
+		</ul>
+		
+
+</body>
+
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/swiper.min.js"></script>
+<script type="text/javascript" src="../js/bombBox.js" ></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+    });
+	
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFramer();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/insurance/list.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/insurance/list.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/insurance/list.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/insurance/list.html";
+			}
+		}
+	}
+	
+	function checkFramer() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					GetMyProdList();
+				} else if (data.code == -1) {
+					alert("您尚未通过家庭农场主认证，请进行家庭农场主认证！!");
+					location.href = "/NewViliage/web/auth/index.html"
+				}
+			}
+		}, 'json');
+	}
+	
+	
+	function GetMyProdList() {
+		$.post("/NewViliage/api/insurer/myInsurer", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					var tmphtml;
+					$(document.body).empty();
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							tmphtml = "<div class=\"lace_table\">";
+							tmphtml = tmphtml + "<div class=\"loan_list_table\">";
+							tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
+							tmphtml = tmphtml + "<tr valign=\"top\"><td colspan=\"2\"><div id=\"ins_name\" class=\"loan_name\" >" + value.ins_name + "</div></td>";
+							tmphtml = tmphtml + "<td align=\"right\" class=\"loan_list_score\" width=\"30%\"><img src=\"../img/star_5.png\"/>";
+							tmphtml = tmphtml + "</td></tr>";
+							tmphtml = tmphtml + "<tr valign=\"top\"><td class=\"loan_list_txt\" width=\"50%\">时间:"+FormatDate(value.apply_date)+"</td>";
+							tmphtml = tmphtml + "<td align=\"right\" class=\"loan_list_bank\" colspan=\"2\"><img src=\"/storage/" + value.insurer_icon + "\" />" + value.insurer_name + "</td></tr>";
+							tmphtml = tmphtml + "</table></div><div class=\"loan_list_div\">";
+							tmphtml = tmphtml + "<span class=\"loan_list_txt2 list_button\" id=\"assess\" onClick=\"assess('"+value.ids+"');\">评价</span>";
+							tmphtml = tmphtml + "<span class=\"loan_list_txt2 list_button\" onClick=\"progress('"+value.ins_status+"','"+value.deny_reason+"');\" >进度查询</span>";
+							tmphtml = tmphtml + "<span class=\"loan_list_txt2 list_button\" onClick=\"report('"+value.ins_status+"','"+value.ids+"');\" >申请理赔</span></div>"
+//							tmphtml = tmphtml + "<span class=\"loan_list_txt2 list_time\">申请时间:" + FormatDate(value.apply_date) + "</span>";
+							tmphtml = tmphtml + "</div>";
+							$(document.body).append(tmphtml);
+						}
+					});
+					$(document.body).append("<br /><br />");
+				}
+			}
+		}, 'json');
+	}
+	
+	function assess(id){
+		window.location.href = "./assess.html?id="+id;
+	}
+	
+	//申请理赔
+	function report(status,ids){
+		
+		if(status==0||status==1||status==2||status==3||status==4){
+			alert("保险合同未签订，请耐心等待");
+			return false;
+		}else if(status == 5){
+			console.log("5")
+			$.post("/NewViliage/api/insurer/reportInsurer",{id:ids} ,function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+					if (data.code==0) {
+						alert("已受理，请耐心等待");
+						location.href = "./list.html"
+					}
+			    }
+		    }, 'json');
+		}else if(status==6||status==7||status==8){
+			alert("已经申请理赔，请勿重复提交");
+			return false;
+		}else if(status == 9){
+			alert("已受理完成")
+		}
+		
+	}
+	
+    var tmp = $("ul").prop("outerHTML");
+	//进度查询
+	function progress(status,deny_reason){
+		bombBox();
+		$("#bombBox_small").empty();
+		$("#bombBox_small").html(tmp);
+		$("#bombBox_small ul").css({"display":"block","font-size":"16px"});
+		$("#bombBox_small span").each(function(i){
+		if(i <= status ){
+			$(this).addClass("active");
+		}
+		if(status == 2){
+			$("#bombBox_small span").eq(1).hide();
+			$("#bombBox_small span").eq(2).show();
+			$("#bombBox_small .message").show();
+			$("#bombBox_small .message").text("未通过原因："+deny_reason)
+		}
+		if(status == 4){
+		    $("#bombBox_small span").eq(3).hide();
+		    $("#bombBox_small span").eq(4).show();
+		    $("#bombBox_small .message").show();
+			$("#bombBox_small .message").text("未通过原因："+deny_reason)
+		}
+		if(status == 8){
+			$("#bombBox_small span").eq(7).hide();
+		    $("#bombBox_small span").eq(8).show();
+		    $("#bombBox_small .message").show();
+			$("#bombBox_small .message").text("原因："+deny_reason)
+		}
+		$("#bombBox_small .message").css({
+			"width":"60%",
+	        "margin-left":"20%",
+	        "margin-top":"40px",
+            "color":"red"
+		})
+		
+		var len = $("#bombBox_small").height()+$(document).scrollTop()+40;
+    	if(len >= $("#bombBox_big").height()){
+    		$("#bombBox_big").css({
+    			"height":len
+    		})
+    	}//防止过长之后空白
+    	
+		})
+	}
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+	
+</script>
+
+</html>

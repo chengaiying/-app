@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/ui-box.css">
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link rel="stylesheet" href="css/swiper.min.css" />
+    <link rel="stylesheet" href="css/index.css">
+    <title>农业信息采集</title>
+
+</head>
+<body style="background-color: #f5f5f9;" ontouchstart="">
+
+<div class="ub farmTit1">
+    <em class="ub ub-ac ub-pc iconfont">&#xe609;</em><h2>家庭农场主信息认证</h2>
+</div>
+
+<div class="ub ub-ver farmList">
+   <ul>
+       <li class="ub name"><div class="ub ub-ac"><h3>农场主姓名</h3><span class="ub-f1 font1" id="farmer">张华斌</span> <em></em></div></li>
+       <li class="ub ub-ac farmName"><div class="ub ub-ac"><h3>家庭农场名称</h3><span class="ub-f1 font1" id="farmerName">请填写</span> <em class="ub ub-ac ub-pc iconfont">&#xe602;</em></div></li>
+       <li class="ub ub-ac farmAdd"><div class="ub ub-ac"><h3>家庭农场地址</h3><span class="ub-f1 font1" id="farmerAdd">请填写</span> <em class="ub ub-ac ub-pc iconfont">&#xe602;</em></div></li>
+   </ul>
+</div>
+
+<div class="ub ub-ver farmList">
+    <ul>
+        <li class="ub ub-ac farmId"><div class="ub ub-ac"><h3>身份证号</h3><span class="ub-f1 font1" id="farmerId">420123198209155921</span> <em class="ub ub-ac ub-pc"></em></div></li>
+        <li class="ub ub-ac farmCon"><div class="ub ub-ac"><h3>联系方式</h3><span class="ub-f1 font1" id="farmerTel">1899563265</span> <em class="ub ub-ac ub-pc iconfont"></em></div></li>
+    </ul>
+</div>
+
+<div class="ub ub-ver farmList2">
+    <ul>
+        <li class="ub ub-ac farmImg" id="J_exampleTrigger"><div class="ub ub-ac" ><h3 class="ub-f1">农场主个人照片上传</h3> <input id="file1" class="dfile"  type="file" name="file1" onChange="ajaxfile();"  /><span class="img1" id="J_photoReplace"></span><span class="photo1" id="J_photoHere_wrap" style="display: none;"><img id="J_photoHere" src="" save_data=""/></span></div> </li>
+        <li class="ub ub-ac farmImg" id="J_exampleTrigger2"><div class="ub ub-ac" ><h3 class="ub-f1">农场主个人照片上传</h3> <input id="file2" class="dfile"  type="file" name="file2" onChange="ajaxfile2();"  /><span class="img1" id="J_photoReplace2"></span><span class="photo1" id="J_photoHere_wrap2" style="display: none;"><img id="J_photoHere2" src="" save_data=""/></span></div> </li>
+    </ul>
+</div>
+<div id="test">
+</div>
+
+<!--
+<input type="button" class="ub ub-ac ub-pc rzBtn" value="立即认证" /> -->
+<a href="javascript:doFarmerAuth();"  class="ub ub-ac ub-pc rzBtn cur">立即认证</a>
+<p class="rzTxt font2">认证成功后，可享受贷款，保险等服务</p>
+
+<p style="min-height: 3rem;"></p>
+
+
+</body>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+
+<!--script src="https://a.alipayobjects.com/u/ecmng/js/201410/3fzyLyZl9J.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="https://static.alipay.com/aliBridge/1.0.0/aliBridge.min.js"></script>
+<script src="https://a.alipayobjects.com/amui/zepto/1.1.3/zepto.js"></script-->
+<script>
+	/*
+    (function(Z){
+        Z(document).ready(function(){
+            if(navigator.userAgent.indexOf("AlipayClient")!==-1){
+                Ali.showTitle(function(){});
+                Ali.hideToolbar();
+            }
+            function getAbsoluteUrl(url){
+                var a = document.createElement('A');
+                a.href = url; // 设置相对路径给Image, 此时会发送出请求
+                url = a.href; // 此时相对路径已经变成绝对路径
+                return url;
+            }
+
+            Z('a#J_codeExample').click(function(e){
+                var t=this;
+                if(navigator.userAgent.indexOf("AlipayClient")!==-1){
+                    e.preventDefault();
+                    Ali.pushWindow({
+                        url: getAbsoluteUrl(Z(t).attr('href')),
+                        param: {
+                            readTitle: "YES",
+                            showToolBar: "NO"
+                        }
+                    })
+                }
+            });
+            Z('#J_exampleTrigger').click(function(e){
+                e.preventDefault();
+                if(navigator.userAgent.indexOf("AlipayClient")===-1){
+                    alert('请在支付宝钱包内运行');
+                }else{
+                    if((Ali.alipayVersion).slice(0,3)>=8.1){
+                        Ali.photo({
+                            dataType: 'dataurl',
+                            allowedEdit: true,
+                            src: 'camera',
+                            format: 'jpg',
+                            quality: 100
+                        }, function(result) {
+                            if(result.errorCode){
+                                //没有成功拍照的情况
+                                //errorCode=10，用户取消
+                                //errorCode=11，操作失败（权限不够）
+                                switch(result.errorCode){
+                                    case 10:
+                                     //   Z('#J_photoReplace').html('用户取消操作');
+                                        alert('用户取消操作');
+                                        break;
+                                    default:
+                                      //  Z('#J_photoReplace').html('操作失败');
+                                        alert('操作失败');
+                                }
+                                Z('#J_photoHere_wrap').hide();
+                                Z('#J_photoReplace').show();
+                            }else{
+                                //成功拍照要做的事情。
+                                Z('#J_photoReplace').hide();
+                                Z('#J_photoHere_wrap').show();
+                                Z('#J_photoHere').attr('src',result.photo);
+								//alert(result.photo);
+								//$("#test").text(result.photo);
+								$('#file1').val(result.photo);
+								ajaxfile();
+								//ppost(result.photo);
+                            }
+
+                        });
+                    }else{
+                        alert('请在钱包8.1以上版本运行');
+                    }
+                }
+            });
+
+
+            Z('#J_exampleTrigger2').click(function(e){
+                e.preventDefault();
+                if(navigator.userAgent.indexOf("AlipayClient")===-1){
+                    alert('请在支付宝钱包内运行');
+                }else{
+                    if((Ali.alipayVersion).slice(0,3)>=8.1){
+                        Ali.photo({
+                            dataType: 'dataurl',
+                            allowedEdit: true,
+                            src: 'camera',
+                            format: 'jpg',
+                            quality: 100
+                        }, function(result) {
+                            if(result.errorCode){
+                                //没有成功拍照的情况
+                                //errorCode=10，用户取消
+                                //errorCode=11，操作失败（权限不够）
+                                switch(result.errorCode){
+                                    case 10:
+                                        //   Z('#J_photoReplace').html('用户取消操作');
+                                        alert('用户取消操作');
+                                        break;
+                                    default:
+                                        //  Z('#J_photoReplace').html('操作失败');
+                                        alert('操作失败');
+                                }
+                                Z('#J_photoHere_wrap2').hide();
+                                Z('#J_photoReplace2').show();
+                            }else{
+                                //成功拍照要做的事情。
+                                Z('#J_photoReplace2').hide();
+                                Z('#J_photoHere_wrap2').show();
+                                Z('#J_photoHere2').attr('src',result.photo);
+                            }
+
+                        });
+                    }else{
+                        alert('请在钱包8.1以上版本运行');
+                    }
+                }
+            });
+
+
+        });
+    })(Zepto);
+	*/
+</script>
+
+
+<script type="text/javascript">
+	
+    $(document).ready(function() {
+        /*var userId = getUrlParam('alipay_user_id');
+        var token = getUrlParam('access_token');
+
+        if (userId != null && token != null) {
+            alert('get token and userid success');
+            localStorage.setItem('access_token', token);
+            localStorage.setItem('alipay_user_id', userId);
+            $('.alipay_user_id').val(userId);
+            $('.access_token').val(token);
+        } else {
+            userId = localStorage.getItem('alipay_user_id');
+            token = localStorage.getItem('access_token')
+            doOauth();
+        }*/
+		checkOauth();
+    });
+	
+    //获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					alert('已获取授权');
+				} else if (data.code == -2) {
+					doOauth();
+				}
+			}
+		}, 'json');
+	}
+
+    //农场主认证  测试用，不做输入校验
+    function doFarmerAuth() {
+        $.post("/NewViliage/api/farmer/farmerAuth", {
+            farmer : $('#farmer').text(),
+            contact : $('#farmerTel').text(),
+            farm_name : $('#farmerName').text(),
+            id_num : $('#farmerId').text(),
+            addr : $('#farmerAdd').text(),
+            alipay_user_id : localStorage.getItem('alipay_user_id'),
+            access_token : localStorage.getItem('access_token'),
+			photo : $("#J_photoHere").attr('save_data')
+
+        }, function(data, textStatus) {
+            if (textStatus == 'success' && data != null) {
+                if (data.code==0) {
+                    alert('农场主认证成功');
+                } else if (data.code == -2) {
+                    alert('请重新获取alipay token');
+                    doOauth();
+                } else if (data.code == 2) {
+                    alert('您已认证，无需重复操作');
+                } else if (data.code >= 100 && data.code < 200) {
+                    alert('参数错误:' + data.desc);
+                } else {
+                    alert('农场主认证失败');
+                }
+            }
+        }, 'json');
+    }
+
+    //支付宝授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+    function doOauth() {
+        location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/xlc/index.html";
+    }
+	
+</script>
+<script>
+//图片上传
+function ajaxfile(){
+	$.ajaxFileUpload({
+		url:'/NewViliage/api/file/upload/',//处理图片脚本
+		secureuri :false,
+		fileElementId :'file1',//file控件id
+		dataType : 'json',
+		success : function (data, status){
+			//alert($("#file1").val());
+			//alert(data.msg);
+			
+			if(data.code==0){
+				//alert('success');
+                $("#J_photoHere_wrap").show();
+				$("#J_photoHere").attr('src','/storage/'+data.desc).attr('save_data',data.result[0]);
+                $("#J_photoReplace").hide();
+
+			}else{
+				alert('failed');
+			}
+			//alert(data.preview);
+			/*if(typeof(data.tag)){
+				alert(data.save);
+			}*/
+			//$('#J_photoHere_wrap').css('display','block');
+            //$('#J_photoReplace').show('display','none');
+			//$('#J_photoHere').attr('src',data.preview).attr('save_data',data.save);
+		},
+		error: function(data, status, e){
+			alert(e);
+		}
+	})
+}
+
+function ajaxfile2(){
+    $.ajaxFileUpload({
+        url:'/NewViliage/api/file/upload/',//处理图片脚本
+        secureuri :false,
+        fileElementId :'file2',//file控件id
+        dataType : 'json',
+        success : function (data, status){
+            //alert($("#file1").val());
+            //alert(data.msg);
+
+            if(data.code==0){
+                //alert('success');
+                $("#J_photoHere_wrap2").show();
+                $("#J_photoHere2").attr('src','/storage/'+data.desc).attr('save_data',data.result[0]);
+                $("#J_photoReplace2").hide();
+
+            }else{
+                alert('failed');
+            }
+            //alert(data.preview);
+            /*if(typeof(data.tag)){
+             alert(data.save);
+             }*/
+            //$('#J_photoHere_wrap').css('display','block');
+            //$('#J_photoReplace').show('display','none');
+            //$('#J_photoHere').attr('src',data.preview).attr('save_data',data.save);
+        },
+        error: function(data, status, e){
+            alert(e);
+        }
+    })
+}
+
+/*
+function ppost(idata){
+	$.ajax({
+		url:'/NewViliage/api/file/upload/',//处理图片脚本
+		type:'post',
+		data:idata,
+		enctype: 'multipart/form-data',
+		success:function(r){
+			alert(r);
+		}
+	})
+}*/
+</script>
+</html>

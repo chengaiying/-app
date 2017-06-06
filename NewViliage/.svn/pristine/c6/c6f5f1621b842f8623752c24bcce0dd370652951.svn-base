@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农业部新农人直报平台</title>
+		<link href="./css/style.css" rel="stylesheet" type="text/css" />
+		<link href="./css/menu.css" rel="stylesheet" type="text/css" />
+		<link href="./css/html.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="css/news_scrol.css" />
+		<script src="./js/jquery-2.1.4.min.js"></script>
+		<script src="./js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="./js/buttonStyle.js"></script>
+
+	</head>
+
+	<body>
+
+		<!--头图 -->
+		<!--<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td><img src="html/image/app_banner.jpg" width="100%" />
+<div class="menu_faq_bg">常见问题</div>
+<div class="menu_faq"><a href="">常见问题</a></div></td></tr></table> -->
+
+		<div id="banner">
+			<div id="banner_list">
+				<a href="https://t.alipayobjects.com/images/partner/T1J44sXjpcXXbMsGbX.html" target="_self" class="on">
+					<img src="html/image/imgSwh1.jpg" width="100%" alt="加快构建新型农业经营体系"></a>
+				<a href="https://market.m.taobao.com/markets/baoxian/nybx" target="_self">
+					<img src="html/image/imgSwh2.jpg" width="100%" alt="农业保险为农户撑起“保护伞”"></a>
+				<a href="https://t.alipayobjects.com/images/partner/T1Ji4sXgVXXXbMsGbX.html" target="_self">
+					<img src="html/image/imgSwh3.jpg" width="100%" alt="健全家庭农场政策体系，扶持家庭农场经济发展"></a>
+			</div>
+
+			<ul>
+				<li class="on"></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		<div id="banner_place"><img src="html/image/imgSwhBg.jpg" width="100%" id="banner_bg_img"></div>
+		<!--占位 -->
+		<div id="banner_bg_site">
+			<div id="banner_bg">&nbsp;</div>
+			<div id="banner_info"></div>
+		</div>
+
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="menu_grid_table">
+			<tr>
+				<td width="10px"></td>
+				<td class="menu_grid_td border_bot_1px" onClick="myBtnClick(this,'#f0f0f0','info/index.html')"><img src="html/icon/micon1.png">
+					<div class="menu_grid_name">信息采集</div>
+				</td>
+
+				<td class="menu_grid_td border_bot_1px" onClick="myBtnClick(this,'#f0f0f0','html/business.html')"><img src="html/icon/micon2.png">
+					<div class="menu_grid_name">经营动态</div>
+				</td>
+
+				<td class="menu_grid_td border_bot_1px" onClick="myBtnClick(this,'#f0f0f0','html/policy.html')"><img src="html/icon/micon3.png">
+					<div class="menu_grid_name">补贴政策</div>
+				</td>
+
+				<td class="menu_grid_td border_bot_1px" onClick="myBtnClick(this,'#f0f0f0','html/Training.html')"><img src="html/icon/micon9.png">
+					<div class="menu_grid_name">我要培训</div>
+				</td>
+				<td width="10px"></td>
+			</tr>
+			<tr>
+				<td width="10px"></td>
+
+				<td class="menu_grid_td" onClick="myBtnClick(this,'#f0f0f0','bank/index.html')"><img src="html/icon/micon4.png">
+					<div class="menu_grid_name">我要贷款</div>
+				</td>
+
+				<td class="menu_grid_td" onClick="myBtnClick(this,'#f0f0f0','insurance/index.html')"><img src="html/icon/micon5.png">
+					<div class="menu_grid_name">我要保险</div>
+				</td>
+
+				<td class="menu_grid_td" onClick="myBtnClick(this,'#f0f0f0','http://112.124.5.104:8080/payment/alipay/indexHtml.html?app_id=2016060701490546')"><img src="html/icon/micon7.png">
+					<div class="menu_grid_name">我要服务</div>
+				</td>
+
+				<td class="menu_grid_td" onClick="myBtnClick(this,'#f0f0f0','html/c_form_market.html')"><img src="html/icon/micon6.png">
+					<div class="menu_grid_name">农业电商</div>
+				</td>
+
+				<td width="10px"></td>
+			</tr>
+		</table>
+
+		<div id="body_content">
+
+			<!--展示内容开始 -->
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="headline_table">
+				<tr valign="top">
+					<td width="1%" class="headline_icon" valign="middle" id="nhdt"><img src="html/image/dongtai.png"></td>
+					<td class="headline_content" valign="middle">
+						<div id="myscroll" class="cls_container">
+							<ul>
+							</ul>
+						</div>
+						<div id="showhint"></div>
+					</td>
+				</tr>
+			</table>
+
+			<!--政策前沿-->
+			<div class="policy_group" id="zc">
+
+			</div>
+			<div class="border_1px_site">
+				<div class="border_1px"></div>
+			</div>
+
+			<!--补贴动态-->
+			<div class="policy_group" id="bt" style="display: none;">
+
+			</div>
+			<div class="border_1px_site">
+				<div class="border_1px"></div>
+			</div>
+
+			<!--市场行情-->
+			<div class="policy_group" id="hq" style="display: none;">
+
+			</div>
+
+			<div class="border_1px_site">
+				<div class="border_1px"></div>
+			</div>
+
+			<br />
+			<center>
+				<div class="cr_app_name">农业部新农人直报平台</div>
+				<div class="cr_info">Copyright © 2016 MOA. All rights reserved.</div>
+				<br />
+			</center>
+
+			<br />
+		</div>
+		<!--body_content -->
+
+		<!--底部菜单 -->
+		<div id="fmenu_click_bg"></div>
+		<!--遮罩层 -->
+		<div>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fmenu_table" id="fmenu_table">
+				<tr valign="bottom">
+					<td class="fmenu_click_td">
+						<div class="fmenu_box" id="fmenu_box">
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/auth/index.html')">
+								<a href="javascript:void(0)">身份认证</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/info/index.html')">
+								<a href="javascript:void(0)">农业信息采集</a>
+							</li>
+						</div>
+					</td>
+					<td class="fmenu_click_td">
+						<div class="fmenu_box" id="fmenu_box">
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/bank/index.html')">
+								<a href="javascript:void(0)">我要贷款</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/menu_check.html?tolink=1')">
+								<a href="javascript:void(0)">农险购买</a>
+							</li>
+							<!--<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/menu_check.html?tolink=2')">
+<a href="javascript:void(0)">农资购买</a></li>
+<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/html/how_to_sell.html')">
+<a href="javascript:void(0)">卖农产品</a></li> -->
+						</div>
+					</td>
+					<td class="fmenu_click_td">
+						<div class="fmenu_box" id="fmenu_box">
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/info/list.html')">
+								<a href="javascript:void(0)">我的上报</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/bank/list.html')">
+								<a href="javascript:void(0)">我的贷款</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/insurance/list.html')">
+								<a href="javascript:void(0)">我的保险</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/info/plan.html')">
+								<a href="javascript:void(0)">我的待办</a>
+							</li>
+							<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/html/score.html')">
+								<a href="javascript:void(0)">我的成长值</a>
+							</li>
+							<!--<li onClick="myBtnClick(this,'#f0f0f0','/NewViliage/web/test.html')">
+<a href="javascript:void(0)">测试</a></li> -->
+							<!--<li><a href="/NewViliage/static/test.html">我要培训</a></li> -->
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" class="fmenu_td_shadow"></td>
+				</tr>
+				<tr align="center">
+					<td class="fmenu_td" width="33%" id="menu_td">
+						<img src="html/icon/menu_icon1.png">
+						<div class="fmenu_name" id="fmenu_td_hd">信息服务</div>
+					</td>
+					<td class="fmenu_td" width="34%">
+						<img src="html/icon/menu_icon2.png">
+						<div class="fmenu_name" id="fmenu_td_hd">金融服务</div>
+					</td>
+					<td class="fmenu_td" width="33%">
+						<img src="html/icon/menu_icon3.png">
+						<div class="fmenu_name" id="fmenu_td_hd">&nbsp;&nbsp;我的…&nbsp;&nbsp;</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!--底部菜单结束 -->
+
+	</body>
+
+	<script type="text/javascript">
+		$(".policy_more").click(function() {
+			window.location.href = "news/index.html"
+		})
+		var now = 0;
+		var loopTime = 4000;
+		var timer;
+		$(document).ready(function() {
+			zc();
+//			hq();
+//			bt();
+			myscroll();
+			//图片轮播		
+			$("#banner_list a").not(".on").hide();
+			$("#banner_info").html("&nbsp;&nbsp;" + $("#banner_list a img").eq(0).attr("alt"));
+			timer = setTimeout("showBannerAuto('left')", loopTime);
+
+			//图片轮播滑动处理
+			$("#banner_list").on("swipeleft", function() {
+				clearTimeout(timer);
+				showBannerAuto('left');
+			});
+
+			$("#banner_list").on("swiperight", function() {
+				clearTimeout(timer);
+				showBannerAuto('right');
+			});
+
+			//调整banner info位置
+			var InfoH = $('#banner_bg').outerHeight();
+			$('#banner_bg').css('top', 0 - InfoH);
+			$('#banner_info').css('top', 0 - InfoH);
+
+			//弹出式菜单
+			$('#fmenu_click_bg').bind('click', ClickOthersHandler);
+			$('.fmenu_click_td').bind('click', ClickOthersHandler);
+
+			$('.fmenu_box').each(function(j) { //启动时处理每个弹出菜单的位置
+				$('.fmenu_td').eq(j).removeClass("on");
+				$('.fmenu_box').eq(j).removeClass("on");
+				$('.fmenu_box').eq(j).hide();
+
+				//var ScnWidth=parseInt($(document).width());
+				//var DomWidth=parseInt($('.menu_box').eq(j).css('width'));	
+				//var LeftVar=ScnWidth/3*(j+0.5)-DomWidth/2;
+				//if(LeftVar<0) LeftVar=0;
+				//if(LeftVar+DomWidth>ScnWidth) LeftVart=ScnWidth-DomWidth;
+				//$('.menu_box').eq(j).css('left',LeftVar);	
+				//alert(LeftVar);			
+			});
+
+			$('#fmenu_click_bg').hide(); //关闭遮罩层
+		});
+
+		function showBannerAuto(dir) {
+			$("#banner_list a").eq(now).fadeOut();
+			$("#banner li").eq(now).removeClass("on");
+
+			if(dir == "right") {
+				if(now == 0) now = 1;
+				else if(now == 1) now = 2;
+				else now = 0;
+			} else {
+				if(now == 0) now = 2;
+				else if(now == 1) now = 0;
+				else now = 1;
+			}
+
+			$("#banner li").eq(now).addClass("on");
+			var nowDisp = $("#banner_list a").eq(now);
+			nowDisp.fadeIn(500);
+			$("#banner_info").html("&nbsp;&nbsp;" + nowDisp.find("img").attr("alt"));
+
+			timer = setTimeout("showBannerAuto('left')", loopTime);
+		}
+
+		function ClickOthersHandler(e) { //点击了非链接区域
+			{
+				//隐藏原来的
+				$('.fmenu_box.on').slideUp();
+				$('.fmenu_box.on').removeClass("on");
+				$('.fmenu_td.on').removeClass("on");
+				$('#fmenu_click_bg').hide(); //关闭遮罩层
+			}
+		}
+
+		$('.fmenu_td').each(function(i) {
+			$(this).click(function() { //处理菜单点击
+				if($(this).attr("class") != "fmenu_td on") { //点击的菜单暂时没弹出
+					$('#fmenu_click_bg').show(); //开启遮罩层
+
+					//先隐藏原来的
+					$('.fmenu_box.on').slideUp();
+					$('.fmenu_box.on').removeClass("on");
+					$('.fmenu_td.on').removeClass("on");
+
+					//显示现在的
+					$(this).addClass("on");
+					$('.fmenu_box').eq(i).addClass("on");
+					$('.fmenu_box').eq(i).slideDown();
+
+				} else { //点击的菜单之前已经弹出
+					//隐藏现在的
+					$('.fmenu_box').eq(i).slideUp();
+					$(this).removeClass("on");
+					$('.fmenu_box').eq(i).removeClass("on");
+
+					$('#fmenu_click_bg').hide(); //关闭遮罩层
+				}
+			});
+		});
+
+		function zc() {
+			$.post("/NewViliage/api/news/ZCQYList", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						$("#zc").empty();
+						var tmphtml = "";
+						tmphtml = tmphtml + "<div class=\"policy_type_name\">l&nbsp;政策前沿</div><div class=\"policy_more\" onclick=\"myBtnClick(this,'#fafafa','news/news.html?type=" + 1 + "');\">更多...</div>";
+						$.each(data.result, function(n, value) {
+							if(value != null) {
+								tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"policy_table\" onclick=\"myBtnClick(this,'#fafafa','" + value.news_url + "');\"><tr valign=\"top\">";
+								tmphtml = tmphtml + "<td rowspan=\"2\" class=\"policy_img\"></td>";
+								tmphtml = tmphtml + "<td><div class=\"policy_title\">" + value.title + "</div></td></tr><tr valign=\"bottom\"><td style=\"padding-top: 20px;\">";
+								tmphtml = tmphtml + "<div class=\"policy_comment\">" + value.time + "></div></td></tr></table>";
+
+							}
+
+						});
+						$("#zc").append(tmphtml);
+					}
+				}
+			}, 'json');
+		}
+
+		function bt() {
+			$.post("/NewViliage/api/news/BTDTList", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						$("#bt").empty();
+						var tmphtml = "";
+						tmphtml = tmphtml + "<div class=\"policy_type_name\">l&nbsp;补贴动态</div><div class=\"policy_more\" onclick=\"myBtnClick(this,'#fafafa','news/news.html?type=" + 2 + "');\">更多...</div>";
+						$.each(data.result, function(n, value) {
+							if(value != null) {
+								tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"policy_table\" onclick=\"myBtnClick(this,'#fafafa','" + value.news_url + "');\"><tr valign=\"top\">";
+								tmphtml = tmphtml + "<td rowspan=\"2\" class=\"policy_img\"></td><td>";
+								tmphtml = tmphtml + "<div class=\"policy_title\">" + value.title + "</div></td></tr><tr valign=\"bottom\"><td style=\"padding-top: 20px;\">";
+								tmphtml = tmphtml + "<div class=\"policy_comment\">" + value.time + "></div></td></tr></table>";
+
+							}
+
+						});
+						$("#bt").append(tmphtml);
+					}
+				}
+			}, 'json');
+		}
+
+		function hq() {
+
+			$.post("/NewViliage/api/news/SCHQList", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						$("#hq").empty();
+						var tmphtml = "";
+
+						tmphtml = tmphtml + "<div class=\"policy_type_name\">l&nbsp;市场行情</div><div class=\"policy_more\" onclick=\"myBtnClick(this,'#fafafa','news/news.html?type=" + 3 + "');\">更多...</div>";
+						$.each(data.result, function(n, value) {
+
+							if(value != null) {
+								tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"policy_table\" onclick=\"myBtnClick(this,'#fafafa','" + value.news_url + "');\"><tr valign=\"top\">";
+								tmphtml = tmphtml + "<td rowspan=\"2\" class=\"policy_img\"></td><td>";
+								tmphtml = tmphtml + "<div class=\"policy_title\">" + value.title + "</div></td></tr><tr valign=\"bottom\"><td style=\"padding-top: 20px;\">";
+								tmphtml = tmphtml + "<div class=\"policy_comment\">" + value.time + "></div></td></tr></table>";
+
+							}
+						});
+						$("#hq").append(tmphtml);
+					}
+				}
+			}, 'json')
+
+		}
+
+		function myscroll() {
+			var tmphtml = "";
+			$.ajax({
+				type: "post",
+				url: "/NewViliage/api/news/NHDTList",
+				cache: false,
+				async: true,
+				dataType: "json",
+				success: function(data, textStatus) {
+					if(textStatus == 'success' && data != null) {
+						if(data.code == 0) {
+							$.each(data.result, function(n, value) {
+								if(value != null) {
+									var content = value.farm_name;
+									if(content != undefined) {
+//										var tmp = content.substring(1);
+//										content = content.replace(tmp, '*');
+										tmphtml = "<li><a href='" + value.newsUrl + "'>" + value.title + "</a></li>"
+										tmphtml = tmphtml + "<li><a href=''>" + content + ",成功贷款" + value.amount + "万元!</a></li>"
+									} else {
+										tmphtml = "<li><a href='" + value.newsUrl + "'>" + value.title + "</a></li>"
+										tmphtml = tmphtml + "<li><a href=''></a></li>"
+									}
+									$("#myscroll ul").append(tmphtml);
+								}
+							});
+						}
+						$('body').append("<script src=\"js/news_scrol.js\" type=\"text/javascript\" charset=\"utf-8\"><\/script>")
+					}
+				}
+
+			});
+		}
+	</script>
+
+</html>

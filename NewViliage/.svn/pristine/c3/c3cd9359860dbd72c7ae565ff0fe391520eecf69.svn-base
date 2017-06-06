@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农场主认证</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="../css/control.css"/>
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="../js/stepBar.js"></script>
+		
+
+		<style type="text/css">
+			.menu_list {
+				width: 100%;
+				margin-top: 10px;
+			}
+			
+			.menu_head {
+				height: 47px;
+				line-height: 47px;
+				padding-left: 38px;
+				font-size: 14px;
+				color: #525252;
+				cursor: pointer;
+				border: 1px solid #e1e1e1;
+				position: relative;
+				margin: 0px;
+				font-weight: bold;
+				
+			}
+			
+			.menu_list .current {
+				background: indianred ;
+			}
+			
+			.menu_body {
+				line-height: 38px;
+				border-left: 1px solid #e1e1e1;
+				backguound: #fff;
+				border-right: 1px solid #e1e1e1;
+			}
+			
+			.menu_body a {
+				display: block;
+				height: 38px;
+				line-height: 38px;
+				padding-left: 38px;
+				color: #777777;
+				background: #fff;
+				text-decoration: none;
+				border-bottom: 1px solid #e1e1e1;
+			}
+			
+			.menu_body a:hover {
+				text-decoration: none;
+			}
+			.form_item_name{
+				display: inline-block;
+				border-bottom: none;
+			}
+			.form_item{
+				border-bottom: solid 1px #e5e5e5;
+			}
+			.form_title{
+				height: 18px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<img src="../img/auth_banner.jpg" width="100%" />
+		</div>
+		<div id="stepBar" class="ui-stepBar-wrap">
+				<div class="ui-stepBar">
+					<div class="ui-stepProcess"></div>
+				</div>
+				<div class="ui-stepInfo-wrap">
+					<table class="ui-stepLayout" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">1</a>
+								<p class="ui-stepName">填写基本信息</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">2</a>
+								<p class="ui-stepName">选择用户类型</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">3</a>
+								<p class="ui-stepName">填写采集信息</p>
+							</td>
+							<td class="ui-stepInfo">
+								<a class="ui-stepSequence">4</a>
+								<p class="ui-stepName">完成注册</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		<div class="form_title">
+			<span class="form_help">填报帮助</span>
+		</div>
+		<input type="hidden" name="industry" id="industry" value="" />
+		<input type="hidden" name="id_num" id="id_num" value="" />
+		<table cellpadding="0" cellspacing="0" border="0" class="form_item">
+			<tbody>
+				<tr valign="top">
+					<td class="form_item_margin"></td>
+					<td id="dispaly_0" class="form_item_name">请选择产业类型:</td>
+					<td class="" align="right">
+						<span class="form_item_name" id="span0" style="color: gray;margin-right: 20px;">请选择</span>
+					</td>
+					<td class="form_item_no_unit"></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="firstpane" class="menu_list" style="display: none;">
+			<h3 class="menu_head">种植业</h3>
+			<h3 class="menu_head">养殖业</h3>
+			<div style="display:none" class="menu_body">
+				<a href="#">畜禽养殖业</a>
+				<a href="#">水产养殖业</a>
+			</div>
+
+			<h3 class="menu_head">种养结合</h3>
+		</div>
+		<br />
+		<br />
+		<br />
+		<div class="form_button1" id="mybtn" onclick="doFarmerAuth()">
+			<div class="form_button_txt1">下一步</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+			$(function(){
+	
+				stepBar.init("stepBar", {
+					step : 2,
+					change : false,
+					animation : true
+				});
+			
+			});
+			$(document).ready(function() {
+				var is_hzs;
+				var id_num;
+				GetUserInfo();
+				
+				
+				//获取个人信息
+				function GetUserInfo() {
+					$.post("/NewViliage/api/farmer/farmerInfo", function(data, textStatus) {
+						if(textStatus == 'success' && data != null) {
+							if(data.code == 0) {
+								var User = data.result;
+								is_hzs=User.is_hzs;
+								id_num=User.id_num;
+								$("#id_num").val(id_num);
+								if(is_hzs==2){
+									$("#firstpane").empty().append("<h3 class=\"menu_head\">畜禽养殖业</h3>")
+								}
+								$("#span0").click(function(){
+					$("#firstpane").slideToggle(300);
+				})
+				$("#firstpane .menu_head").click(function() {
+					$(this).addClass("current").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+					$(this).siblings().removeClass("current");
+					$(this).siblings().children().removeClass("current");
+					if($(this).text()=="养殖业"){
+						$("#firstpane div.menu_body a").click(function() {
+							$(this).parent().siblings().removeClass("current");
+							$(this).addClass("current");
+							var $text=$(this).text();
+							$("#span0").text($text);
+							$("#firstpane").slideUp("slow");
+							$(this).siblings().removeClass("current");
+							$("#industry").val($("#span0").text());
+						});
+					}else{
+						var $text=$(this).text();
+						$("#span0").text($text);
+						$("#firstpane").slideUp("slow");
+						$("#industry").val($("#span0").text());
+					}
+					
+				});
+							}
+						}
+					}, 'json');
+				}	
+			});
+			function doFarmerAuth() {				
+//					请求api验证
+					console.log($("#id_num").val());
+					$.post("/NewViliage/api/farmer/industryTypeAuth", {
+						id_num:$("#id_num").val(),
+						IndustryType: $('#industry').val(),
+	
+					}, function(data, textStatus) {
+						if(textStatus == 'success' && data != null) {
+							$(".log").text(JSON.stringify(localStorage))
+							if(data.code == 0) {
+								location.href = "../info/index.html?IndustryType="+$("#industry").val();
+								
+							} else if(data.code == -2) {
+								alert('请重新获取alipay token');
+								doOauth();
+							} else if(data.code == 2) {
+								alert('您已认证，无需重复操作');
+							} else if(data.code >= 100 && data.code < 200) {
+								alert('参数错误:' + data.desc);
+							} else {
+								alert('规模养殖场(小区)认证失败');
+							}
+						}
+					}, 'json');
+				}
+		</script>
+</html>

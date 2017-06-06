@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>贷款评价</title>
+<link rel="stylesheet" type="text/css" href="../css/info.css"/>
+<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="../js/PublicFunc.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+.a,.b,.c{
+	margin: 0;
+	padding: 0;
+	width: 150px;
+    height:30px;
+    background-image: url(../img/star_0.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+li{
+	height: 30px;
+	width:30px;
+	list-style: none;
+	float: left;
+	box-sizing: border-box;
+}
+span{
+	font-size: 16px;	
+}
+em {font-style: normal;display: inline-block;width: 15px;}
+.big{
+	/*width: 200px;*/
+	/*margin: 0 auto;*/
+	margin-left: 30px;
+	/*text-align: center;*/
+	margin-bottom: 10px;
+	}
+.first{margin-top: 30px;}
+</style>
+</head>
+<body>
+	<div class="big first">
+		<span>是否解决资金需求：<em class="em_0"></em>分</span>
+		<ul class="a" score="">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<span></span>
+	</div>
+	<hr />
+	<div class="big">
+		<span>贷款响应速度：<em class="em_1"></em>分</span>
+		<ul class="b" score="">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<hr />
+	<div class="big">
+		<span>工作人员服务态度：<em class="em_2"></em>分</span>
+		<ul class="c"  score="">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<hr />
+	
+<div class="form_button1" id="mybtn" onclick="addAssess()" style="margin-top: 20px;"><div class="form_button_txt1">提交</div></div>
+	
+	
+<script type="text/javascript">
+	$(document).ready(function() {
+		achieveAssess(); 
+	});
+	$("li").click(function(){
+		var index = $(this).index()+1;
+		$(this).parent().attr("score",index);
+		$(this).parent().css("background-image","url(\"../img/star_"+index+".png\")");
+		$(this).parent().parent().find("em").text(index);
+	})
+	//获取URL中的活动id参数
+	var dataId = getUrlParam("id");
+	
+	//查询接口
+	function achieveAssess(){
+		$.post("/NewViliage/api/loan/queryEvaluate",{id:dataId},function(data,textStatus){
+			if(textStatus == 'success'&&data != null){
+				if(data.code == 0){
+					var res = data.result;
+					if(res.sfjjzjxq!=null &&res.dkxysd!=null &&res.gzryfwtd!=null){
+						$(".em_0").text(res.sfjjzjxq);//是否解决资金需求评分
+						$(".em_1").text(res.dkxysd);//贷款响应速度评分
+						$(".em_2").text(res.gzryfwtd);//工作人员服务态度评分
+						$(".a").css("background-image","url(\"../img/star_"+res.sfjjzjxq+".png\")");//是否解决资金需求的星星个数
+						$(".b").css("background-image","url(\"../img/star_"+res.dkxysd+".png\")");//贷款响应速度的星星个数
+						$(".c").css("background-image","url(\"../img/star_"+res.gzryfwtd+".png\")");//工作人员服务态度的星星个数
+						$(".form_button1").hide();
+					}
+										
+				}else{
+					alert("获取信息失败")
+				}
+			}
+		},"json")
+	}
+   //提交方法
+	function addAssess(){
+		var firstData  = $(".em_0").text(),secondData = $(".em_1").text(),thirdData  = $(".em_2").text();
+		console.log(firstData);console.log(secondData)
+		if(firstData==""||firstData == null){
+			alert("请评价完整");
+			return false
+		}
+		if(secondData==""||secondData == null){
+			alert("请评价完整");
+			return false
+		}
+		if(thirdData==""||thirdData == null){
+			alert("请评价完整");
+			return false
+		}
+		$.post("/NewViliage/api/loan/saveEvaluate",{id:dataId,sfjjzjxq:firstData,dkxysd:secondData,gzryfwtd:thirdData},function(data, textStatus){
+			if (textStatus == 'success' && data != null) {
+				if(data.code == 0){
+					alert("评价成功");
+				    $(".form_button1").hide();
+				    window.location.href = "/NewViliage/web/menu.html"
+				}
+			    else {
+			        alert("数据错误");
+			    }
+
+			}
+		}, "json");
+	}
+
+</script>
+</body>
+</html>

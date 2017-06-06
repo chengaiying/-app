@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>卖农产品</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/html.css" rel="stylesheet" type="text/css" />
+<script src="../js/buttonStyle.js"></script>
+</head>
+
+<body>
+
+
+<div class="sell_table" onclick="myBtnClick(this,'#fafafa','./xcfx_tmall.html')" style="display:none;">
+<div class="sell_img"><img src="image/temp1.jpg" width="100%" /></div>
+<div class="sell_title"><img src="image/star.png"/>西菖凤翔旗舰店</div>
+<div class="sell_introduce">家庭农场淘宝开店成功案例分享</div>
+</div>
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_goto_table" onclick="myBtnClick(this,'#fafafa','https://openshop.taobao.com/index.htm')">
+  <tr valign="middle">
+    <td width="1%"><div class="sell_goto_content"><img src="image/kaidian.png" width="50px"></div></td>
+    <td ><div><div class="sell_goto_header">马上去开店&nbsp;&gt;</div></div>
+      <div class="sell_goto_intro">通过实名认证后，即可免费开店。</div>
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+
+<div class="sell_group">
+<div class="sell_type_name">农业电商成功案例</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_table2" onclick="myBtnClick(this,'#fafafa','./xcfx_tmall.html')"><tr valign="top">
+<td class="sell_img2"><img src="image/temp3.jpg"/></td>
+<td><div class="sell_title2"><img src="image/star.png"/>西菖凤翔旗舰店</div>
+<div class="sell_introduce2">【鸡蛋皇冠店】大别山深处的自然养鸡场。</div></td>
+</tr></table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_table2" onclick="myBtnClick(this,'#fafafa','')"><tr valign="top">
+<td class="sell_img2"><img src="image/study2.png"/></td>
+<td><div class="sell_title2"><img src="image/star.png"/>开店成功案例</div>
+<div class="sell_introduce2">【蜂蜜皇冠店】桂花蜜的绝美酿造方法。</div></td>
+</tr></table>
+
+
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+
+
+
+
+<div class="sell_group">
+<div class="sell_type_name">开店教程</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_table2" onclick="myBtnClick(this,'#fafafa','https://v.daxue.taobao.com/detail.htm?spm=a1z14.7758060.1000847.46.OJfyIo&courseId=59595')"><tr valign="top">
+<td class="sell_img2"><img src="image/study1.png"/></td>
+<td><div class="sell_title2"><img src="image/video.png"/>新手卖家必学淘宝开店规则</div>
+<div class="sell_introduce2">【淘宝开店课程1】新手成长计划，磨刀不误砍柴功，掌握开店基本规则。</div></td>
+</tr></table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_table2" onclick="myBtnClick(this,'#fafafa','https://v.daxue.taobao.com/detail.htm?spm=a1z14.7758060.1000847.10.sQqVJ3&courseId=58960')"><tr valign="top">
+<td class="sell_img2"><img src="image/study2.png"/></td>
+<td><div class="sell_title2"><img src="image/video.png"/>新手开店全流程解析</div>
+<div class="sell_introduce2">【淘宝开店课程2】手把手教您开店，流程细节一网打尽！</div></td>
+</tr></table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sell_table2" onclick="myBtnClick(this,'#fafafa','https://v.daxue.taobao.com/detail.htm?spm=a1z14.7758060.1000847.14.sQqVJ3&courseId=60122')"><tr valign="top">
+<td class="sell_img2"><img src="image/study3.png"/></td>
+<td><div class="sell_title2"><img src="image/video.png"/>新手生存守则 开店卖货到底应该关注什么</div>
+<div class="sell_introduce2">【淘宝开店课程3】核心开店技巧分享，开店赚钱不再走弯路！</div></td>
+</tr></table>
+
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+
+<br />
+
+
+</body>
+</html>

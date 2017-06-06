@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
+<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+
+<body class="demo-1">
+<div class="container">
+    <section>
+        <select class="cs-select cs-skin-border">
+            <option value="" disabled selected>请选择</option>
+            <option value="email">农户</option>
+            <option value="twitter">养殖户</option>
+            <option value="linkedin">农民</option>
+        </select>
+    </section>
+</div><!-- /container -->
+<script src="js/classie.js"></script>
+<script src="js/selectFx.js"></script>
+<script>
+(function() {
+	[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {	
+		new SelectFx(el);
+	} );
+})();
+</script>
+</body>
+</html>

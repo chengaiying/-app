@@ -1,0 +1,98 @@
+package com.moa.viliage.service;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import com.alibaba.druid.util.StringUtils;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.moa.viliage.db.Tables.TNews;
+import com.moa.viliage.model.FarmerDynamic;
+import com.moa.viliage.model.News;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+
+public class NewsService {
+	public static ResultInfo<List<News>> ZCQYList(Controller controller){
+		List<Record> list=Db.find("SELECT * from news where type=1 order by modify_time desc LIMIT 0,2");
+		List<News> newsList=new ArrayList<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		for (Record record : list) {
+			News news=new News();
+			news.setId(record.getInt(TNews.COL_ID).toString());
+			news.setTitle(record.getStr(TNews.COL_TITLE));
+			news.setNews_url(record.getStr(TNews.COL_URL));
+			news.setTime(format.format(record.getTimestamp(TNews.COL_MODIFY_TIME)));
+			newsList.add(news);
+		}
+		return new ResultInfo<List<News>>(ResultCodes.RET_SUCCESS, "ok",newsList);
+		
+	}
+	public static ResultInfo<List<News>> BTDTList(Controller controller){
+		List<Record> list=Db.find("SELECT * from news where type=2 order by modify_time desc LIMIT 0,2");
+		List<News> newsList=new ArrayList<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		for (Record record : list) {
+			News news=new News();
+			news.setId(record.getInt(TNews.COL_ID).toString());
+			news.setTitle(record.getStr(TNews.COL_TITLE));
+			news.setNews_url(record.getStr(TNews.COL_URL));
+			news.setTime(format.format(record.getTimestamp(TNews.COL_MODIFY_TIME)));
+			newsList.add(news);
+		}
+		return new ResultInfo<List<News>>(ResultCodes.RET_SUCCESS, "ok",newsList);
+		
+	}
+	public static ResultInfo<List<News>> SCHQList(Controller controller){
+		List<Record> list=Db.find("SELECT * from news where type=3 order by modify_time desc LIMIT 0,2");
+		List<News> newsList=new ArrayList<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		for (Record record : list) {
+			News news=new News();
+			news.setId(record.getInt(TNews.COL_ID).toString());
+			news.setTitle(record.getStr(TNews.COL_TITLE));
+			news.setNews_url(record.getStr(TNews.COL_URL));
+			news.setTime(format.format(record.getTimestamp(TNews.COL_MODIFY_TIME)));
+			newsList.add(news);
+		}
+		return new ResultInfo<List<News>>(ResultCodes.RET_SUCCESS, "ok",newsList);
+		
+	}
+	public static ResultInfo<List<News>> newsList(Controller controller){
+		String type=controller.getPara(TNews.COL_TYPE);
+		if (StringUtils.isEmpty(type)) { 
+			return new ResultInfo<List<News>>(ResultCodes.RET_PARAM_ERROR,"新闻类型不能为空");
+		}
+		int page=Integer.parseInt(controller.getPara("page","1"));
+		int num=(page-1)*8;
+		List<Record> list=Db.find("SELECT * from news where type=? order by modify_time desc LIMIT ?,8",type,num);
+		List<News> newsList=new ArrayList<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		for (Record record : list) {
+			News news=new News();
+			news.setTitle(record.getStr(TNews.COL_TITLE));
+			news.setNews_url(record.getStr(TNews.COL_URL));
+			news.setTime(format.format(record.getTimestamp(TNews.COL_MODIFY_TIME)));
+			newsList.add(news);
+		}
+		return new ResultInfo<List<News>>(ResultCodes.RET_SUCCESS, "ok",newsList);
+	}
+	public static ResultInfo<List<FarmerDynamic>> NHDTList(Controller controller){
+		List<Record> newslist=Db.find("select title,news_url from news order by modify_time desc LIMIT 0,3");
+		List<Record> loanlist=Db.find("select s.farm_name,s.amount,s.modify_date from(select a.farm_name,l.amount,l.modify_date from loan_apply l INNER  JOIN alipay_user a ON l.user_id=a.id AND l.STATUS=4)s order by s.modify_date desc LIMIT 0,3");
+		List<FarmerDynamic> list=new ArrayList<>();
+		for (int i = 0; i < newslist.size(); i++) {
+			FarmerDynamic farmerDynamic=new FarmerDynamic();
+			farmerDynamic.setTitle(newslist.get(i).getStr("title"));
+			farmerDynamic.setNewsUrl(newslist.get(i).getStr("news_url"));
+			if (loanlist.size()>=i+1) {
+				farmerDynamic.setFarm_name(loanlist.get(i).getStr("farm_name"));
+				farmerDynamic.setAmount(loanlist.get(i).getInt("amount"));
+			}
+			list.add(farmerDynamic);
+		}
+		
+		return new ResultInfo<List<FarmerDynamic>>(ResultCodes.RET_SUCCESS, "ok",list);
+	}
+
+}

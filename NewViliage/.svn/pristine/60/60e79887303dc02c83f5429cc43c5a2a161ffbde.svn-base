@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>农业部服务窗</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/html.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/iframe.js"></script>
+<script src="../js/buttonStyle.js"></script> 
+</head>
+
+<body>
+<div id="frame_content">
+<div class="nav_link"><span class="nav_link_main">直报管理</span><span class="nav_link_page">/&nbsp;统计报表</span></div>
+
+
+
+<br />
+<table id="info" width="100%" border="0" cellspacing="0" cellpadding="0" class="data_table">
+  <tr class="data_frist_tr">
+    <td>序号</td>
+    <td width="60px">省份</td>
+    <td>家庭农场总数</td>
+    <td>家庭农场认证总人数</td>
+    <td>认证比例</td>
+    <td>直报系统信息采集总人数</td>
+    <td>采集比例</td>
+  </tr>
+</table>
+
+
+
+<br />
+
+
+
+
+
+
+
+</div>
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		GetForm();
+    });
+	
+	function GetForm() {
+		$.post("/NewViliage/api/form/formList", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<td>" + value.formName + "</td>";
+							$(".data_frist_tr").append(tmphtml);
+						}
+					});
+					GetInfo();
+				} else {
+					alert("获取表结构失败!");
+				}
+			}
+		}, 'json');
+	}
+	
+	//获取表单信息
+	function GetInfo() {
+		$.post("/NewViliage/api/admin/report/summaryReport", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<tr>";
+							tmphtml = tmphtml + "<td>" + (n + 1) + "</td>";
+							tmphtml = tmphtml + "<td>" + value.province + "</td>";
+							tmphtml = tmphtml + "<td>" + value.subTotal + "</td>";
+							tmphtml = tmphtml + "<td>" + value.authNum + "</td>";
+							tmphtml = tmphtml + "<td>" + value.authRate + "%" + "</td>";
+							tmphtml = tmphtml + "<td>" + value.submitCount + "</td>";
+							tmphtml = tmphtml + "<td>" + value.submitRate + "%" + "</td>";
+							$.each(value.eachCounts, function(d, count) {
+								if (count != null ) {
+									tmphtml = tmphtml + "<td>" + count + "</td>";
+								}
+							});
+							tmphtml = tmphtml + "</tr>";
+							$("#info").append(tmphtml);
+						}
+					});
+				} else {
+					alert("获取数据信息失败!");
+				}
+			}
+		}, 'json');
+	}
+</script>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>我的上报</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ilist_table"><tr valign="top">
+<td rowspan="2" class="ilist_img">
+<img src="img/info_tag.png" width="40px"/></td>
+<td>
+<span class="ilist_title_name">家庭基本信息</span>
+<span class="ilist_report_num">已经上报<font color="#00aaee"><strong>1</strong></font>次</span>
+</td></tr>
+<tr valign="top"><td class="ilist_report_time">
+最后一次上报 2016-1-9</td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ilist_table"><tr valign="top">
+<td rowspan="2" class="ilist_img">
+<img src="img/info_tag.png" width="40px"/></td>
+<td>
+<span class="ilist_title_name">土地信息</span>
+<span class="ilist_report_num">已经上报<font color="#00aaee"><strong>5</strong></font>次</span>
+</td></tr>
+<tr valign="top"><td class="ilist_report_time">
+最后一次上报 2016-11-12</td></tr>
+</table>
+
+
+
+
+<br /><br />
+
+</body>
+</html>

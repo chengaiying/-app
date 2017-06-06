@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+
+#frame_content{
+	padding:10px 20px 10px 20px;
+}
+
+.nav_link{
+	padding-bottom:10px;
+}
+
+.nav_link_main{
+	color: #00aaee;
+	font-size: 22px;
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.nav_link_page{
+	font-size:14px;
+}
+
+.data_table{
+	border-top:solid 1px #dddddd;
+	border-left:solid 1px #dddddd;
+}
+
+.data_table td{
+	border-right:solid 1px #dddddd;
+	border-bottom:solid 1px #dddddd;
+	padding:5px 5px 5px 5px;
+	text-align:center;
+	color:#535353;
+}
+
+.data_frist_tr,.data_frist_tr td{
+	background-color:#f5f5f5;
+	color:#444444;
+	text-wrap:none;
+
+}
+
+.info_frame_select{
+	border:solid 1px #dddddd;
+	color:#535353;
+	font-size:16px;
+	padding:10px 10px 10px 10px;
+}
+
+.info_frame_select option:nth-child(even){
+	background-color:#f5f5f5; 
+}

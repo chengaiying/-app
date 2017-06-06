@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>家庭农场主认证</title>
+<link href="../info_/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../info_/info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+
+<link href="../picker/css/mui.picker.css" rel="stylesheet" />
+<link href="../picker/css/mui.poppicker.css" rel="stylesheet" />
+<script src="../picker/js/mui.min.js"></script>
+<script src="../picker/js/mui.picker.js"></script>
+<script src="../picker/js/mui.poppicker.js"></script>
+<script src="../picker/js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+    
+</head>
+
+<body>
+<div class="form_group_no_border">
+<img src="img/auth.png" width="100%" />
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场主姓名</td>
+<td class="form_item_input" align="right"><input id="farmer" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场名称</td>
+<td class="form_item_input" align="right"><input id="farmerName" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场地址（省市县）</td>
+<td class="form_item_content" align="right" style="width:50%">
+<input id="province" type="text" style="display:none" />
+<input id="city" type="text" style="display:none" />
+<input id="district" type="text" style="display:none" />
+
+<div id="showCityPicker">请选择</div>
+
+<script>
+(function($, doc){
+	$.init();
+	$.ready(function(){
+		var cityPicker3 = new $.PopPicker({layer:3});
+		cityPicker3.setData(cityData3);
+		var showCityPickerButton = doc.getElementById('showCityPicker');
+		var cityResult3 = doc.getElementById('showCityPicker');
+		showCityPickerButton.addEventListener('tap', function(event) {
+			cityPicker3.show(function(items) {
+				if(typeof(items[1].text)=="undefined") items[1].text="其它";
+				if(typeof(items[2].text)=="undefined") items[2].text="其它";
+				
+				doc.getElementById('province').value=items[0].text;
+				doc.getElementById('city').value=items[1].text;
+				doc.getElementById('district').value=items[2].text;
+				
+				cityResult3.innerText = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;				
+				//return false;//返回 false 可以阻止选择框的关闭
+			});
+		}, false);
+	});
+})(mui, document);
+</script>
+
+</td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">街道、乡镇</td>
+<td class="form_item_input" align="right"><input id="viliage" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+</div>
+<div class="border_top_1px"></div>
+
+
+
+
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">身份证号</td>
+<td class="form_item_input" align="right"><input id="farmerId" type="text" placeholder="请填写" size="20" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">手机号码</td>
+<td class="form_item_input" align="right"><input id="farmerTel" type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+</div>
+<div class="border_top_1px"></div>
+
+<div class="form_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">农场主个人照片上传</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="file1" class="form_input_file" type="file" name="file1" onChange="ajaxfile();" />
+<span id="J_photoReplace" class="form_input_file_img" ><img id="J_imgHere" src="./img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap" class="form_input_file_photo" style="display: none;"><img id="J_photoHere" src="" width="40px" /></span>
+</td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">家庭农场执照上传</td>
+<td class="form_item_jump form_item_file" align="right">
+<input id="file2" class="form_input_file" type="file" name="file2" onChange="ajaxfile2();" />
+<span id="J_photoReplace2" class="form_input_file_img" ><img id="J_imgHere2" src="./img/addphoto.png" width="40px" /></span>
+<span id="J_photoHere_wrap2" class="form_input_file_photo" style="display: none;"><img id="J_photoHere2" src="" width="40px" /></span>
+</td>
+</tr></table>
+</div>
+<div class="border_top_1px"></div>
+
+
+<div class="form_button1" id="mybtn" onclick="formJumpBtn();"><div class="form_button_txt1">立即认证</div></div>
+<script type="text/javascript">
+function formJumpBtn(){
+    document.getElementById('mybtn').style.backgroundColor="#0091cb"; 
+	doFarmerAuth(); 
+}
+</script>
+
+<br /><br />
+
+
+</body>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var windowsWidth = $(window).width() + "px"
+		var windowsHeight = $(window).height() + "px"
+		var headHeight = $(".farmTit1").height() + "px"
+		$(".addselect").css("left", windowsWidth)
+		$(".addselect").css("top", headHeight)
+		
+		$(".addselect").css("height", windowsHeight)
+		$(".name").click(function(){
+			
+			$(".addselect").animate({
+				left: windowsWidth,
+			},function(){
+				
+				$(".addselect").css("display","none")
+			});
+		})
+			//checkOauth();
+		localStorage.setItem('count', "1");
+		//地址
+		$("#address").click(function() {
+			var uadd = $("#xxadd").val();
+			localStorage.uadd = uadd;
+			alert("地址选择")
+			$(".addselect").css("display","block")
+			$(".addselect").animate({
+				left: '0px',
+			});
+		});
+
+		var farmerName = localStorage.farmerName;
+		var farmer = localStorage.farmer;
+		var farmerTel = localStorage.farmerTel;
+		var farmerId = localStorage.farmerId;
+		$("#farmerName").val(farmerName); //家庭农场名称
+		$("#farmer").val(farmer); //农场主姓名
+		$("#farmerTel").val(farmerTel); //联系方式
+		$("#farmerId").val(farmerId); //身份证号码
+	});
+
+	//农场主认证  测试用，不做输入校验
+	function doFarmerAuth() {
+		
+		if($("#farmer").attr("value") == '' || $("#farmer").text() == '请填写') {
+			alert('请填写农场主姓名');
+			return false;
+		}
+		if($("#farmerName").attr("value") == '' || $("#farmerName").text() == '请填写') {
+			alert('请填写家庭农场主姓名');
+			return false;
+		}
+		if($("#farmerId").attr("value") == '' || $("#farmerId").text() == '请填写') {
+			alert('请填写身份证号');
+			return false;
+		}
+		if($("#farmerTel").attr("value") == '' || $("#farmerTel").text() == '请填写') {
+			alert('请填写联系方式');
+			return false;
+		} 
+		if($("#J_photoHere").attr('src') == '') {
+			alert('请上传农场主个人照片');
+			return false;
+		} else {
+			
+			localStorage.farmer = $('#farmer').attr("value");
+			localStorage.farmerName = $("#farmerName").attr("value");
+			localStorage.farmerTel = $("#farmerTel").attr("value");
+			localStorage.farmerId = $("#farmerId").attr("value");
+			alert($("#J_photoHere").attr('src'));alert($('#J_photoHere2').attr('src'));
+			
+				//请求api验证
+			$.post("/NewViliage/api/farmer/farmerAuth", {
+				farmer: $('#farmer').attr("value"),
+				contact: $('#farmerTel').attr("value"),
+				farm_name: $('#farmerName').attr("value"),
+				id_num: $('#farmerId').attr("value"),
+				province: $('#province').attr("value"),
+				city: $('#city').attr("value"),
+				district: $('#district').attr("value"),
+				viliage: $('#viliage').attr("value"),
+				addr: "",
+				alipay_user_id: localStorage.getItem('alipay_user_id'),
+				access_token: localStorage.getItem('access_token'),
+				photo : $("#J_photoHere").attr('src'),
+				licence_img : $('#J_photoHere2').attr('src')
+
+			}, function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					$(".log").text( JSON.stringify(localStorage))
+					if(data.code == 0) {
+						location.href = "success.html";
+						alert('农场主认证成功');
+					} else if(data.code == -2) {
+						alert('请重新获取alipay token');
+						doOauth();
+					} else if(data.code == 2) {
+						alert('您已认证，无需重复操作');
+					} else if(data.code >= 100 && data.code < 200) {
+						alert('参数错误:' + data.desc);
+					} else {
+						alert('农场主认证失败');
+					}
+				}
+			}, 'json');
+		}
+
+	}
+</script>
+
+<script>
+	//图片上传
+	function ajaxfile() {
+		$.ajaxFileUpload({
+			url: '/NewViliage/api/farmer/uploadPhoto/', //处理图片脚本
+			secureuri: false,
+			fileElementId: 'file1', //file控件id
+			dataType: 'json',
+			success: function(data, status) {
+				if(data.code == 0) {
+					var h = "http://srv.qswteck.com:8700/storage/"
+					alert('上传成功');
+					$("#J_photoHere_wrap").show();
+					$("#J_photoHere").attr('src', h+data.result);
+					$("#J_photoReplace").hide();
+					
+
+				} else {
+					alert("图片过大");
+				}
+			},
+			error: function(data, status, e) {
+				alert(e);
+			}
+		})
+	}
+
+	function ajaxfile2() {
+		$.ajaxFileUpload({
+			url: '/NewViliage/api/farmer/uploadLicenceImg/', //处理图片脚本
+			secureuri: false,
+			fileElementId: 'file2', //file控件id
+			dataType: 'json',
+			success: function(data, status) {
+			
+				if(data.code == 0) {
+					var h = "http://srv.qswteck.com:8700/storage/"
+					alert('上传成功');
+					$("#J_photoHere_wrap2").show();
+					$("#J_photoHere2").attr('src', h+data.result);					
+					$("#J_photoReplace2").hide();
+
+				} else {
+					alert('failed');
+				}
+			},
+			error: function(data, status, e) {
+				alert(e);
+			}
+		})
+	}
+</script>
+
+</html>

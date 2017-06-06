@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="viewport" content="width=device-width" />
+<title>农业信息采集</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./css/info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div class="info_table">
+<div class="info_img"><img src="img/info_tag.jpg" /></div><div class="info_title">家庭基本信息</div>
+
+<div class="info_msg">家庭基本信息的填报，需要农户根据实际情况进行填写</div>
+<div class="info_tips">截止 2016/7/7</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

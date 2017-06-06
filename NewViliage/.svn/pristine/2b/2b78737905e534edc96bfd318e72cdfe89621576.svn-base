@@ -1,0 +1,26 @@
+@charset "utf-8";
+body {
+	margin: 0px;
+	font: normal 100% Helvetica, Arial, sans-serif;
+	background-color:#f6f5fa;
+}
+
+a:link { 
+color: #000000; 
+text-decoration: none; 
+} 
+
+a:visited { 
+color: #000000; 
+text-decoration: none; 
+} 
+
+a:hover { 
+color: #999999; 
+text-decoration: none; 
+} 
+
+
+
+
+

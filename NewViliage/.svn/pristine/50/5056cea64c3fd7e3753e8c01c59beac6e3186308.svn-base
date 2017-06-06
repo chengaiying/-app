@@ -1,0 +1,912 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* 指引图*/
+.guide_group{
+	width:100%;
+	padding:30px 0px 0px 0px;
+}
+
+.guide_group img{
+	width:150px;
+}
+
+.guide_txt{
+	font: normal 2em "微软雅黑";
+	color:#a5a5a5;
+	margin:15px 0px 20px 0px;
+}
+
+/* 指引图帮助*/
+.guide_help_group{
+	font: normal 1.4em "微软雅黑";
+}
+
+.guide_help_title{
+	color: #666;
+	padding-bottom: 10px;
+	white-space: nowrap;
+}
+
+.guide_help_context{
+	padding-bottom:6px;
+	color:#ff8108;
+	white-space: nowrap;
+}
+
+.guide_help_context img{
+	vertical-align:text-top;
+	padding-right:5px;
+	height:15px;
+	position:relative;
+	top:-1px;
+}
+
+.guide_help_txt{
+}
+
+
+
+/* 农业信息采集 结果状态反馈*/
+.status_group{
+	background-color:#FFF;
+	padding: 30px 0px 15px 0px;
+	border-bottom:solid 1px #e5e5e5;
+	width:100%;
+	overflow:hidden;
+}
+.status_img img{
+	width:90px;	
+}
+.status_txt{
+	margin:10px 0px 10px 0px;
+	font: normal 2.4em "微软雅黑";
+	color:#00aaee;
+	letter-spacing:3px;
+}
+
+.status_link a{
+	font: normal 1.4em "微软雅黑";
+	color:#a5a5a5;
+}
+
+.result_txt{
+	color: #a5a5a5;
+	font: normal 1.6em "微软雅黑";
+	line-height: 1.6em;
+}
+
+/* 农业信息采集 列表*/
+.info_table{
+	background-color: #FFF;
+	display: block;
+	margin: 10px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;	
+}
+
+.info_img{
+	display: inline;
+	float: left;
+	width:17%;
+}
+.info_img img{
+	width:40px;
+	padding:10px 0px 0px 10px;
+}
+
+.info_title{
+	display: inline-block;
+	overflow: hidden;
+	width:83%;
+	padding-top: 15px;
+	padding-bottom: 12px;
+	border-bottom: solid 1px #e5e5e5;
+}
+.info_title_txt{
+	font: normal 1.8em "微软雅黑";
+}
+
+.info_role{
+	display:none;/*inline;*/
+	font-size: 1.2em;
+	color: #FF8108;
+	float: right;
+	witdh: 15%;
+	margin-right: 10px;
+	background-color: #FEEECC;
+	padding:3px;
+	border-radius:3px;
+}
+
+.info_msg{
+	display:block;
+	font-size: 1.4em;
+	color: #a5a5a5;
+	padding-top:10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.info_tips{
+	display:block;
+	padding:10px 10px 10px 10px;
+	font-size: 1.4em;
+	color: #a5a5a5;
+}
+
+.info_tips_time{
+	filter:alpha(opacity=0); /*IE滤镜，透明度50%*/
+	-moz-opacity:0; /*Firefox私有，透明度50%*/
+	opacity:0;/*其他，透明度50%*/
+	
+	background: url("../img/time.png") no-repeat scroll left top transparent;
+	padding-left:17px;
+}
+
+.info_state{
+	color: #F60;
+	display: inline;
+	float: right;
+	witdh: 15%;
+}
+
+/* 弹窗框*/
+.info_dialog_shadow{
+	position:fixed;
+	z-index:100;
+	top:0px;
+	bottom:0px;
+	width:100%;
+	background-color:#000;
+	
+	filter:alpha(opacity=40); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.4; /*Firefox私有，透明度50%*/
+	opacity:0.4;/*其他，透明度50%*/	
+}
+
+.info_dialog_bg{
+	position:fixed;
+	z-index:101;
+	top:20px;
+	left:20px;
+	right:20px;
+	background-color:#fff;
+	border-radius:10px;
+	padding:0px 20px 0px 15px;
+}
+
+.info_dialog{}
+
+ul.info_dialog {
+	margin:0;
+	padding:0;
+}
+
+ul.info_dialog li{
+	font: normal 1.8em "微软雅黑";
+	padding:10px 0px 10px 0px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+ul.info_dialog li:last-child{border:none}
+
+ul.info_dialog li img{
+	height:16px;
+	padding-right:8px;
+	vertical-align:central;
+}
+
+.info_dialog_state{
+	font-size:0.7778em;
+	float:right;
+	color: #F60;
+}
+
+
+
+
+/* 农业信息采集 简洁列表*/
+.ilist_table
+{
+	background-color: #FFF;
+	margin: 10px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;	
+}
+
+.ilist_img{
+	width:0.1%;
+	padding:10px 10px 0px 10px;
+}
+
+.ilist_title_name{
+	font: normal 1.8em "微软雅黑";
+	display: inline;
+	float:left;
+	padding-top: 10px;
+	padding-bottom: 6px;
+}
+
+.ilist_report_num{
+	display: inline;
+	float:right;
+	padding:10px 10px 0px 10px;
+	font-size: 1.4em;
+	color: #a5a5a5;
+}
+
+.ilist_report_time{
+	font: normal 1.4em "微软雅黑";
+	padding-bottom:10px;
+	color: #a5a5a5;
+}
+
+/* 农业信息采集 表单填写*/
+.form_img{
+	width:100%;
+}
+
+.form_title{
+	background-color: #FFF;
+	padding-top: 15px;
+	padding-bottom: 12px;
+	border-bottom: solid 1px #e5e5e5;
+	padding-right: 12px;
+	padding-left: 12px;
+}
+
+.form_title_name{
+	font: normal 1.8em "微软雅黑";
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: #CCC;
+	padding-left: 10px;
+}
+
+.form_title_name_blue{
+	font: normal 1.8em "微软雅黑";
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: #00aaee;
+	padding-left: 10px;
+	color:#00aaee;
+}
+
+.form_help{
+	display: inline;
+	float: right;
+	font:normal 1.2em "微软雅黑";
+	color: #FF8108;
+}
+
+.form_group{
+	background-color: #FFF;
+	margin: 10px 0px 0px 0px;
+	border-top:solid 1px #e5e5e5;
+	width:100%;
+	overflow:hidden;
+}
+
+.form_group_no_border{
+	background-color: #FFF;
+	width:100%;
+	overflow:hidden;
+}
+
+.form_item{
+	padding-top:10px;
+	overflow:hidden;
+	width:100%;
+}
+
+.form_item_gap{ /*列表间隔*/
+	border-top: solid 1px #e5e5e5;
+	border-bottom: solid 1px #e5e5e5;
+
+	top:-1px;
+	height:10px;
+	background-color:#f6f5fa;
+}
+
+.form_item_margin{
+	width:10px;
+	height:34px;
+}
+
+.form_item_name{
+	font:normal 1.6em "微软雅黑";
+	padding-top:3px;
+	padding-bottom:15px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_content{
+	width: 30%;
+	text-align: right;
+	padding-top:3px;
+	padding-right: 10px;
+	border-bottom: solid 1px #e5e5e5;
+	font:normal 1.6em "微软雅黑";
+	color: #CCC;
+	background: url("../img/enter.png") no-repeat scroll right top transparent;
+  	padding-right:24px;
+}
+
+.form_item_content_view{
+	width: 40%;
+	text-align: right;
+	padding-top:3px;
+	padding-right: 5px;
+	border-bottom: solid 1px #e5e5e5;
+	font:normal 1.6em "微软雅黑";
+}
+
+.form_item_content_view_long{
+	width: 55%;
+	text-align: right;
+	padding-top:3px;
+	padding-right: 5px;
+	border-bottom: solid 1px #e5e5e5;
+	font:normal 1.6em "微软雅黑";
+}
+
+.form_item_input{
+	width:30%;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_input input{
+	font:normal 1.6em "微软雅黑";
+	text-align:right;
+	margin-right:5px;
+	border:none;
+}
+
+.form_item_input select{	
+	font:normal 1.6em "微软雅黑";
+	color:#ccc;
+	background: url("../img/enter2.png") no-repeat scroll right top transparent;
+  	padding-right:21px;
+}
+
+.form_item_unit{
+	font: normal 1.6em "微软雅黑";
+	width:0.1%;
+	text-align:right;
+	padding-right:9px;
+	padding-top:3px;
+	border-bottom: solid 1px #e5e5e5;
+	white-space: nowrap;
+}
+
+.form_item_no_unit{
+	width:2px;
+	border-bottom: solid 1px #e5e5e5;
+}
+
+.form_item_jump{
+	width:0.1%;
+	padding-top:2px;
+	padding-right:10px;
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_img_view{
+	width:0.1%;
+	padding-top:2px;
+	padding-right:10px;
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_item_history{
+	font: normal 1.4em "微软雅黑";
+	color:#00aaee;
+	text-align:right;
+	padding:14px 10px 10px 0px;
+	background-color:#FFF;
+}
+
+.form_item_history a{
+	color:#00aaee;
+	text-align:right;
+	padding:14px 10px 10px 0px;
+	background-color:#FFF;
+}
+
+.form_null_tips{
+	font: normal 1.4em "微软雅黑";
+	color:#cccccc;
+	width:100%;
+	text-align:center;
+	padding:20px 0px 0px 0px;
+}
+
+/* 按钮*/
+.form_button1{
+	border-radius: 6px;	
+	margin: 10px 10px 0px 10px;
+	padding: 10px 10px 10px 10px;
+	background-color: #00AAEE;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+
+.form_button_txt1{
+	display:block;
+	text-align: center;
+	font: normal 2em "微软雅黑";
+	letter-spacing:5px;
+	color: #ffffff;
+}
+
+.form_button2{
+	border:solid 1px #DDDDDD;
+	border-radius: 6px;	
+	margin: 10px 10px 0px 10px;
+	padding: 9px 10px 9px 10px;
+	background-color: #ffffff;
+	outline:none; 
+	-webkit-tap-highlight-color:rgba(0,0,0,0); 
+}
+
+.form_button_txt2{
+	display:block;
+	text-align: center;
+	font: normal 2em "微软雅黑";
+	letter-spacing:5px;
+	color: #666666;
+}
+
+/* 农业信息采集 表单选择项*/
+.form_selt_group{
+	padding-left:20px;
+	display:none;
+}
+
+.form_selt_item{
+	background-color:#f6f5fa;
+	padding:12px 10px 10px 0px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_selt_margin{
+	width:10px;
+}
+
+.form_selt_name{
+	font: normal 1.4em "微软雅黑";
+	width:auto;
+}
+
+.form_selt_input{
+	width:0.1%;
+	padding-right:14px;
+}
+
+.form_selt_icon img{	
+	height:16px;
+}
+
+/* 农业信息采集 多选框*/
+.form_check_group{
+	padding-left:20px;
+	display:none;
+}
+
+.form_check_item{
+	background-color:#f6f5fa;
+	padding:12px 10px 10px 0px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.form_check_margin{
+	width:10px;
+}
+
+.form_check_name{
+	font: normal 1.4em "微软雅黑";
+	width:auto;
+}
+
+.form_check_input{
+	width:0.1%;
+	padding-right:14px;
+}
+
+/* 农业信息采集 表单文件上传处理*/
+.form_item_file{
+	position: relative;
+}
+
+.form_input_file{
+	filter: alpha(opacity=0); 
+	opacity:0;
+	-moz-opacity:0;
+	width:120px;
+	height:35px;
+	position: absolute;
+	top:0;
+	right:60px;
+	z-index:999;
+}
+
+.form_input_file_img{
+	position: absolute;
+    top: -4px;
+    right: 60px;
+    z-index: 1;
+}
+
+.form_input_file_photo{
+
+}
+
+/*历史记录*/
+.form_his_bg{
+	background-color:#fff;
+}
+
+.form_his_hd{
+	font: normal 1.6em "微软雅黑";
+	border-bottom:solid 1px #f5f5f5;
+	padding:10px 10px 10px 10px;
+}
+
+.form_his_list{
+	font: normal 1.4em "微软雅黑";
+	border-bottom:solid 1px #f5f5f5;
+	margin-left:10px;
+	padding:10px 10px 10px 0;
+	color:#999;
+}
+
+.form_his_arrow{
+	display:inline;
+	float:right;
+	color:#999;
+}
+
+/* 贷款部分 */
+.loan_header{
+	position:relative;
+}
+
+.loan_goto_button{
+	display:none;
+	position:absolute;
+	bottom:15px;
+	right:15px;
+	padding:6px 8px 4px 8px;
+	border-radius:4px;
+	border:solid 1px #fff;
+	color:#fff;
+	font: normal 1.4em "微软雅黑";
+	
+}
+
+.loan_table_hd{
+	background-color: #FFF;
+	// margin: 10px 0px 0px 0px;
+	// border-top:solid 1px #e5e5e5;	
+}
+
+.loan_table_list{
+	display:none;
+	background-color: #FFF;
+}
+
+.loan_table_noborder{
+	background-color: #FFF;
+	display: block;
+	margin:0;
+	padding-bottom:10px;
+	border-bottom:solid 1px #e5e5e5;
+}
+
+.loan_product_table{
+	background-color: #FFF;
+	display: block;
+	width:100%;
+	margin: 10px 0px 0px 0px;
+	padding:0px 0px 10px 0px;
+	border-top:solid 1px #e5e5e5;
+	border-bottom:solid 1px #e5e5e5;		
+}
+
+.loan_product_table h1{
+	font: normal 1.6em "微软雅黑";
+	color:#333;
+	line-height:1.6em;
+	padding:0;
+	margin:10px 0px 4px 0px;
+}
+
+.loan_product_table p{
+	font: normal 1.4em "微软雅黑";
+	color:#666;
+	line-height:1.4em;
+	padding:0px 0px 10px 0px;
+	margin:0px 0px 0px 0px;
+	border-bottom: dashed 1px #e5e5e5;
+}
+
+.loan_margin{
+	padding-left:15px;
+}
+
+.loan_open{
+	display:inline;
+	float:right;
+	padding-right: 10px;	
+}
+
+.loan_open img{
+	height:16px;
+}
+
+.loan_bank{
+	border-top:solid 1px #e5e5e5;
+}
+
+.loan_bank_name img,.loan_product_bank img{
+	display:inline;
+	float:left;
+	padding-top:1px;
+	padding-right:6px;
+	height:16px;
+}
+
+.loan_bank_name,.loan_product_bank_name{
+	display:inline;
+	float:left;
+	padding-left: 15px;
+	font: normal 1em "微软雅黑";
+}
+
+.loan_product_bank{
+	clear:both;
+	padding-top:6px;
+}
+
+.loan_prod_score{
+	padding:10px 10px 0px 0px;
+}
+
+.loan_prod_score img{
+	float:right;
+	height:16px;
+}
+
+.loan_prod_price{
+	color: #ff8108;
+	font: normal 1.6em "微软雅黑";
+}
+
+.loan_prod_img{
+	width:10%;
+	padding:10px 10px 0px 0px;
+}
+
+.loan_prod_img img{
+	width:100px;
+}
+
+.loan_sel_icon{
+	float:right;
+	width:16px;
+	background-color:#fff;
+	padding:0px 10px 0px 10px;
+}
+
+.loan_sel_icon img{
+	width:16px;
+	padding-bottom:1px;
+}
+
+.loan_left_img{
+	width:1%;
+	padding:10px 10px 10px 0px;
+	border-bottom:solid 1px #f0f0f0;
+}
+
+.loan_left_img img{
+	width:50px;
+}
+
+.loan_right_txt{
+	width:98%;
+}
+
+.loan_name{
+	display:inline;
+	float:left;
+	font: normal 1em "微软雅黑";
+	
+}
+
+.loan_score{
+	display:inline;
+	float:right;
+}
+
+.loan_score img{
+	height:16px;
+	float:right;
+	padding-right:10px;
+}
+
+.loan_rate{
+	font-size: 1em;
+	color: #ff8108;
+	vertical-align:bottom;
+	border-bottom:solid 1px #f0f0f0;
+}
+
+.loan_submit_table{
+	background-color:#f0f0f0;
+	width:100%;
+	position:fixed;
+	bottom:0px;	
+	height:50px;
+	z-index:999;
+}
+
+.loan_input{
+	font: normal 1.6em "微软雅黑";
+	padding-right:5px;
+	border-top:solid 1px #e5e5e5;
+	color:#a5a5a5;
+}
+
+.loan_input input{
+	text-align:right;
+	margin-right:5px;
+	border:none;
+	background-color:#f0f0f0;
+}
+
+.loan_input_txt{
+	font: normal 1.6em "微软雅黑";
+	border-top:solid 1px #e5e5e5;
+	color:#a5a5a5;
+	text-wrap:none;
+}
+
+.loan_sumbit_btn{
+	background-color: #00AAEE;
+	font: normal 2em "微软雅黑";
+	color: #ffffff;
+	border-top:solid 1px #00aaee;
+}
+
+.lace_table{
+	margin:10px 0px 0px 0px;
+	padding:0px 10px 0px 10px;
+	position:relative;
+}
+
+.lace_table_bg{
+	width:100%;
+}
+
+.loan_list_table{
+	// position:absolute;
+	z-index:10;
+	top:0px;
+	left:10px;
+	right:10px;
+	padding:0px 10px 0px 10px;
+	// overflow:hidden;
+}
+
+/*.loan_list_score{
+	padding:10px 0px 0px 0px;
+}*/
+
+.loan_list_score img{
+	height:16px;
+}
+
+.loan_list_bank{
+	font: normal 1.6em "微软雅黑";
+	padding-top:10px;
+	text-wrap:none;
+}
+
+.loan_list_bank img{
+	position:relative;
+	top:1px;
+	padding-right:6px;
+	height:16px;
+}
+
+.loan_list_txt{
+	font: normal 1.6em "微软雅黑";
+	padding-top:10px;
+}
+
+.loan_list_txt2{
+	// position:absolute;
+	z-index:20;	
+	font: normal 1.6em "微软雅黑";
+	left:20px;
+	bottom:10px;
+	color:#ccc;
+}
+
+.loan_list_check{
+	position:absolute;
+	z-index:20;
+	bottom:0px;
+	right:20px;
+}
+
+.loan_list_check img{
+	width:70px;
+}
+
+/*贷款页标签*/
+.loan_mtab{
+	font: normal 1.6em "微软雅黑";
+	background-color:#fff;
+	border-top:solid 1px #e5e5e5;
+}
+
+.mtab_item{
+	// border-top:solid 1px #eee;
+}
+
+.mtab_item div{
+	margin:9px 0px 9px 0px;
+}
+
+.mtab_line_site{
+	position:relative;
+}
+
+.mtab_line{
+	position:absolute;
+	top:-3px;
+	width:34%;
+	border-bottom:solid 3px #00aaee;
+}
+
+/*旺农贷*/
+.wang_loan_group{
+	background-color:#FFF;
+	margin-top:10px;
+	padding: 0px 0px 10px 0px;
+	width:100%;
+}
+
+.wang_loan_bg{
+	position:relative;	
+}
+
+.wang_loan_content{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
+.wang_loan_content .form_button1{
+	margin:18px 0px 25px 0px;
+}
+
+.wang_loan_txt{
+	font: normal 1.4em "微软雅黑";
+	padding-bottom:6px;
+	color:#ff8108;
+	white-space: nowrap;
+}
+
+.wang_loan_txt img{
+	vertical-align:text-top;
+	padding-right:5px;
+	height:15px;
+	position:relative;
+	top:-1px;
+}

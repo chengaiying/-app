@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>我的贷款</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<style type="text/css">
+	#div1 {
+	    z-index: 102;
+	    position: fixed;
+	    top: 120px;
+	    left: 50%;
+	    width: 80%;
+	    margin-left: -42%;
+	    box-shadow: 0 0 10px #999;
+	    background-color: #fff;
+	    padding: 10px 10px 10px 10px;
+	    /*display: none;*/
+	}
+	#div2 {
+    border-radius: 6px;
+    margin: 10px 10px 0px 10px;
+    padding: 10px 10px 10px 10px;
+    background-color: #00AAEE;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    text-align: center;
+    font: normal 2em "微软雅黑";
+    letter-spacing: 5px;
+    color: #ffffff;
+}
+	#div1 textarea {
+	    width: 100%;
+	    height: 50px;
+	}
+</style>
+<body>
+<div class="form_null_tips">暂无贷款记录</div>
+
+</body>
+
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/swiper.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		checkOauth();
+    });
+	
+//	function checkOauth() {
+//		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+//			if (textStatus == 'success' && data != null) {
+//				if (data.code==0) {
+//					GetMyProdList();
+//				} else if (data.code == -2) {
+//					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/list.html";
+//				}
+//			}
+//		}, 'json');
+//	}
+	
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFramer();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/list.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/bank/list.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/bank/list.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/list.html";
+			}
+		}
+	}
+	
+	function checkFramer() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					GetMyProdList();
+				} else if (data.code == -1) {
+					alert("您尚未通过家庭农场主认证，请进行家庭农场主认证！!");
+					location.href = "/NewViliage/web/auth/index.html"
+				}
+			}
+		}, 'json');
+	}
+	
+	
+	function GetMyProdList() {
+		$.post("/NewViliage/api/loan/myLoans", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					var tmphtml;
+					$(document.body).empty();
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							tmphtml = "<div class=\"lace_table\">";
+							tmphtml = tmphtml + "<img src=\"../img/lace_table.png\" class=\"lace_table_bg\" />";
+							tmphtml = tmphtml + "<div class=\"loan_list_table\">";
+							tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
+							tmphtml = tmphtml + "<tr valign=\"top\"><td colspan=\"2\"><div class=\"loan_name\" >" + value.prodName + "</div></td>";
+							tmphtml = tmphtml + "<td align=\"right\" class=\"loan_list_score\" width=\"30%\"><img src=\"../img/star_5.png\"/>";
+							tmphtml = tmphtml + "</td></tr>";
+							tmphtml = tmphtml + "<tr valign=\"top\"><td class=\"loan_list_txt\" width=\"50%\">申请额度:" + value.amount + "万元</td>";
+							tmphtml = tmphtml + "<td align=\"right\" class=\"loan_list_bank\" colspan=\"2\"><img src=\"/storage/" + value.bankIcon + "\" />" + value.bankName + "</td></tr>";
+							tmphtml = tmphtml + "</table></div>";
+							tmphtml = tmphtml + "<div class=\"loan_list_txt2\">申请时间:" + FormatDate(value.applyDate) + "</div>";
+							tmphtml = tmphtml + "<div class=\"loan_list_txt2\" style=\"left: 200px;\" id=\"assess\" onClick=\"assess('"+value.loanId+"');\">评价</div>";
+
+							switch (value.status){
+							case 0:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_0.png\" /></div>";
+								break;
+							case 1:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_1.png\" /></div>";
+								break;
+							case 2:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_2.png\" /></div>";
+								break;
+							case 3:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_3.png\" /></div>";
+								break;
+							case 4:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_4.png\" /></div>";
+								break;
+							default:
+								tmphtml = tmphtml + "<div class=\"loan_list_check\"><img src=\"../img/sign_0.png\" /></div>";
+								break;
+							}
+							tmphtml = tmphtml + "</div>";
+							$(document.body).append(tmphtml);
+						}
+					});
+					$(document.body).append("<br /><br />");
+				}
+			}
+		}, 'json');
+	}
+	
+	function assess(id){
+		$(document.body).append("<div id=\"div1\"><form action=''><textarea id='textarea'></textarea><div id='div2' onClick=\"addOther('"+id+"')\">完成</div></form></div>");
+		var textareaValue=$("#div1 textarea").val();
+		$.post("/NewViliage/api/loan/queryEvaluate ",{id:id}, function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$("#div1 textarea").val(data.result);
+				}
+			}
+	
+		},'json')
+		
+	}
+	
+	function addOther(id){
+		var textareaValue=$("#div1 textarea").val();
+		$.post("/NewViliage/api/loan/saveEvaluate ",{id:id,evaluate:textareaValue}, function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					alert("提交成功！感谢您的评价！");
+					
+					$("#div1").remove();
+				}
+			}
+	
+		},'json')
+	}
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+	
+</script>
+
+</html>

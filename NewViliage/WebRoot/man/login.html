@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>登陆 - 农业部服务窗</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./css/menu.css" rel="stylesheet" type="text/css" />
+<script src="./js/jquery-2.1.4.min.js"></script>
+<script src="./js/buttonStyle.js"></script> 
+<style type="text/css">
+.login_frame{
+	background-color:#FFF;
+	width:400px;
+	padding:20px 20px 50px 20px;
+	margin-top:100px;
+}
+.login_body{
+	width:400px;
+	font-size:16px;
+	text-align:left;
+}
+.login_header{
+	padding:0px 0px 10px 0px;
+	font-size:24px;
+	border-bottom:solid 1px #dddddd;
+	letter-spacing:5px;
+	margin-bottom:10px;	
+}
+.login_title{
+	padding:10px 0px 10px 0px;
+	letter-spacing:2px;
+	font-size:18px;
+}
+.login_input input{
+	padding:0px 6px 0px 6px;
+	border:solid 1px #dddddd;
+	font-size:20px;
+	height:36px;
+	width:388px;	
+}
+</style>
+</head>
+<body>
+<div style="background-color:#f8f8f8; width:100%; height:800px">
+<br />
+<center>
+<div class="login_frame">
+<div class="login_body">
+<div class="login_header">登陆</div>
+<div class="login_title">用户名</div>
+<div class="login_input"><input name="user_name" type="text" id="user_name" placeholder="请填写用户名"></div>
+<div class="login_title">密码</div>
+<div class="login_input"><input name="user_pw" type="password" id="user_pw" placeholder="请填写密码"></div>
+<br />
+<a href="javascript:;"><span style="display:inline;float:left;"><div class="btn1" onClick="myBtnClick(this,'#0091cb','');LoginCheck();"><div class="btn1_txt">登陆</div></div></span></a>
+<a href="javascript:;"><span style="display:inline;float:right;"><div class="btn2"><div class="btn2_txt">忘记密码</div></div></span></a>
+</div>
+<br />
+</div><!--login_frame -->
+</center>
+</div>
+
+</body>
+
+<script type="text/javascript">
+$(document).ready(function(){
+		
+});
+
+function LoginCheck(){
+	if($("#user_name").val()=='admin' && $("#user_pw").val()=='888888')
+	{
+		window.location.href='index.html';
+	}
+	else
+	{
+		alert('密码错误');
+	}
+}
+
+</script>	
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>我的上报</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+</body>
+
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+    });
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					GetInfo();
+				} else if (data.code == -2) {
+					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/info/list.html";
+				}
+			}
+		}, 'json');
+	}
+	
+	//获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+	
+	//点击DIV跳转，带formid参数
+	function ClickDiv(formId) {
+		location.href="/NewViliage/info/form_my_report.html?form_id=" + formId;
+	}
+	
+	function GetInfo() {
+		$.post("/NewViliage/api/form/myReportedInfo?filter_type=3", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$(document.body).empty();
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<div onclick=" + "ClickDiv(" + value.formId + ")" + ">";
+							tmphtml = tmphtml + "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"ilist_table\"><tr valign=\"top\">";
+							tmphtml = tmphtml + "<td rowspan=\"2\" class=\"ilist_img\">";
+							tmphtml = tmphtml + "<img src=\"" + "/storage/" + value.icon + "\" width=\"40px\"/></td>";
+							tmphtml = tmphtml + "<td><span class=\"ilist_title_name\">" + value.formName + "</span>";
+							tmphtml = tmphtml + "<span class=\"ilist_report_num\">已经上报<font color=\"#00aaee\"><strong>" + value.count + "</strong></font>次</span>";
+							tmphtml = tmphtml + "</td></tr>";
+							tmphtml = tmphtml + "<tr valign=\"top\"><td class=\"ilist_report_time\">最后一次上报 " + FormatDate(value.lastDate) + "</td></tr>";
+							tmphtml = tmphtml + "</table>";
+							tmphtml = tmphtml + "</div>";
+							
+							$(document.body).append(tmphtml);
+						}
+					});
+					$(document.body).append("<br /><br />");
+				} 
+			}
+		}, 'json');
+	}
+	
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+</script>
+
+</html>

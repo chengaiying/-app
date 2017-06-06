@@ -1,0 +1,39 @@
+@charset "utf-8";
+/* CSS Document */
+
+.info_table
+{
+	background-color: #FFF;
+	display: block;
+	margin-top: 10px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #e5e5e5;
+	border-bottom-color: #e5e5e5;	
+}
+
+.info_img{
+	display: inline;
+	float: left;
+	overflow: hidden;
+}
+
+.info_title{
+	display: inline;
+	overflow: hidden;
+	font-family: "微软雅黑";
+	font-size: 2em;
+}
+
+.info_msg{
+	clear: both;		
+}
+
+.info_tips{
+	
+}

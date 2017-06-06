@@ -1,0 +1,66 @@
+﻿/*字体标准*/
+h2{font-size: 1rem; }
+h3{font-size: 0.94rem;}
+.font1{font-size: 0.875rem;}
+.font2{font-size: 0.8125rem;}
+
+/*农场主认证*/
+.farmTit1{width: 100%; min-height: 2.19rem; padding: 0.875rem 3%; background-color: #fff; border-bottom: 1px solid #e1e3e0;}
+.farmTit1 em{display: block; width: 2.19rem; height: 2.19rem; font-size: 1.4rem; color: #fff; background-color: #ff7753; margin-right: 0.8rem; -o-border-radius: 50%; -moz-border-radius: 50%; -webkit-border-radius: 50%; border-radius: 50%;}
+.farmList,.farmList2,.farmList3{width: 100%; height: auto; margin-top: 1.25rem; border-bottom: 1px solid #e1e3e0; border-top: 1px solid #e1e3e0; background-color: #fff;}
+.farmList ul li,.farmList2 ul li,.farmList3 ul li{min-height: 3rem; }
+
+.farmList span,.farmList em{display: block;}
+.farmList span{text-align: right; margin-right: 0.2rem; color: #b4b4b4;}
+.farmList em{width: 1.5rem; height: 1.5rem; font-size: 1.3rem; color: #b5b5b5;}
+.farmList div{width: 97%; min-height: 3rem; margin-left: 3%; border-bottom: 1px solid #e1e3e0;}
+.farmList ul li:last-child div,.farmList2 ul li:last-child div{border:none;}
+.farmList ul li:hover,.farmList2 ul li:hover{background-color: #fafafa;}
+.farmList .addinput{display: block; width: 100%; min-height: 2rem; margin-left: 0.8rem; font-family: "microsoft yahei"; font-size: 0.92rem;  color: #b4b4b4;}
+
+.farmList2 ul li div{width: 97%; min-height: 4rem; margin-left: 3%; border-bottom: 1px solid #e1e3e0;}
+.farmList2 ul li div{padding: 1.125rem 0;}
+.farmImg input{ border: none; background-color: #fbfbfb;}
+.farmImg span{color: #b4b4b4;}
+
+.rzBtn{width: 94%; height: 3rem; line-height: 3rem; background-color: #ebebf0; color: #d2d2d2; font-size: 1.125rem; text-align: center; margin: 1.25rem auto 0.6rem auto; -o-border-radius: 0.3rem; -moz-border-radius: 0.3rem; -webkit-border-radius: 0.3rem; border-radius: 0.3rem; font-family: "microsoft yahei";}
+.rzTxt{width: 100%; text-align: center; color: #cccccc;}
+.cur{background-color: #108ee9; color: #fff;}
+
+/*照片上传*/
+.farmList2 .img1{display: block; width: 4rem; height: 4rem; background: url("../images/addimg.png") no-repeat; background-size: 100% !important; margin-right: 2rem;}
+.farmList2 .photo1{display: block; width: 4rem; height: 4rem; overflow: hidden; -o-border-radius: 0.4rem; -moz-border-radius: 0.4rem; -webkit-border-radius: 0.4rem; border-radius: 0.4rem; margin-right: 2rem;}
+.farmList2 .photo1 img{width: 4rem; height: 4rem; -o-border-radius: 0.4rem; -moz-border-radius: 0.4rem; -webkit-border-radius: 0.4rem; border-radius: 0.4rem;}
+.farmList2{position: relative;}
+.farmList2 .dfile{position: absolute; left: 0; top: 0; z-index: 999;  width: 100%; height: 100%; opacity: 0;}
+
+/*提交成功*/
+.success{margin-top: 20%; height: auto;}
+.suIcon{width: 5rem; height: 5rem; background-color: #108ee9; -moz-border-radius: 50%; -webkit-border-radius: 50%; border-radius: 50%;}
+.suIcon em{font-size: 1.6rem; color: #fff;}
+.suTxt{font-size: 1.5rem; color: #108ee9; line-height: 2rem; margin: 0.6rem 0;}
+.success a{font-size: 0.94rem; color: #a5a5a5;}
+
+/*通过认证*/
+.rzPass{font-size: 0.875rem; padding: 0.2rem 0.6rem; color: #0c87e0; border: 1px solid #0c87e0; margin-left: 0.8rem; -moz-border-radius: 0.4rem; -webkit-border-radius: 0.4rem; border-radius: 0.4rem;}
+.farmList3 span,.farmList em{display: block;}
+.farmList3 span{margin-right: 0.8rem; margin-left: 0.8rem; color: #333333;}
+.farmList3 h3{min-width: 7.5rem; color: #dcdcdc;}
+.farmList3 em{width: 1.5rem; height: 1.5rem; font-size: 1.3rem; color: #b5b5b5;}
+.farmList3 div{width: 97%; min-height: 3rem; padding: 0.6rem 0; margin-left: 3%; border-bottom: 1px solid #e1e3e0;}
+.farmList3 ul li:last-child div,.farmList2 ul li:last-child div{border:none;}
+.farmList3 ul li:hover,.farmList2 ul li:hover{background-color: #fafafa;}
+.farmList3 .addinput{display: block; width: 100%; min-height: 2rem; margin-left: 0.8rem; font-family: "microsoft yahei"; font-size: 0.8125rem; }
+.farmList3 .img1{width: 4rem; height: 4rem; border: none; -o-border-radius: 0.4rem; -moz-border-radius: 0.4rem; -webkit-border-radius: 0.4rem; border-radius: 0.4rem; margin-left: 0.8rem;}
+.farmList3 .img1 img{width: 4rem; height: 4rem; border: none; -o-border-radius: 0.4rem; -moz-border-radius: 0.4rem; -webkit-border-radius: 0.4rem; border-radius: 0.4rem;}
+
+@media screen and (min-width:400px){
+
+	}
+
+
+
+@media screen and (max-width:340px){
+
+
+}

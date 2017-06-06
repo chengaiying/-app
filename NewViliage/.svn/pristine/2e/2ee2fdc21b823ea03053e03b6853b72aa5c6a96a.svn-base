@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>补贴政策</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/html.css" rel="stylesheet" type="text/css" />
+<script src="../js/buttonStyle.js"></script>
+</head>
+
+<body>
+
+<img src="image/policy_banner.jpg" width="100%">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_into_line" onclick="myBtnClick(this,'#fafafa','/NewViliage/web/info/form.html?form_id=35')">
+<tr><td valign="top" width="1%"><img src="image/form_up.png"></td>
+<td valign="top"><div class="policy_into_title">补贴信息填报表</div>
+<div class="policy_into_tips">（家庭农场主及合作社请及时填报）</div></td>
+</tr>
+</table>
+
+
+
+
+
+
+
+<div class="policy_group">
+<div class="policy_type_name" style="color:#000;">l&nbsp;补贴动态</div>
+<div class="policy_more">更多...</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','https://fuwu.alipay.com/platform/materialView.htm?messageId=322877&id=1417855')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于印发《新一轮草原生态保护补助奖励政策实施指导意见（2016-2020年）》的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">125<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/govpublic/CWS/201603/t20160328_5073679.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于做好2016年部分财政支农项目实施工作的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">224<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/sjzz/xumusi/cybhjs/201603/t20160308_5044196.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于印发《新一轮草原生态保护补助奖励政策实施指导意见（2016-2020年）》的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">156<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/govpublic/CWS/201605/t20160530_5154719.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于做好 2016年新型职业农民培育工作的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">187<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/govpublic/CWS/201605/t20160530_5154758.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于开展农作物秸秆综合利用试点 促进耕地质量提升工作的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">164<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/govpublic/CWS/201606/t20160601_5158272.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于做好2016年现代农业生产发展等项目实施工作的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">132<img src="image/comment.png"></div></td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="policy_table" onclick="myBtnClick(this,'#fafafa','http://www.moa.gov.cn/govpublic/CWS/201606/t20160601_5158184.htm')"><tr valign="top">
+<td rowspan="2" class="policy_img"><img src="image/20160907_4.jpg"/></td>
+<td><div class="policy_title">农业部办公厅 财政部办公厅关于做好2016年农业结构调整试点工作的通知</div></td></tr>
+<tr valign="bottom"><td><div class="policy_comment">98<img src="image/comment.png"></div></td></tr>
+</table>
+
+</div>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+
+
+
+
+<br />
+
+
+</body>
+</html>

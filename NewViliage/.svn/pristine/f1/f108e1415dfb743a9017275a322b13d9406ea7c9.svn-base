@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>农业部服务窗</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/html.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/iframe.js"></script>
+<script src="../js/buttonStyle.js"></script> 
+</head>
+
+<body>
+<div id="frame_content">
+<div class="nav_link"><span class="nav_link_main">直报管理</span><span class="nav_link_page">/&nbsp;直报表单</span></div>
+
+<br />
+<table width="200px" border="0" cellspacing="0" cellpadding="0">
+<tr><td>
+<select id="form_sel" title="" class="info_frame_select">
+    <option>请选择直报表单</option>
+</select>
+</td>
+<td style="padding-left:20px;">
+<a href="javascript:;"><div id="query_btn" class="btn1" onClick="Query()"><div class="btn1_txt">查询</div></div></a>    
+</td>
+<td style="padding-left:20px;">
+<a href="javascript:;"><div class="btn2" onClick="myBtnClick(this,'#e6e6e6','');"><div class="btn2_txt">输出</div></div></a>    
+</td>
+</tr></table>
+
+<br />
+<table id="form_table" width="100%" border="0" cellspacing="0" cellpadding="0" class="data_table">  
+  
+</table>
+
+<br />
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td style="padding-right:10px;">
+<a href="javascript:;"><div id="up_page_btn" class="btn3" onClick="ClickPage(0)"><div class="btn3_txt">上一页</div></div></a>
+</td><td>
+<a href="javascript:;"><div id="down_page_btn" class="btn3" onClick="ClickPage(1)"><div class="btn3_txt">下一页</div></div></a>
+</td><td width="99%" align="right">
+<span id="page_num" class="txt1">第1页/共1页</span>
+</td></tr></table>
+
+
+</div>
+</body>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		GetForm();
+		$('#form_sel').change(function(){
+			var formId = $("#form_sel").get(0).selectedIndex;
+			GetFormField(formId);
+			});
+    });
+	
+	var page = 1;
+	var totalPage = 1;
+	var formTitle;
+	
+	function GetForm() {
+		$.post("/NewViliage/api/form/formList", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<option>" + value.formName + "</option>";
+							$("#form_sel").append(tmphtml);
+						}
+					});
+				} else {
+					alert("获取表失败!");
+				}
+			}
+		}, 'json');
+	}
+	
+	function GetFormField(formId) {
+		if (formId == 0) {
+			$("#form_table").empty();
+			return;
+		}
+		$.post("/NewViliage/api/form/formDefDetail?form_id=" + formId , function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$("#form_table").empty();
+					var tmphtml = "<tr class=\"data_frist_tr\"><td>序号</td><td width=\"60px\">农场主</td>";
+					$.each(data.result.formWords, function(n, value) {
+						if (value != null) {
+							tmphtml = tmphtml +"<td>" + value.display + "</td>";
+						}
+					});
+					tmphtml = tmphtml + "</tr>";
+					formTitle = tmphtml;
+					$("#form_table").append(tmphtml);
+				} else {
+					alert("获取表字段失败!");
+				}
+			}
+		}, 'json');
+	}
+	
+	//点击查询
+	function Query() {
+		var query_btn = document.getElementById("query_btn");
+		myBtnClick(query_btn,'#00AAEE','');
+		
+		var formId = $("#form_sel").get(0).selectedIndex;
+		if (formId == 0) {
+			return;
+		}
+		page = 1;
+		
+		$.post("/NewViliage/api/admin/form/formData?form_id=" + formId + "&page=" + page, function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$("#form_table").empty();
+					$("#form_table").append(formTitle);
+					totalPage = data.result.totalPage;
+					$("#page_num").html("第" + data.result.page + "页/共" + data.result.totalPage + "页");
+					$.each(data.result.datas, function(n, value) {
+						if (value != null) {
+							var tmphtml = "<tr>";
+							tmphtml = tmphtml + "<td>" + (n + 1) + "</td>";
+							tmphtml = tmphtml + "<td>" + value.farmer + "</td>";
+							$.each(value.coreData, function(d, count) {
+								if (count != null ) {
+									if (count.indexOf("jpg") > 0 || count.indexOf("png") > 0)
+									{
+										tmphtml = tmphtml + "<td>" + "<img src=\"/storage/" + count + "\" style=\"width:50px;\" /></td>";
+									}
+									else {
+										tmphtml = tmphtml + "<td>" + count + "</td>";
+									}
+									
+								}
+							});
+							tmphtml = tmphtml + "</tr>";
+							$("#form_table").append(tmphtml);
+						}
+					});
+				} else if (data.code == 1) {
+					alert("没有数据!");
+				}
+				else {
+					alert("获取表结构失败!");
+				}
+			}
+		}, 'json');
+		
+	}
+	
+	//点击翻页，0上一页，1下一页
+	function ClickPage(state) {
+		
+		if (state == 1) {
+			var down_page_btn = document.getElementById("down_page_btn");
+			myBtnClick(down_page_btn,'#ffffff','');
+			if(page >= totalPage) {
+				return;
+			}
+			page = page + 1;
+		}
+		else {
+			var up_page_btn = document.getElementById("up_page_btn");
+			myBtnClick(up_page_btn,'#ffffff','');
+			if (page == 1) {
+				return;
+			}
+			page = page - 1;
+		}
+		
+		var formId = $("#form_sel").get(0).selectedIndex;
+		if (formId == 0) {
+			return;
+		}
+		
+		$.post("/NewViliage/api/admin/form/formData?form_id=" + formId + "&page=" + page, function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$("#form_table").empty();
+					$("#form_table").append(formTitle);
+					$("#page_num").html("第" + data.result.page + "页/共" + data.result.totalPage + "页");
+					$.each(data.result.datas, function(n, value) {
+						if (value != null) {
+							var tmphtml = "<tr>";
+							tmphtml = tmphtml + "<td>" + (((page-1) * 20) + (n + 1)) + "</td>";
+							tmphtml = tmphtml + "<td>" + value.farmer + "</td>";
+							$.each(value.coreData, function(d, count) {
+								if (count != null ) {
+									if (count.indexOf("jpg") > 0 || count.indexOf("png") > 0)
+									{
+										tmphtml = tmphtml + "<td>" + "<img src=\"/storage/" + count + "\" style=\"width:50px;\" /></td>";
+									}
+									else {
+										tmphtml = tmphtml + "<td>" + count + "</td>";
+									}
+									
+								}
+							});
+							tmphtml = tmphtml + "</tr>";
+							$("#form_table").append(tmphtml);
+						}
+					});
+				} else if (data.code == 1) {
+					alert("没有数据!");
+				}
+				else {
+					alert("获取表结构失败!");
+				}
+			}
+		}, 'json');
+	}
+	
+</script>
+
+</html>

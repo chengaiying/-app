@@ -1,0 +1,406 @@
+package com.moa.viliage.service;
+
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import com.alipay.api.internal.util.StringUtils;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.moa.viliage.WebConfig;
+import com.moa.viliage.common.Utils;
+import com.moa.viliage.db.Tables.TAlipayUser;
+import com.moa.viliage.interceptor.TokenInterceptor;
+import com.moa.viliage.result.ResultCodes;
+import com.moa.viliage.result.ResultInfo;
+import com.moa.viliage.result.obj.EmptyResultObj;
+import com.moa.viliage.token.AlipayUserInfo;
+import com.moa.viliage.token.AlipayUserInfoCache;
+
+public class FarmerService {
+
+	private static final String TAG = "FarmerService";
+
+	public static final int PHOTO_FILE_LIMIT = 1024 * 1024;
+	
+	public static final String PARAM_FARMER_PHOTO = "farmer_photo";
+	
+	public static final String PARAM_FARMER_LICENCE = "farmer_licence";
+
+	/**
+	 * 农场主认证
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<EmptyResultObj> doAuth(Controller controller) {
+		String phone = controller.getPara(TAlipayUser.COL_CONTACT);
+		String farmName = controller.getPara(TAlipayUser.COL_FARM_NAME);
+		String isHzs = controller.getPara(TAlipayUser.COL_IS_HZS);
+		String alipayUserId = controller.getRequest().getSession().getAttribute(TokenInterceptor.PARAM_ALIPAY_USER_ID).toString();
+		String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String idNum = userInfoObj.idNum;
+		String farmer = userInfoObj.realName;
+		
+		String tmpPhotoPath = userInfoObj.findTmpFileName(PARAM_FARMER_PHOTO);
+		String tmpLicencePath = userInfoObj.findTmpFileName(PARAM_FARMER_LICENCE);
+		
+		//test
+		idNum = controller.getPara(TAlipayUser.COL_ID);
+		farmer = controller.getPara(TAlipayUser.COL_FARMER);
+
+		if ((Utils.isEmpty(farmer) || Utils.isEmpty(phone)) && ("0".equals(isHzs) || "1".equals(isHzs))) {//xf updated by 20170412
+			Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_PARAM_ERROR, "or name or contact is empty");
+		}
+		
+		Record aliUserRecord = Db.findFirst("select * from alipay_user where (id_num=? and farmer=?) or (farmer=? and farm_name=?)", idNum, farmer, farmer, farmName);
+
+		//如果不存在该农场主数据，则表示认证失败
+		if (aliUserRecord == null || !isHzs.equals(aliUserRecord.getStr(TAlipayUser.COL_IS_HZS))) {
+//			Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED, "auth failed");
+		}
+
+		//如果该农场主之前已认证，则要删除可能存在的临时文件
+		if ("1".equals(aliUserRecord.getStr(TAlipayUser.COL_IS_AUTHED))) {
+			Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_DATA_HAS_EXIST, "has authed already");
+		}
+		boolean isPass = false;
+		if("0".equals(aliUserRecord.getStr(TAlipayUser.COL_IS_HZS))) {// 如果是普通农户，需要验证身份证和姓名
+			isPass = idNum.equals(aliUserRecord.getStr(TAlipayUser.COL_ID)) && farmer.equals(aliUserRecord.getStr(TAlipayUser.COL_FARMER));
+		} else if ("1".equals(aliUserRecord.getStr(TAlipayUser.COL_IS_HZS))) {// 如果是合作社，需要验证合作社名称和用户姓名
+			isPass = farmName.equals(aliUserRecord.getStr(TAlipayUser.COL_FARM_NAME)) && farmer.equals(aliUserRecord.getStr(TAlipayUser.COL_FARMER));
+		} else if ("2".equals(aliUserRecord.getStr(TAlipayUser.COL_IS_HZS))) {
+			isPass = true;
+		}
+		
+		if (isPass) {
+			aliUserRecord.set(TAlipayUser.COL_ALIPAY_USER_ID, alipayUserId);
+			aliUserRecord.set(TAlipayUser.COL_FARMER, farmer);
+			aliUserRecord.set(TAlipayUser.COL_CONTACT, phone);
+			//aliUserRecord.set(TAlipayUser.COL_IS_AUTHED, "1");//xf updated by 20170413
+			aliUserRecord.set(TAlipayUser.COL_REQUIRED_TYPE, "0");//xf updated by 20170413
+			aliUserRecord.set(TAlipayUser.COL_ADDRESS, controller.getPara(TAlipayUser.COL_ADDRESS));
+			aliUserRecord.set(TAlipayUser.COL_PROVINCE, controller.getPara(TAlipayUser.COL_PROVINCE));
+			aliUserRecord.set(TAlipayUser.COL_CITY, controller.getPara(TAlipayUser.COL_CITY));
+			aliUserRecord.set(TAlipayUser.COL_DISTRICT, controller.getPara(TAlipayUser.COL_DISTRICT));
+			aliUserRecord.set(TAlipayUser.COL_VILIAGE, controller.getPara(TAlipayUser.COL_VILIAGE));
+			aliUserRecord.set(TAlipayUser.COL_ID, controller.getPara(TAlipayUser.COL_ID));
+			
+			aliUserRecord.set(TAlipayUser.COL_FARM_NAME, controller.getPara(TAlipayUser.COL_FARM_NAME));
+			aliUserRecord.set(TAlipayUser.COL_LICENSE_CODE, controller.getPara(TAlipayUser.COL_LICENSE_CODE));
+			
+			//alipay_user中新增modify_time（修改时间），modify(修改者)字段
+			aliUserRecord.set(TAlipayUser.COL_MODIFY_TIME,Timestamp.valueOf(Utils.getCurrentTimeStr()));
+			aliUserRecord.set(TAlipayUser.COL_MODIFY,aliUserRecord.getInt(TAlipayUser.COL_USER_ID));
+
+			String photoName = "";
+			String licenceImgName = "";
+			try {
+				if (! Utils.isEmpty(tmpPhotoPath)) {
+					photoName = Utils.createUUID() + ".jpg";
+					File tmpPhoto = new File(tmpPhotoPath);
+					if (tmpPhoto.exists() && tmpPhoto.isFile()) {
+						tmpPhoto.renameTo(new File(WebConfig.photoDir + File.separator + photoName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_PHOTO);
+						aliUserRecord.set(TAlipayUser.COL_PHOTO, "photo/" + photoName);
+					}
+				}
+			} catch (Exception e) {
+				Logger.getLogger(TAG).error("move picture error" + e.getMessage());
+			}
+
+			try {
+				if (! Utils.isEmpty(tmpLicencePath)) {
+					licenceImgName = Utils.createUUID() + ".jpg";
+					File tmpLicence = new File(tmpLicencePath);
+					if (tmpLicence.exists() && tmpLicence.isFile()) {
+						tmpLicence.renameTo(new File(WebConfig.licenceImgDir + File.separator + licenceImgName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_LICENCE);
+						aliUserRecord.set(TAlipayUser.COL_LICENCE_IMG, "licence_img/" + licenceImgName);
+					}
+				}
+			} catch (Exception e) {
+				Logger.getLogger(TAG).error("move picture error" + e.getMessage());
+				e.printStackTrace();
+			}
+
+			try {
+				if (Db.update(TAlipayUser.TABLE_NAME, TAlipayUser.COL_USER_ID, aliUserRecord)) {
+					return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS, "auth success");
+				} else {
+					Utils.deleteFileByName(WebConfig.photoDir + File.separator + photoName, WebConfig.licenceImgDir + File.separator + licenceImgName);
+				}
+
+			} catch (Exception e) {
+				Utils.deleteFileByName(WebConfig.photoDir + File.separator + photoName, WebConfig.licenceImgDir + File.separator + licenceImgName);
+				Logger.getLogger(TAG).error("update data error" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		
+		Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+		return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED, "auth failed");
+	}
+
+	//xf updated by 20170413
+	public static ResultInfo<EmptyResultObj> industryTypeAuth(Controller controller) {
+		String industryType = controller.getPara(TAlipayUser.COL_INDUSTRY_TYPE);
+		String idNum = controller.getPara(TAlipayUser.COL_ID);
+		int flag = Db.update("update alipay_user set is_authed=?, industry_type=? where id_num=?", "1", industryType, idNum);
+		if (flag >= 1) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS, "auth success");
+		} else {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED, "auth failed");
+		}
+	}
+
+	public static ResultInfo<EmptyResultObj> checkIfFarmerAuthed(Controller controller) {
+		String alipayUserId = controller.getRequest().getSession().getAttribute(TokenInterceptor.PARAM_ALIPAY_USER_ID).toString();
+
+		Record aliUserRecord = Db.findFirst("select alipay_user_id from alipay_user where alipay_user_id=? and is_authed=1", alipayUserId);
+		if (aliUserRecord != null) {
+			return new ResultInfo<EmptyResultObj>(ResultCodes.RET_SUCCESS);
+		} 
+		return new ResultInfo<EmptyResultObj>(ResultCodes.RET_FAILED);
+	}
+
+	/**
+	 * 获取空场主个人信息
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<Map<String, Object>> farmerInfo(Controller controller) {
+		String userId = controller.getRequest().getSession().getAttribute(TokenInterceptor.USER_ID).toString();
+		Record record = Db.findFirst("select * from  alipay_user where id=?", userId);
+
+		if (record == null) {
+			return new ResultInfo<Map<String, Object>>(ResultCodes.RET_DATA_NOT_EXIST);
+		}
+		ResultInfo<Map<String, Object>> ret = new ResultInfo<Map<String, Object>>(ResultCodes.RET_SUCCESS);
+		ret.result = record.getColumns();
+		return ret;
+	}
+
+	/**
+	 * 修改认证信息
+	 * @param controller
+	 * @return
+	 */
+	public static ResultInfo<Map<String, Object>> updateFamerInfo(Controller controller) {
+		String userId = controller.getRequest().getSession().getAttribute(TokenInterceptor.USER_ID).toString();
+		String tokenStr = controller.getSession().getAttribute(TokenInterceptor.PARAM_TOKEN).toString();
+		AlipayUserInfo userInfoObj = AlipayUserInfoCache.getInstance().findUserInfoByToken(tokenStr);
+		String isHzs= controller.getPara("is_hzs");
+		String farmerName= controller.getPara("farm_name");
+		String farmer= controller.getPara("farmer");
+		String phone= controller.getPara("contact");
+		String idNum= controller.getPara("id_num");
+		String id= controller.getPara("id");
+		String viliage=controller.getPara("viliage");
+		String province=controller.getPara("province");
+		String city=controller.getPara("city");
+		String district=controller.getPara("district");
+		String licenseCode=controller.getPara("license_code");
+		String tmpPhotoPath = userInfoObj.findTmpFileName(PARAM_FARMER_PHOTO);
+		String tmpLicencePath = userInfoObj.findTmpFileName(PARAM_FARMER_LICENCE);
+		if(StringUtils.isEmpty(isHzs)){
+			
+			return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"合作社判断标识不能为空");	
+			
+		}
+       if(StringUtils.isEmpty(id)){
+			
+			ResultInfo<Map<String, Object>> ret = new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"标识id不能为空");	
+			return ret;
+			
+		}
+   	    Record record = Db.findFirst("select * from  alipay_user where id=? and is_hzs=?", userId,isHzs);
+   	    
+   	    if(record==null){
+   	    	
+   	    	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_DATA_NOT_EXIST);
+   	    	
+   	    }
+		//判断是否是合作社用户
+		if(isHzs.equals("1")){
+			if(StringUtils.isEmpty(farmerName)){
+				
+				return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"合作社名称不能为空");	
+				
+			}	
+            if(StringUtils.isEmpty(farmer)){
+				
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"理事长名称或者代理人名称不能为空");
+			
+				
+			}	
+            if(!record.get(TAlipayUser.COL_FARMER).equals(farmer)){
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"合作社用户合作社名称不能修改");	
+            }
+            if(!record.get(TAlipayUser.COL_FARM_NAME).equals(farmerName)){
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"合作社用户理事长名称不能修改");
+            }
+            Record updateRecord=new Record(); 
+            
+            
+            
+            
+            
+            String photoName = "";
+			String licenceImgName = "";
+			try {
+				if (! Utils.isEmpty(tmpPhotoPath)) {
+					photoName = Utils.createUUID() + ".jpg";
+					File tmpPhoto = new File(tmpPhotoPath);
+					if (tmpPhoto.exists() && tmpPhoto.isFile()) {
+						tmpPhoto.renameTo(new File(WebConfig.photoDir + File.separator + photoName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_PHOTO);
+						updateRecord.set(TAlipayUser.COL_PHOTO, "photo/" + photoName);
+					}
+				}
+				if (! Utils.isEmpty(tmpLicencePath)) {
+					licenceImgName = Utils.createUUID() + ".jpg";
+					File tmpLicence = new File(tmpLicencePath);
+					if (tmpLicence.exists() && tmpLicence.isFile()) {
+						tmpLicence.renameTo(new File(WebConfig.licenceImgDir + File.separator + licenceImgName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_LICENCE);
+						updateRecord.set(TAlipayUser.COL_LICENCE_IMG, "licence_img/" + licenceImgName);
+					}
+				}
+			
+            
+            updateRecord.set(TAlipayUser.COL_ID, idNum);
+            updateRecord.set(TAlipayUser.COL_VILIAGE, viliage);
+            updateRecord.set(TAlipayUser.COL_CITY, city);
+            updateRecord.set(TAlipayUser.COL_CONTACT, phone);
+            updateRecord.set(TAlipayUser.COL_DISTRICT, district);
+            updateRecord.set(TAlipayUser.COL_PROVINCE, province);
+            updateRecord.set(TAlipayUser.COL_USER_ID, id);
+            updateRecord.set(TAlipayUser.COL_LICENSE_CODE,licenseCode);
+            updateRecord.set(TAlipayUser.COL_MODIFY, userId);
+            updateRecord.set(TAlipayUser.COL_MODIFY_TIME, Utils.getCurrentTimeStr());
+            if (!Db.update(TAlipayUser.TABLE_NAME,TAlipayUser.COL_USER_ID, updateRecord)) {
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"合作社用户信息修改失败");	
+            }
+			} catch (Exception e) {
+				Logger.getLogger(TAG).error("move picture error" + e.getMessage());
+				e.printStackTrace();
+			}finally{
+				//删除临时文件目录中的图片信息
+				Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+			}  
+		}else if (isHzs.equals("0")) {
+
+			if(StringUtils.isEmpty(idNum)){
+				
+				return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"家庭农场身份证信息不能为空");	
+				
+			}	
+            if(StringUtils.isEmpty(phone)){
+				
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"家庭农场手机号码不能为空");
+			
+				
+			}	
+            if(!record.get(TAlipayUser.COL_CONTACT).equals(phone)){
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"家庭农场电话号码不能修改");	
+            }
+            if(!record.get(TAlipayUser.COL_ID).equals(idNum)){
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"家庭农场认证信息不能修改");
+            }
+            Record updateRecord=new Record(); 
+            
+            
+            
+            
+            String photoName = "";
+			String licenceImgName = "";
+			try {
+				if (! Utils.isEmpty(tmpPhotoPath)) {
+					photoName = Utils.createUUID() + ".jpg";
+					File tmpPhoto = new File(tmpPhotoPath);
+					if (tmpPhoto.exists() && tmpPhoto.isFile()) {
+						tmpPhoto.renameTo(new File(WebConfig.photoDir + File.separator + photoName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_PHOTO);
+						updateRecord.set(TAlipayUser.COL_PHOTO, "photo/" + photoName);
+					}
+				}
+				if (! Utils.isEmpty(tmpLicencePath)) {
+					licenceImgName = Utils.createUUID() + ".jpg";
+					File tmpLicence = new File(tmpLicencePath);
+					if (tmpLicence.exists() && tmpLicence.isFile()) {
+						tmpLicence.renameTo(new File(WebConfig.licenceImgDir + File.separator + licenceImgName));
+						userInfoObj.removeTmpFile(PARAM_FARMER_LICENCE);
+						updateRecord.set(TAlipayUser.COL_LICENCE_IMG, "licence_img/" + licenceImgName);
+					}
+				}
+            updateRecord.set(TAlipayUser.COL_FARMER, farmer);
+            updateRecord.set(TAlipayUser.COL_VILIAGE, viliage);
+            updateRecord.set(TAlipayUser.COL_CITY, city);
+            updateRecord.set(TAlipayUser.COL_FARM_NAME, farmerName);
+            updateRecord.set(TAlipayUser.COL_DISTRICT, district);
+            updateRecord.set(TAlipayUser.COL_PROVINCE, province);
+            updateRecord.set(TAlipayUser.COL_USER_ID, id);
+            
+            updateRecord.set(TAlipayUser.COL_MODIFY, userId);
+            updateRecord.set(TAlipayUser.COL_MODIFY_TIME, Utils.getCurrentTimeStr());
+            if (!Db.update(TAlipayUser.TABLE_NAME,TAlipayUser.COL_USER_ID, updateRecord)) {
+            	
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"家庭农场认证信息修改失败");	
+            }
+			} catch (Exception e) {
+				Logger.getLogger(TAG).error("move picture error" + e.getMessage());
+				e.printStackTrace();
+			}finally{
+				//删除临时文件目录中的图片信息
+				Utils.deleteFileByName(tmpPhotoPath, tmpLicencePath);
+			}     
+		} else {//xf updated by 20170412 - start
+			if(StringUtils.isEmpty(farmerName)){
+				return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"养殖场名称不能为空");
+			}
+            if(StringUtils.isEmpty(phone)){
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"养殖场手机号码不能为空");
+			}
+            if(!record.get(TAlipayUser.COL_CONTACT).equals(phone)){
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"养殖场电话号码不能修改");
+            }
+            if(!record.get(TAlipayUser.COL_FARM_NAME).equals(farmerName)){
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"养殖场名称不能修改");
+            }
+            Record updateRecord=new Record();
+			try {
+            updateRecord.set(TAlipayUser.COL_ID, idNum);
+            updateRecord.set(TAlipayUser.COL_VILIAGE, viliage);
+            updateRecord.set(TAlipayUser.COL_CITY, city);
+            updateRecord.set(TAlipayUser.COL_CONTACT, phone);
+            updateRecord.set(TAlipayUser.COL_DISTRICT, district);
+            updateRecord.set(TAlipayUser.COL_PROVINCE, province);
+            updateRecord.set(TAlipayUser.COL_USER_ID, id);
+            updateRecord.set(TAlipayUser.COL_LICENSE_CODE,licenseCode);
+            updateRecord.set(TAlipayUser.COL_MODIFY, userId);
+            updateRecord.set(TAlipayUser.COL_MODIFY_TIME, Utils.getCurrentTimeStr());
+            if (!Db.update(TAlipayUser.TABLE_NAME,TAlipayUser.COL_USER_ID, updateRecord)) {
+            	return new ResultInfo<Map<String, Object>>(ResultCodes.RET_FAILED,"养殖场信息修改失败");
+            }
+			} catch (Exception e) {
+				Logger.getLogger(TAG).error("养殖场信息修改失败" + e.getMessage());
+				e.printStackTrace();
+			}
+			//xf updated by 20170412 - end
+		}
+		
+		return new ResultInfo<Map<String, Object>>(ResultCodes.RET_SUCCESS,"ok");
+	}
+}

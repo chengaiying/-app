@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" type="text/css" href="assets/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/payment.css"/>
+<title>记账</title>
+</head>
+
+<body>
+
+收支类型:<input class="in_or_exp" name="in_or_exp" type="text" >(1-收入 2-支出)<br/>
+场景id:<input class="scene" name="scene" type="text" ><br/>
+农产品类型:<input class="agri_prod_type" name="agri_prod_type" type="text" > 格式：2016-06-08<br/> 
+单价:<input class="unit_price" name="unit_price" type="text" ><br/>
+产量:<input class="count" name="count" type="text" ><br/>
+总价:<input class="total" name="total" type="text" ><br/>
+<button onclick="record()">提交</button>
+
+</body>
+
+<script src="web/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	
+	function record() {
+		$.post("api/biz/record", 
+				{
+					in_or_exp : $(".in_or_exp").val(),
+					scene : $(".scene").val(),
+					agri_prod_type : $(".agri_prod_type").val(),
+					unit_price : $(".unit_price").val(),
+					count : $(".count").val(),
+					total : $(".total").val()
+					
+				},
+				function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					alert('record success:');
+				} else {
+					alert('record error ' + data.desc);
+				}
+			}
+		}, 'json');
+	}
+
+</script>
+</html>
+

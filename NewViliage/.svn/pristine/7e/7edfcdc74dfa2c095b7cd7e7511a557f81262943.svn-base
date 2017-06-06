@@ -1,0 +1,461 @@
+package com.moa.viliage.db;
+
+
+public class Tables {
+
+	/**
+	 * 用于描述农场主表
+	 * C端表单字段名与此处一致
+	 * @author zf21100
+	 */
+	public static class TAlipayUser {
+		public static final String TABLE_NAME = "alipay_user"; 
+		/**被代理人**/
+		public static final String COL_PRINCIPAL_ID = "principal_Id";
+		public static final String COL_LICENSE_CODE = "license_code";
+		/** user_id */
+		public static final String COL_USER_ID = "id";
+		/** 农场主身份证 */
+		public static final String COL_ID = "id_num";
+
+		/** 该农场主对应支付宝 用户的id */
+		public static final String COL_ALIPAY_USER_ID = "alipay_user_id";
+
+		/** 农场主姓名 */
+		public static final String COL_FARMER = "farmer";
+		
+		public static final String COL_FARMER_TYPE = "farmer_type";
+		/** 产业类型 */
+		public static final String COL_INDUSTRY_TYPE = "industry_type";
+		public static final String COL_REQUIRED_TYPE = "required_type";
+
+		/** 农场名字 */
+		public static final String COL_FARM_NAME = "farm_name";
+		
+		/** 一级地址    */
+		public static final String COL_PROVINCE = "province";
+		
+		/** 二级地址    */
+		public static final String COL_CITY = "city";
+		
+		/** 三级地址    */
+		public static final String COL_DISTRICT = "district";
+		
+		/** 四级地址    */
+		public static final String COL_VILIAGE = "viliage";
+
+		/** 农场地址 */
+		public static final String COL_ADDRESS = "addr";
+
+		/** 农场主联系方式：手机号 */
+		public static final String COL_CONTACT = "contact";
+
+		/** 农场主个人照片 */
+		public static final String COL_PHOTO = "photo";
+
+		/** 农场营业执照图片 */
+		public static final String COL_LICENCE_IMG = "licence_img";
+
+		/** 该农场主是否已认证  */
+		public static final String COL_IS_AUTHED = "is_authed";
+		
+		public static final String COL_IS_HZS = "is_hzs";
+		
+		/** 修改时间**/
+		public static final String COL_MODIFY_TIME = "modify_time";
+		
+		/** 修改人**/
+		public static final String COL_MODIFY = "modify";
+	}
+
+	/**
+	 * 表单字段类型
+	 * @author zf21100
+	 *
+	 */
+	public static class TFormDataType {
+		public static final String TABLE_NAME = "form_data_type";
+
+		public static final String COL_ID = "id";
+
+		public static final String COL_DESC = "desc";
+	}
+
+	/**
+	 * 表单数据,该表只保存字符串数据，表单结构定义 {@link TFormDef}
+	 * 该表有20个预留字段
+	 * @author alps
+	 *
+	 */
+	public static class TFormData {
+
+		public static final int MAX_WORD_NUM = 80;
+
+		public static final String TABLE_NAME = "form_data";
+
+		public static final String COL_ID = "id";
+
+		/** 表类类型id */
+		public static final String COL_FORM_ID = "form_id";
+		public static final String COL_USER_ID = "user_id";
+
+		/** 支付宝用户id */
+		public static final String COL_ALIPAY_USER_ID = "alipay_user_id";
+
+		/** 数据提交时间 */
+		public static final String COL_DATE = "date";
+		
+		public static final String COL_IS_LAST = "is_last";
+		
+		/** 修改时间**/
+		public static final String COL_MODIFY_TIME = "modify_time";
+		
+		/** 修改人**/
+		public static final String COL_MODIFY = "modify";
+
+		public static final String[] COL_DATA_ARRAY = new String[MAX_WORD_NUM];
+
+		static {
+			for (int i = 0; i < MAX_WORD_NUM; i++) {
+				COL_DATA_ARRAY[i] = "c" + (i + 1);
+			}
+		}
+	}
+
+	public static class TFormDataHistory {
+		public static final String TABLE_NAME = "form_data_history";
+	}
+
+	/**
+	 * 表单定义表
+	 * @author alps
+	 *
+	 */
+	public static class TFormDef {
+
+		public static final String TABLE_NAME = "form_def";
+
+		public static final String COL_ID = "id";
+
+		/** 表单名称 */
+		public static final String COL_FORM_NAME = "form_name";
+		
+		public static final String COL_FORM_TYPE = "form_type";
+		
+		public static final String COL_SEQ = "seq";
+		
+		public static final String COL_ICON = "icon";
+		
+		public static final String COL_FLAG = "flag";
+
+		public static final String COL_START_DATE = "start_date";
+
+		public static final String COL_END_DATE = "end_date";
+		
+		public static final String COL_FIT_FARMER = "fit_farmer";
+		
+		public static final String COL_BOOT_IMG = "boot_img";
+
+		/** 字段定义集合，以Json形式结构化存储 */
+		public static final String COL_WORDS_DEF = "words_def";
+		
+		public static final String COL_FORM_DESC = "form_desc";
+
+	}
+	
+	
+	/**
+	 * 金融机构
+	 * @author alps
+	 *
+	 */
+	public static class TBank {
+		
+		public static final String TABLE_NAME = "bank";
+		/** 机构id */
+		public static final String COL_ID = "id";
+		/** 机构名称 */
+		public static final String COL_BANK_NAME = "bank_name";
+		
+		/** 机构图标 */
+		public static final String COL_BANK_ICON = "bank_icon";
+		
+		/** 机构介绍 */
+		public static final String COL_BANK_DESC = "bank_desc";
+		
+		/** 机构类型*/
+		public static final String COL_BANK_TYPE = "type";
+	}
+	
+	/**
+	 * 贷款产品
+	 * @author alps
+	 */
+	public static class TFiProd {
+		public static final String TABLE_NAME = "fi_prod";
+		
+		public static final String COL_ID = "id";
+		/** 机构id */
+		public static final String COL_BANK_ID = "bank_id";
+		/** 产品名称 */
+		public static final String COL_PROD_NAME = "prod_name";
+		/** 产品图标 */
+		public static final String COL_PROD_ICON = "prod_icon";
+		/** 产品介绍 */
+		public static final String COL_PROD_DESC = "prod_desc";
+		/** 产品内容 */
+		public static final String COL_PROD_CONTENT = "prod_content";
+		/** 利率 */
+		public static final String COL_RATE = "rate";
+		
+		/** 贷款限额 */
+		public static final String COL_MAX_AMOUNT = "max_amount";
+		/** 贷款最大期限 */
+		public static final String COL_MAX_PERIOD = "max_period";
+		/** 产品信息链接 */
+		public static final String COL_LINK_URL = "link_url";
+		
+		public static final String COL_CONTACT = "contact";
+	}
+	
+	/**
+	 * 贷款申请
+	 * @author alps
+	 */
+	public static class TLoanApply {
+		
+		public static final String TABLE_NAME = "loan_apply";
+		
+		public static final String COL_ID = "id";
+		
+		/** 产品id */
+		public static final String COL_PROD_ID = "prod_id";
+		
+		/** 农场主id */
+		public static final String COL_FARMER_ID = "farmer_id";
+		public static final String COL_USER_ID = "user_id";
+		
+		/** 贷款金额  */
+		public static final String COL_AMOUNT = "amount";
+		
+		/** 贷款期限 */
+		public static final String COL_PERIOD = "period";
+		
+		/** 电话 */
+		public static final String COL_PHONE = "phone";
+		
+		/** 贷款用途 */
+		public static final String COL_PURPOSE = "purpose";
+		
+		/** 工商号 */
+		public static final String COL_BIZ_NUM = "biz_num";
+		
+		/** 土地面积 */
+		public static final String COL_LAND_AREA = "land_area";
+		
+		/** 年产量 */
+		public static final String COL_ANNUAL_OUTPUT = "annual_output";
+		
+		/** 年收入 */
+		public static final String COL_ANNUAL_INCOME = "annual_income";
+		
+		/** 申请日期 */
+		public static final String COL_APPLY_DATE = "apply_date";
+		
+		/** 贷款状态 */
+		public static final String COL_STATUS = "status";
+		
+		/** 贷款拒绝的原因 */
+		public static final String COL_REASON = "deny_reason";
+		
+		/** 状态修改时间,一般指处理时间 */
+		public static final String COL_MODIFY_DATE = "modify_date";
+		
+		/** 创建人 */
+		public static final String COL_CREATEOR = "createor";
+	}
+	
+	
+	
+	/**
+	 * 记账本数据
+	 * @author zf21100
+	 *
+	 */
+	public class TAcctData {
+		public static final String TABLE_NAME = "acct_data";
+		
+		public static final String COL_ID = "id";
+		
+		public static final String COL_ALIPAY_USER_ID = "alipay_user_id";
+		
+		/** 收支类型 */
+		public static final String COL_IN_OR_EXP = "in_or_exp";
+		
+		/** 账目类型 */
+		public static final String COL_ACCT_TYPE = "acct_type";
+		
+		/** 金额 */
+		public static final String COL_AMOUNT = "amount";
+		
+		/** 记账日期 */
+		public static final String COL_DATE = "date";
+		
+		public static final String COL_YEAR = "year";
+		
+		public static final String COL_MONTH = "month";
+		
+		public static final String COL_DAY = "day";
+	}
+	
+	public class TAcctType {
+		public static final String TABLE_NAME = "acct_type";
+		
+		public static final String COL_ID = "id";
+		
+		/** 收支类型 */
+		public static final String COL_IN_OR_EXP = "in_or_exp";
+		
+		/** 账目类型名称 */
+		public static final String COL_ACCT_NAME = "acct_name";
+		
+		/** 类型图标 */
+		public static final String COL_ICON = "icon";
+		
+	}
+	
+	/**
+	 * 农产品类型
+	 * @author zf21100
+	 */
+	public class TAgriProdType {
+		public static final String TABLE_NAME = "agri_prod_type";
+		
+		public static final String COL_ID = "id";
+		
+		public static final String COL_NAME = "name";
+		
+		public static final String COL_UNIT = "unit";
+		
+		public static final String COL_HAS_CHILD = "has_child";
+		
+		public static final String COL_PARENT = "parent";
+	}
+	
+	public class TBizRecord {
+		public static final String TABLE_NAME = "biz_record";
+		
+		public static final String COL_ID = "id";
+		
+		public static final String COL_ALIPAY_USER_ID = "alipay_user_id";
+		public static final String COL_USER_ID = "user_id";
+		
+		public static final String COL_IN_OR_EXP = "in_or_exp";
+		
+		public static final String COL_SCENE = "scene";
+		
+		public static final String COL_SCENE_NAME = "scene_name";
+		
+		public static final String COL_AGRI_PROD_TYPE = "agri_prod_type";
+		
+		public static final String COL_UNIT_PRICE = "unit_price";
+		
+		public static final String COL_COUNT = "count";
+		
+		public static final String COL_TOTAL = "total";
+		
+		public static final String COL_NOTE = "note";
+		
+		public static final String COL_CREATE_DATE = "create_date";
+		
+		public static final String COL_MODIFY_TIME = "modify_time";
+		
+		public static final String COL_YEAR_AND_MONTH = "year_and_month";
+		/**创建人**/
+		public static final String COL_CREATEOR = "createor";
+	}
+ //table_resource
+	public class TableResource {
+		// 表名
+		public static final String TABLE_NAME = "table_resource";
+		// 目录id
+		public static final String COL_ID = "table_resource_id";
+		// 目录名字
+		public static final String COL_NAME = "table_resource_name";
+		// 目录级别
+		public static final String COL_TYPE = "type";
+
+		public static final String COL_CODE = "table_resource_code";
+		// 父级目录 0-最上级目录
+		public static final String COL_PARENT_ID = "parent_id";
+		// 父级目录名字 0-最上级目录
+		public static final String COL_PARENT_NAME = "parent_name";
+
+	}
+	public class TableTraining {
+		// 表名
+		public static final String TABLE_NAME = "training";
+		// id
+		public static final String COL_TRAINING_ID = "training_id";
+		// 名字
+		public static final String COL_TRAINING_NAME = "training_name";
+		// 时间 
+		public static final String COL_TRAINING_TIME = "training_time";
+		// 状态
+		public static final String COL_TRAINING_STATUS = "training_status";
+		//userid
+		public static final String COL_TRAINING_USER_ID = "user_id";
+		//alipayuserid
+		public static final String COL_TRAINING_ALIPAY_USER_ID = "alipay_user_id";
+
+	}
+	/** 区域 */
+	public static class TRegion {
+		public static final String TABLE_NAME = "region";
+		public static final String COL_REGION_ID = "region_id";
+		public static final String COL_REGION_NAME = "region_name";
+		public static final String COL_REGION_CODE = "region_code";
+		public static final String COL_PARENT_ID = "parent_id";
+	}
+
+	public class TableTrainCourse {
+		// 表名
+		public static final String TABLE_NAME = "train_course";
+		//id
+		public static final String COL_COURSE_ID = "id";
+		// regionid
+		public static final String COL_COURSE_REGION_ID = "region_id";
+		// 课程名
+		public static final String COL_COURSE_TRAIN_PROJECT = "train_project";
+		// 电话号码
+		public static final String COL_COURSE_PHONE = "phone";
+		// 描述
+		public static final String COL_COURSE_DESCRIBE = "describe";
+		// 地址
+		public static final String COL_COURSE_ADDRESS = "address";
+		// 内容
+		public static final String COL_COURSE_CONTENT = "content";
+		//系统发布日期
+		public static final String COL_COURSE_RELEASE_DATE = "release_date";
+	}
+	public static class TNews{
+		// 表名
+		public static final String TABLE_NAME = "news";
+		//id
+		public static final String COL_ID = "id";
+		// 新闻标题
+		public static final String COL_TITLE = "title";
+		//新闻类型
+		public static final String COL_TYPE = "type";
+		//新闻链接
+		public static final String COL_URL = "news_url";
+		//创建时间
+		public static final String COL_CREATEOR_TIME = "createor_time";
+		//创建人
+		public static final String COL_CREATEOR = "createor";
+		//修改时间
+		public static final String COL_MODIFY_TIME = "modify_time";
+		//修改人
+		public static final String COL_MODIFY = "modify";	
+	}	
+}

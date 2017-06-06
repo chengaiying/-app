@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>表单预览</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<img src="img/1.jpg" width="100%" />
+<div class="form_title">
+<span class="form_title_name">土地信息</span>
+<span class="form_help">填报帮助</span>
+</div>
+
+<div class="form_group">
+<!--
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">土地总面积</td>
+<td class="form_item_content_view" align="right">大面积</td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">土地总面监控组件快等发酵了看法见</td>
+<td class="form_item_content_view" align="right">200</td>
+<td class="form_item_unit">平方</td>
+</tr></table>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">图片上传示例示例示例</td>
+<td class="form_item_img_view" align="right">
+<img src="./img/2.jpg" width="40px" /></td>
+</tr></table>
+
+<div class="form_item_history">历史修改</div>-->
+</div>
+
+<div class="border_top_1px"></div>
+
+
+<div class="form_button2" id="sel_btn" onclick="formJumpSelBtn();"><div class="form_button_txt2">再次上报</div></div>
+<script type="text/javascript">
+function formJumpSelBtn(){
+    document.getElementById('sel_btn').style.backgroundColor="#f8f8f8"; 
+	location.href="/NewViliage/info/form.html?form_id=" +  getUrlParam("form_id");
+}
+</script>
+
+<br /><br />
+
+</body>
+
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//如果进入到该页面说明已经进行了授权，直接获取信息直报的字段结构
+		QueryFormStruct(); 
+		
+    });
+	
+	//获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	
+	//获得表单中的结构信息
+	function QueryFormStruct() {
+		$.post("/NewViliage/api/form/formDetail?form_id=" + getUrlParam("form_id"), function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					var htmlTest;
+					$(".form_group").empty();
+					$.each(data.result.formWords, function(n, value) {
+						if (value != null) {
+							htmlTest = QueryFormStructure(n,value);
+							$(".form_group").append(htmlTest);
+						}
+					});
+					$(".form_group").append("<div class=\"form_item_history\">历史修改</div>");
+					
+					
+				}
+				else {
+					alert('表单结构获取失败' + data.desc);
+				}
+			}
+		}, 'json');
+	}
+	
+	//根据不同的类型设置表单中的结构
+	function QueryFormStructure(n,value) {
+		var htmlTmp = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\"><tr valign=\"top\"><td class=\"form_item_margin\"></td>";
+		htmlTmp = htmlTmp + "<td class=\"form_item_name\">" + value.display + "</td>";
+		if (value.dataType == 4) {
+			htmlTmp = htmlTmp + "<td class=\"form_item_img_view\" align=\"right\">";
+			htmlTmp = htmlTmp + "<img src=\"" + "/storage/" + value.value + "\" width=\"40px\" /></td>";
+		}
+		else if (value.dataType == 6) {
+			var checkval = "";
+			var arrValue = eval(value.value);
+			$.each(arrValue,function(n,valueArray) {
+				checkval = checkval + valueArray + "<br/>";
+			});
+			htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + checkval + "</td>";
+		}
+		else {
+			if (value.value == null || value.value == undefined) {
+				htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + "</td>";
+			}
+			else {
+				htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + value.value + "</td>";
+			}
+			
+			if (value.unit == null || value.unit == undefined) {
+				htmlTmp = htmlTmp + "<td class=\"form_item_no_unit\"></td>";
+			}
+			else {
+				htmlTmp = htmlTmp + "<td class=\"form_item_unit\">" + value.unit +"</td>";
+			}
+		}
+		htmlTmp = htmlTmp + "</tr></table>";
+		if (value.div == 1) {
+			htmlTmp = htmlTmp + "<div class=\"form_item_gap\"></div>";
+		}
+		return htmlTmp;
+		 
+	}
+
+</script>
+
+</html>

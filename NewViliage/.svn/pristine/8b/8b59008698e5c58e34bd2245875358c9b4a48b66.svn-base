@@ -1,0 +1,498 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农业信息采集</title>
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info_uzone.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="../css/control.css" />
+		<style type="text/css">
+			.delect {
+				position: relative;
+				top: 8px;
+				font-size: 16px;
+				border-radius: 20px;
+				line-height: 20px;
+				border: 1px solid #e5e5e5;
+				margin-bottom: 10px;
+				color: orangered;
+			}
+			
+			.delect span {
+				display: inline-block;
+				width: 20px;
+				text-align: center;
+			}
+			#mybtn{
+				 position: fixed;
+   				 bottom: 0;
+				 width: 100%;
+				 margin: 0;
+				 z-index: 9999;
+				 border-radius: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="info_html_temp">
+			<!--弹出的隐藏表单部分 -->
+			<div id="info_dialog_all" style="display:none">
+				<div class="info_dialog_shadow" onClick="showDialog()"></div>
+				<div class="info_dialog_bg">
+					<ul class="info_dialog">
+						<li id="num_five">
+							<!--<img src="">-->商标信息<span id="state_five" class="info_dialog_state">未填报</span></li>
+						<li id="num_one">
+							<!--<img src="">-->无公害农产品证书<span id="state_one" class="info_dialog_state">未填报</span></li>
+						<li id="num_two">
+							<!--<img src="">-->有机产品认证证书<span id="state_two" class="info_dialog_state">未填报</span></li>
+						<li id="num_three">
+							<!--<img src="">-->绿色食品证书<span id="state_three" class="info_dialog_state">未填报</span></li>
+						<li id="num_four">
+							<!--<img src="">-->农产品地理标志<span id="state_four" class="info_dialog_state">未填报</span></li>
+						<li id="num_six">
+							<!--<img src="">-->其他<span id="state_six" class="info_dialog_state">未填报</span></li>
+					</ul>
+				</div>
+				<!--info_dialog_bg -->
+			</div>
+			<!--info_dialog_all -->
+			<!--弹出的隐藏表单部分 结束 -->
+
+			<!--个人信息头 -->
+			<div id="info_uzone">
+				<div id="info_uzone_img"><img src="../img/uzone_bg.jpg" width="100%" id="info_uzone_img_src">
+				</div>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" id="uzone_table">
+					<tr>
+						<td colspan="2" id="uzone_avatar_bg">
+							<div id="uzone_avatar"><img src="../img/blank.png" id="uzone_avatar_img"></div>
+							<div id="uzone_farme_name">家庭农场</div>
+							<div><img src="../img/uzone_auth_no.png" height="16px" id="uzone_auth_icon"></div>
+						</td>
+					</tr>
+					<tr bgcolor="#fff">
+						<td width="10px"></td>
+						<td class="uzone_line_hd"><span id="uzone_user_name">姓名</span><span id="uzone_user_role">（家庭农场主）</span></td>
+					</tr>
+					<tr bgcolor="#fff">
+						<td></td>
+						<td height="10px"></td>
+					</tr>
+				</table>
+				
+			</div>
+			<!--个人信息头 -->
+		</div>
+		<!--info_html_temp -->
+		
+		
+	</body>
+
+	<script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="../js/swiper.min.js"></script>
+	<script src="../js/ajaxfileupload.js"></script>
+	<script src="../js/buttonStyle.js"></script>
+	<script src="../js/PublicFunc.js"></script>
+	<script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="../js/stepBar.js"></script>
+
+	<script type="text/javascript">
+		$(function() {
+
+			
+
+		});
+		$(document).ready(function() {
+			checkOauth();
+
+			$("#uzone_avatar_bg").height($("#uzone_table").width() * 3 / 10);
+		});
+
+		function checkOauth() {
+			$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						checkFramer();
+						
+						
+						return;
+					}
+					CheckOauthPublic(data.code, "");
+				}
+			}, 'json');
+		}
+		function checkFramer() {
+			$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+				if (textStatus == 'success' && data != null) {
+					if (data.code==0) {
+						var DivTmp = $('#info_html_temp').html();
+						
+								
+		
+						
+						$(document.body).empty();
+						$(document.body).append(DivTmp);
+						
+						GetUserInfo();
+						GetInfo();
+					} else if (data.code == -1) {
+						alert("农业部新农直报平台数据库中未能匹配您的身份信息，请您继续关注平台数据完善和功能开放。");
+						location.href = "/NewViliage/web/auth/index.html";
+					}
+				}
+			}, 'json');
+		}
+		//时间转换
+		function FormatDate(strTime) {
+			//var date = new Date(strTime);
+			var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+			//date = date.getTime();
+			return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+		}
+
+		//点击DIV跳转，带formid参数
+		function ClickDiv(formId, state) {
+			if(state == 0) {
+				location.href = "/NewViliage/web/info/form.html?form_id=" + formId;
+			} else {
+				location.href = "/NewViliage/web/info/form_my_report.html?form_id=" + formId;
+			}
+
+		}
+
+		//获取个人信息
+		function GetUserInfo() {
+			$.post("/NewViliage/api/farmer/farmerInfo", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						var User = data.result;
+			
+						
+						industryType(User.industry_type)
+						$("#uzone_avatar_img").attr("src", "/storage/" + User.photo);
+						$("#uzone_farme_name").html(User.farm_name);
+						if(User.is_authed) $("#uzone_auth_icon").attr("src", "../img/uzone_auth_yes.png");
+
+						$("#uzone_user_name").html(User.farmer);
+						if(User.is_hzs == "1") {
+							$("#uzone_user_role").html("（合作社经营者）");
+							$("#uzone_id_tr").hide();
+						}
+						if(User.is_hzs == "2") {
+							$("#uzone_user_role").html("（养殖场（小区）经营者）");
+							$("#uzone_id_tr").hide();
+						}
+						if(User.industry_type==""||User.industry_type==null||User.industry_type==undefined){
+							alert("尚未选择产业类型.请选择产业类型后继续操作")
+							window.location.href="../auth/selectIndustryType.html"
+						}else{
+							if(User.required_type==0||User.required_type==undefined||User.required_type==null){
+								var DivTmp1 = "<div id=\"stepBar\" class=\"ui-stepBar-wrap\" style=\"display:none\">"
+								DivTmp1 =DivTmp1+"<div class=\"ui-stepBar\">"
+								DivTmp1 =DivTmp1+"<div class=\"ui-stepProcess\"></div></div><div class=\"ui-stepInfo-wrap\">"
+								DivTmp1 =DivTmp1+"<table class=\"ui-stepLayout\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"ui-stepInfo\">"
+								DivTmp1 =DivTmp1+"<a class=\"ui-stepSequence\">1</a><p class=\"ui-stepName\">填写基本信息</p></td><td class=\"ui-stepInfo\">"
+								DivTmp1 =DivTmp1+"<a class=\"ui-stepSequence\">2</a><p class=\"ui-stepName\">选择用户类型</p></td><td class=\"ui-stepInfo\">"
+								DivTmp1 =DivTmp1+"<a class=\"ui-stepSequence\">3</a><p class=\"ui-stepName\">填写采集信息</p></td><td class=\"ui-stepInfo\">"
+								DivTmp1 =DivTmp1+"<a class=\"ui-stepSequence\">4</a><p class=\"ui-stepName\">完成注册</p></td></tr></table></div></div>";
+								$("#info_uzone").append(DivTmp1);
+									stepBar.init("stepBar", {
+										step: 3,
+										change: false,
+										animation: true
+								});
+								var DivTmp2 = "<div class=\"form_button1\" id=\"mybtn\"><div class=\"form_button_txt1\">完成注册</div></div>"
+								$(document.body).append(DivTmp2);
+								doFarmerAuth1(User.industry_type)
+								$("#mybtn").click(function(){
+									doFarmerAuth(User.industry_type,User.id_num)
+								});
+							}else{
+								$("#stepBar").hide();
+								$("#mybtn").hide();
+							}
+						}
+						
+						
+						
+						/* 
+						$("#uzone_line_addr").html(User.province+"&nbsp;"+User.city+"&nbsp;"+User.district+"&nbsp;"+User.viliage);
+						$("#uzone_line_id").html(User.id_num.slice(0,6)+"********"+User.id_num.slice(14));
+						$("#uzone_line_phone").html(User.contact.slice(0,7)+"****"); */
+					}
+				}
+			}, 'json');
+		}
+		
+		function GetInfo() {
+			$.ajax({
+				type: "GET",
+				url: "/NewViliage/api/form/myReportedInfo?random=" + Math.random(),
+				dataType: "json",
+				async: false,
+				success: function(data) {
+					if(data.code == 0) {
+						//$(document.body).empty();
+						$.each(data.result, function(n, value) {
+							if(value != null) {
+								if(value.formId < 0) {
+									switch(value.formId) {
+										case -1:
+											$("#num_one").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-1," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_one").html("未填报");
+											} else {
+												$("#state_one").attr("style", "color:#a5a5a5");
+												$("#state_one").html("已填报");
+											}
+											break;
+										case -2:
+											$("#num_two").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-2," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_two").html("未填报");
+											} else {
+												$("#state_two").attr("style", "color:#a5a5a5");
+												$("#state_two").html("已填报");
+											}
+											break;
+										case -3:
+											$("#num_three").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-3," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_three").html("未填报");
+											} else {
+												$("#state_three").attr("style", "color:#a5a5a5");
+												$("#state_three").html("已填报");
+											}
+											break;
+										case -4:
+											$("#num_four").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-4," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_four").html("未填报");
+											} else {
+												$("#state_four").attr("style", "color:#a5a5a5");
+												$("#state_four").html("已填报");
+											}
+											break;
+										case -5:
+											$("#num_five").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-5," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_five").html("未填报");
+											} else {
+												$("#state_five").attr("style", "color:#a5a5a5");
+												$("#state_five").html("已填报");
+											}
+											break;
+										case -6:
+											$("#num_six").attr("onClick", "myBtnClick(this,'#f0f0f0','');ClickDiv(-6," + value.count + ")");
+											if(value.count == 0) {
+												$("#state_six").html("未填报");
+											} else {
+												$("#state_six").attr("style", "color:#a5a5a5");
+												$("#state_six").html("已填报");
+											}
+											break;
+									}
+								} else if(value.formId == 9) {
+
+								} else {
+									var tmphtml;
+
+									if(n > 4) {
+										tmphtml = "<div class=\"delect\"><span>-</span>" + value.formName + "</div><div class=\"info_table\" id=\"c" + n + "\"onclick=" + "ClickDiv(" + value.formId + "," + value.count + ")" + ">";
+									} else {
+										tmphtml = "<div class=\"info_table\" id=\"c" + n + "\"onclick=" + "ClickDiv(" + value.formId + "," + value.count + ")" + ">";
+									}
+
+									tmphtml = tmphtml + "<div class=\"info_img\"><img src=\"" + "/storage/" + value.icon + "\" /></div>";
+									tmphtml = tmphtml + "<div class=\"info_title\">";
+									tmphtml = tmphtml + "<span class=\"info_title_txt\">" + value.formName + "</span>";
+									if(n > 4) {
+										tmphtml = tmphtml + "<div class=\"info_role\">（选填）</div>";
+									}else{
+										tmphtml = tmphtml + "<div class=\"info_role\">（必填）</div>";
+									}
+									tmphtml = tmphtml + "</div>";
+									tmphtml = tmphtml + "<div class=\"info_msg\">" + value.formDesc + "</div>";
+									tmphtml = tmphtml + "<div class=\"info_tips\">";
+									tmphtml = tmphtml + "<span class=\"info_tips_time\">" + FormatDate(value.endDate) + "</span>";
+									if(value.count == 0) {
+										tmphtml = tmphtml + "<div class=\"info_state\">未填写</div></div></div>";
+									} else {
+										tmphtml = tmphtml + "<div class=\"info_state\" style=\"color:#a5a5a5\">已填写</div></div></div>";
+									}
+									$(document.body).append(tmphtml);
+								}
+
+							}
+						});
+
+						tmphtml = "<div class=\"delect\"><span>-</span>品牌信息</div><div class=\"info_table\" id=\"c9\" onClick=\"showDialog()\">";
+						tmphtml = tmphtml + "<div class=\"info_img\"><img src=\"../img/icon2.png\" /></div>";
+						tmphtml = tmphtml + "<div class=\"info_title\">";
+						tmphtml = tmphtml + "<span class=\"info_title_txt\">品牌信息</span>";
+						tmphtml = tmphtml + "<div class=\"info_role\">（选填）</div>";
+						tmphtml = tmphtml + "</div>";
+						tmphtml = tmphtml + "<div class=\"info_msg\">点击进入子菜单填报品牌商标、三品一标信息。</div>";
+						tmphtml = tmphtml + "<div class=\"info_tips\">";
+						tmphtml = tmphtml + "<span class=\"info_tips_time\">截止 2016/7/7</span>";
+						//tmphtml = tmphtml + "<div class=\"info_state\" style=\"color:#a5a5a5\">已填写</div></div></div>";
+
+						$(document.body).append(tmphtml);
+
+						$(document.body).append("<br /><br />");
+						
+					}
+					$("body .delect").click(function() {
+						if($(this).children("span").text() == "-") {
+							$(this).children("span").text("+");
+						} else {
+							$(this).children("span").text("-");
+						}
+						$(this).next(".info_table").slideToggle(300);
+					})
+				}
+			});
+			//			$.post("/NewViliage/api/form/myReportedInfo?random=" + Math.random(), function(data, textStatus) {
+			//				if(textStatus == 'success' && data != null) {
+			//					
+			//						var len = data.result.length;
+			//					
+			//				}
+			//				
+			//			}, 'json');
+
+		}
+
+		//		1.种植业
+		//		2.1 畜牧养殖业
+		//		2.2 水产养殖业
+		//		3 种养结合
+		//		4 畜禽养殖类
+		function industryType(IndustryType) {
+			
+			if(IndustryType =="种植业") {
+				$("#c3").remove();
+				$("#c4").remove();
+			}else if(IndustryType =="畜牧养殖业"||IndustryType=="畜禽养殖业"){
+				$("#c2").remove();
+				$("#c4").remove();
+			}else if(IndustryType == "水产养殖业"){
+				$("#c2").remove();
+				$("#c3").remove();
+			}else{
+				
+			}
+		}
+			function doFarmerAuth(industryType,id_num) {				
+//					请求api验证
+					console.log(industryType)
+					if(industryType=="种植业"){
+						if($("#c0 .info_state").text()=="已填写"&&$("#c1 .info_state").text()=="已填写"&&$("#c2 .info_state").text()=="已填写"){
+							finishRegistration(id_num);
+						}else{
+							alert("请填写信息采集中必填项")
+						}
+						
+					}else if(industryType =="畜牧养殖业"||industryType=="畜禽养殖业"){
+						if($("#c0 .info_state").text()=="已填写"&&$("#c1 .info_state").text()=="已填写"&&$("#c3 .info_state").text()=="已填写"){
+							finishRegistration(id_num);
+						}else{
+							alert("请填写信息采集中必填项")
+						}
+						
+					}else if(industryType =="水产养殖业"){
+						if($("#c0 .info_state").text()=="已填写"&&$("#c1 .info_state").text()=="已填写"&&$("#c4 .info_state").text()=="已填写"){
+							finishRegistration(id_num);
+						}else{
+							alert("请填写信息采集中必填项")
+						}
+						
+					}else{
+						if($("#c0 .info_state").text()=="已填写"&&$("#c1 .info_state").text()=="已填写"&&$("#c2 .info_state").text()=="已填写"&&$("#c3 .info_state").text()=="已填写"&&$("#c4 .info_state").text()=="已填写"){
+							finishRegistration(id_num);
+						}else{
+							alert("请填写信息采集中必填项")
+						}
+						
+					}
+					
+				}
+//			用于登录检测
+				function doFarmerAuth1(industryType) {				
+//					
+				
+					if(industryType=="种植业"){
+						if($("#c0 .info_state").text()!="已填写"&&$("#c1 .info_state").text()!="已填写"&&$("#c2 .info_state").text()!="已填写"){
+							alert("请填写信息采集中必填项")	
+						}
+					}else if(industryType =="畜牧养殖业"||industryType=="畜禽养殖业"){
+						if($("#c0 .info_state").text()!="已填写"&&$("#c1 .info_state").text()!="已填写"&&$("#c3 .info_state").text()!="已填写"){
+							alert("请填写信息采集中必填项")
+						}
+						
+					}else if(industryType =="水产养殖业"){
+						if($("#c0 .info_state").text()!="已填写"&&$("#c1 .info_state").text()!="已填写"&&$("#c4 .info_state").text()!="已填写"){
+							alert("请填写信息采集中必填项")
+						}
+					}else{
+						if($("#c0 .info_state").text()!="已填写"&&$("#c1 .info_state").text()!="已填写"&&$("#c2 .info_state").text()!="已填写"&&$("#c3 .info_state").text()!="已填写"&&$("#c4 .info_state").text()!="已填写"){
+							alert("请填写信息采集中必填项")
+						}
+						
+					}
+					
+				}
+//			填写信息采集必填项,完成注册执行
+			function finishRegistration(id_num){
+				$.post("/NewViliage/api/farmer/updUserInfo", {
+						required_type:1,
+						id_num:id_num
+					}, function(data, textStatus) {
+						if(textStatus == 'success' && data != null) {
+							if(data.code == 0) {
+								location.href = "../auth/success.html"
+								
+							}else {
+								alert(data.desc);
+							}
+						}
+					}, 'json');
+			}
+		function showDialog() {
+			$('#info_dialog_all').fadeToggle();
+		}
+
+		function setupWebViewJavascriptBridge(callback) {
+			if(window.WebViewJavascriptBridge) {
+				return callback(WebViewJavascriptBridge);
+			}
+			if(window.WVJBCallbacks) {
+				return window.WVJBCallbacks.push(callback);
+			}
+			window.WVJBCallbacks = [callback];
+			var WVJBIframe = document.createElement('iframe');
+			WVJBIframe.style.display = 'none';
+			WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+			document.documentElement.appendChild(WVJBIframe);
+			setTimeout(function() {
+				document.documentElement.removeChild(WVJBIframe)
+			}, 0)
+		}
+
+		var tmpBridge;
+
+		setupWebViewJavascriptBridge(function(bridge) {
+			tmpBridge = bridge;
+
+		})
+	</script>
+
+</html>

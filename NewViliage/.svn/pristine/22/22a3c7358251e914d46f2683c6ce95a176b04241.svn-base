@@ -1,0 +1,459 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>我要贷款</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery.animate-colors-min.js"></script>
+<script src="../js/buttonStyle.js"></script>
+<style type="text/css">
+/*.loan_type_company{display:none;}*/
+.detail_type_company .loan_type_bank{display:none;}
+.detail_type_bank .loan_type_company{display:none;}
+.mtab_item .space_item,.space_item_0{margin: 0;height: 10px;border: solid 1px #eee;background-color: #eee; }
+.mtab_item .detail_type{margin-left: 15px;overflow: hidden;}
+.span_item_1 .span_item_2{display: inline-block;}
+.span_item_1{float: left;}
+.span_item_2{float: right;margin-right: 10px;}
+.loan_open_item{height: 16px;vertical-align: middle;}
+.item_bank,.item_company{display: none;}
+</style>
+</head>
+
+<body>
+
+<div id="temhtml_1">
+<div class="loan_header">
+<img src="../img/loan_banner.jpg" width="100%"><div class="loan_goto_button" onclick="myBtnClick(this,'#577e10','')">去蚂蚁旺农贷&nbsp;&gt;</div></div>
+<div class="form_title">
+			<span class="form_title_name">我要贷款</span>
+			<span class="form_help">&nbsp;</span>
+            <span class="form_help" onclick = "myBtnClick(this,'#f0f0f0','../menu.html')">返回主菜单</span>
+</div>
+<div class="space_item_0"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="loan_mtab">
+	<tr class="item_company">
+		<td class="mtab_item" width="33%" >
+			<div class="detail_type" onclick="ClickTabSelect(this)"><span class="span_item_1">农业担保公司</span><span class="span_item_2"><img src="../img/bank_open.png" class="loan_open_item"  alt="" /></span></div>
+			<div id="" class="detail_type_company" style="display: none;" >
+		    </div>
+		    <div class="space_item"></div>
+		</td>
+	</tr>
+	<tr class="item_bank">
+        <td class="mtab_item" width="33%" >
+        	<div class="detail_type" style="border-right:solid 1px #eee;" onclick="ClickTabSelect(this)"><span class="span_item_1">金融机构贷款</span><span class="span_item_2"><img src="../img/bank_open.png" class="loan_open_item" alt="" /></span></div>
+        	<div id="" class="detail_type_bank" style="display: none;">
+        	</div>
+        	<div class="space_item"></div>
+        </td>
+	</tr>
+	<tr>
+        <td class="mtab_item" width="33%" >
+        	<div class="detail_type" style="border-right:solid 1px #eee;" onclick="ClickTabSelect(this)">旺农贷</div></td>
+	</tr>
+</table>
+</div><!--temhtml_1 -->
+
+<div id="wang_loan" style="display:none">
+		<div class="wang_loan_group" align="center">
+		<img src="../img/wang_loan.jpg" width="100%"/>
+		<div class="wang_loan_bg"><img src="../img/wang_loan_bg.jpg" width="100%"/>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="wang_loan_content">
+		<tr><td colspan="3" align="center"><div class="form_button1" onclick="myBtnClick(this,'#0091cb','https://q.mybank.cn/?scheme=mybank%3A%2F%2Flauncher%3Furl%3Dmybank%253A%252F%252Fh5app%252Foffline%253FappId%253D20000223')" style="width:70%"><div class="form_button_txt1">立即申请</div></div></td></tr>
+		<tr>
+		<td>&nbsp;</td>
+		<td width="50%" class="wang_loan_txt"><img src="../img/n1.png"/><span class="guide_help_txt">申请的借款将直接发放至个人支付宝余额</span></td>
+		<td>&nbsp;</td>
+		</tr>
+		<tr>
+		<td>&nbsp;</td>
+		<td class="wang_loan_txt"><img src="../img/n2.png"/><span class="guide_help_txt">还款方便，支持支付宝自动扣款</span></td>
+		<td>&nbsp;</td>
+		</tr>
+		<tr>
+		<td>&nbsp;</td>
+		<td class="wang_loan_txt"><img src="../img/n3.png"/><span class="guide_help_txt">保持良好的还款记录，有助于信用的提升</span></td>
+		<td>&nbsp;</td>
+		</tr>
+		</table>
+		</div>
+		</div><!--wang_loan_group -->
+		</div><!--wang_loan -->
+
+</body>
+
+<script type="text/javascript" src="../js/swiper.min.js"></script>
+<script type="text/javascript" src="../js/qswteckMap.js"></script>
+
+<script type="text/javascript">
+	var bankMap = new Map();
+	
+	$(document).ready(function() {
+		checkOauth();	
+		
+		
+		localStorage.setItem("bank_type", "银行");
+    });
+	
+//	function checkOauth() {
+//		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+//			if (textStatus == 'success' && data != null) {
+//				if (data.code==0) {
+//					$.ajaxSetup({   
+//						async : false  
+//					});
+//					GetBankList();
+//					GetProdList();
+//				} else if (data.code == -2) {
+//					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/index.html";
+//				}
+//			}
+//		}, 'json');
+//	}
+
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				onCheckOauth(data.code);
+			}
+		}, 'json');
+	}
+	
+	
+	function onCheckOauth(code) {
+		if(code == 0) {
+			checkFramer();
+			return;
+		}
+		var userAgent = navigator.userAgent;//浏览器标识
+		if (userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+			if (code == -2) {
+				//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/index.html";
+			}
+		} else if ((userAgent.indexOf("Android") > -1) && (userAgent.indexOf("MoaClient") > -1)) {  //android 客户端
+			window.androidJsObj.onCheckOauth(code, '/web/bank/index.html');
+		} else if ((userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1 ) && userAgent.indexOf("MoaClient") > -1) {
+			//alert("is IOS app");
+			if (code == -2) {
+				tmpBridge.callHandler('AuthCallback', {'url':'/web/bank/index.html'}, function responseCallback(responseData) {
+                    console.log("JS received response:", responseData)
+                    });
+			}
+			
+		} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+			//alert("is pc or other device");
+			if (code == -2) {
+				console.log("is pc or other device");
+				location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/bank/index.html";
+			}
+		}
+	}
+	
+	function checkFramer() {
+		$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+				checkIndustryType()
+					
+				} else if (data.code == -1) {
+					alert("您尚未通过家庭农场主认证，请进行家庭农场主认证！!");
+					location.href = "/NewViliage/web/auth/index.html"
+				}
+			}
+		}, 'json');
+	}
+	//检测是否选取产业类型和是否填写信息采集必填项
+	function checkIndustryType(){
+		$.post("/NewViliage/api/farmer/farmerInfo", function(data, textStatus) {
+					if(textStatus == 'success' && data != null) {
+						if(data.code == 0) {
+							var User = data.result;
+							if(User.industry_type==""||User.industry_type==null||User.industry_type==undefined){
+								alert("尚未选择产业类型.请选择产业类型后继续操作")
+								window.location.href="../auth/selectIndustryType.html"
+							}else{
+								if(User.required_type==0||User.required_type==undefined||User.required_type==null){
+									window.location.href="../info/index.html"
+								}
+							}
+							$.ajaxSetup({   
+								async : false  
+							});
+							GetBankList();
+							GetProdList();
+						}
+					}
+		}, 'json');
+	}
+	//add by karlno	
+	function ClickTabSelect(obj){//点击后便利所有mtab对象
+		$('.detail_type').each(function(j){			
+			if(this==obj)//如果是点击的那个对象
+			{
+				
+				//不同点击的结果处理
+				if(j==2)//旺农贷
+				{
+					 window.location.href = "./wang_loan.html";
+				}
+				else if(j==1)//银行
+				{
+					$('#bank_loan').fadeIn(300);
+					
+					$(".detail_type_bank").slideToggle();
+					$(":radio").attr("checked", false);
+					localStorage.setItem("bank_type", "银行");
+					
+				}
+				else if(j==0)//担保公司
+				{
+					$('#bank_loan').fadeIn(300);
+					
+                    $(".detail_type_company").slideToggle();
+					$(":radio").attr("checked", false);
+					localStorage.setItem("bank_type", "农业担保公司");
+				}
+			}
+//			else //其他对象
+//			{
+//				$(this).animate({color:'#cccccc'},400);
+//			}
+		});	
+	}
+	
+	
+	function GetBankList() {
+		$.post("/NewViliage/api/loan/bankList", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var bank = new Object();
+							bank.bankId = value.bankId;
+							bank.bankType = value.type;
+							bank.bankName = value.bankName;
+							bank.bankIcon = value.bankIcon;
+							bank.bankDesc = value.bankDesc;
+							bankMap.remove(bank.bankId);
+							bankMap.put(bank.bankId,bank);
+						}
+					});
+					
+					localStorage.setItem("bank_info", JSON.stringify(bankMap.elements));
+				}
+			}
+		}, 'json');
+	}
+	
+	function GetProdList() {
+		$.ajax({
+        type: "post",
+        url: "/NewViliage/api/loan/prodList",
+        async : false,
+        dataType: "json",
+        success: function(data,textStatus){
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					var tmphtml=$('#temhtml_1').html();
+					tmphtml = tmphtml + $('#wang_loan').prop("outerHTML");
+					$(document.body).empty();			
+					tmphtml = tmphtml + "<div id=\"bank_loan\">";//add by karlno
+					tmphtml = tmphtml + "<form id=\"table_group\"></form>";
+					tmphtml = tmphtml + "<br /><br /><br /><br /><br /><br />";
+					tmphtml = tmphtml + "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"loan_submit_table\" width=\"100%\"><tr valign=\"middle\">";
+					tmphtml = tmphtml + "<td width=\"50%\" class=\"loan_input\" align=\"right\">";
+					tmphtml = tmphtml + "<input id=\"amount\" type=\"number\" placeholder=\"请填写申请金额\" size=\"10\"/></td>";
+					tmphtml = tmphtml + "<td width=\"5%\" nowrap=\"nowrap\" class=\"loan_input_txt\">万元&nbsp;&nbsp;</td>";
+					tmphtml = tmphtml + "<td id=\"doApply\" width=\"45%\" align=\"center\" class=\"loan_sumbit_btn\" onclick=\"doApply()\">立刻申请</td>";
+					tmphtml = tmphtml + "</tr></table>";
+					tmphtml = tmphtml + "</div>";//add by karlno
+					$(document.body).append(tmphtml);
+					$("#table_group").empty();
+					var bankid = -1;
+					tmphtml = "";
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var bank = bankMap.get(value.bankId);
+							var bankClass = "";
+							if(bank.bankType == 1) {
+								bankClass = "loan_type_bank";
+								$(".item_bank").show();
+							}
+							else if(bank.bankType == 2) {
+								bankClass = "loan_type_company";
+								$(".item_company").show();
+							}
+							if (bankid != value.bankId) {
+								if (bankid != -1) {
+									tmphtml = tmphtml + "</table>";
+//									tmphtml = tmphtml + "<div class=\"border_1px_site\"><div class=\"border_1px\"></div></div>";
+									tmphtml = tmphtml + "</div>";
+									bankMap.remove(bankid);
+								}
+								bankid = value.bankId;
+								
+								//银行
+								tmphtml = tmphtml + "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"loan_table_hd " + bankClass + "\" width=\"100%\" >";
+								tmphtml = tmphtml + "<tr valign=\"top\">";
+								tmphtml = tmphtml + "<td class=\"loan_bank\">";
+								tmphtml = tmphtml + "<div class=\"loan_bank_name\"><img src=\"/storage/" + bank.bankIcon + "\" />" + bank.bankName + "</div>";
+								tmphtml = tmphtml + "<div class=\"loan_open\"><img src=\"../img/bank_open.png\" class=\"loan_open_img\"></div>";
+								tmphtml = tmphtml + "</td></tr></table>";
+								tmphtml = tmphtml + "<div class=\"loan_table_list\">";
+								tmphtml = tmphtml + "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"" + bankClass + "\" width=\"100%\">";
+							}
+							//产品
+							tmphtml = tmphtml + "<tr valign=\"top\"><td rowspan=\"2\" class=\"loan_margin\"></td>";
+							tmphtml = tmphtml + "<td rowspan=\"2\" class=\"loan_left_img\" onclick=\"ToProduct('" + value.id + "')\" >";
+							tmphtml = tmphtml + "<img src=\"/storage/" + value.prodIcon + "\" /></td>";
+							tmphtml = tmphtml + "<td colspan=\"2\" class=\"loan_right_txt\">";
+							tmphtml = tmphtml + "<div class=\"loan_name\" onclick=\"ToProduct('" + value.id + "')\">" + value.prodName + "</div>";
+							tmphtml = tmphtml + "</td>";
+							tmphtml = tmphtml + "<td width=\"1%\"><div class=\"loan_sel_icon\"><input id=\"" + value.id + "\" type=\"radio\" name=\"prod_id_"+bankid + "\"value=\"" + value.id + "\" /></div></td>";
+							tmphtml = tmphtml + "</tr>";
+							tmphtml = tmphtml + "<tr valign=\"bottom\">";
+							tmphtml = tmphtml + "<td colspan=\"3\" class=\"loan_rate\">" + value.rate;
+							tmphtml = tmphtml + "<div class=\"loan_score\"><img src=\"../img/star_5.png\"/></div></td>";
+							tmphtml = tmphtml + "</tr>";
+							
+						}
+					});
+					if (bankid != -1) {
+						bankMap.remove(bankid);
+						tmphtml = tmphtml + "</table>";
+						tmphtml = tmphtml + "<div class=\"border_1px_site\"><div class=\"border_1px\"></div></div>";
+						tmphtml = tmphtml + "</div>";
+					}
+//					var banks = bankMap.values();
+//					$.each(banks,function(n,banktmp) {
+//						var bankClassTmp = "";
+//						if(banktmp.bankType == 1) {
+//							bankClassTmp = "loan_type_bank";
+//						}
+//						else if(banktmp.bankType == 2) {
+//							bankClassTmp = "loan_type_company";
+//						}
+//						tmphtml = tmphtml + "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"loan_table_hd " + bankClassTmp + "\" width=\"100%\" >";
+//								tmphtml = tmphtml + "<tr valign=\"top\">";
+//								tmphtml = tmphtml + "<td class=\"loan_bank\">";
+//								tmphtml = tmphtml + "<div class=\"loan_bank_name\"><img src=\"/storage/" + banktmp.bankIcon + "\" />" + banktmp.bankName + "</div>";
+//								tmphtml = tmphtml + "<div class=\"loan_open\"><img src=\"../img/bank_open.png\" class=\"loan_open_img\"></div>";
+//								tmphtml = tmphtml + "</td></tr></table>";
+//								tmphtml = tmphtml + "<div class=\"loan_table_list\">";
+//								tmphtml = tmphtml + "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"" + bankClassTmp + "\" width=\"100%\">";
+//								tmphtml = tmphtml + "</table>";
+//								tmphtml = tmphtml + "<div class=\"border_1px_site\"><div class=\"border_1px\"></div></div>";
+//								tmphtml = tmphtml + "</div>";
+//					});
+//					$("#table_group").append(tmphtml);
+					$(".detail_type_company").append(tmphtml);
+					$(".detail_type_bank").append(tmphtml);
+					
+					
+				} 
+				
+			}
+			
+			$(".loan_table_hd").each(function(i){
+				$(this).click(function(){//处理菜单点击
+					var List=$(this).next(".loan_table_list");
+					if(List.attr("id")!="on_"+i)
+					{	
+						$(this).find('img.loan_open_img').attr('src','../img/bank_close.png');
+						List.slideDown();
+						List.attr("id","on_"+i);
+					}
+					else
+					{
+						$(this).find('img.loan_open_img').attr('src','../img/bank_open.png');
+						List.slideUp();
+						List.attr("id","");
+					}
+				});
+			});
+			
+		}
+        
+    });
+	}
+
+//	function GetProdList() {
+//		$.post("/NewViliage/api/loan/prodList", function(data, textStatus) {}, 'json');
+//	}
+//
+
+            
+       
+	function doApply() {		
+		var bCheck = false;
+		var produce_item = [];
+		$("input[type=radio]:checked").each(function(){ 
+			bCheck = true;
+			produce_item.push($(this).val());
+		});
+
+        var pid_1=pid_2 = "";
+        switch (produce_item.length){
+        	case 0:
+        	    alert("必须选择一个产品");
+			    return false;
+        		break;
+        	case 1:
+        	    pid_1 = produce_item[0];
+        	    pid_2 = "";
+        	    break;
+        	case 2:
+        	    pid_1 = produce_item[0];
+        	    pid_2 = produce_item[1];
+        	    break
+        	default:
+        	    alert("最多选择两个产品");
+		      	$("input[type=radio]:checked").attr("checked",false);
+		      	return false;
+        		break;
+        }
+        
+		var jumpUrl = "./sumbit.html?prod_id=" + pid_1+"&prod_id_2="+pid_2;
+		var amount = $("#amount").val();
+		if (amount != null && amount != undefined) {
+			jumpUrl = jumpUrl + "&amount=" + amount;
+		}
+		
+		var doApply = document.getElementById("doApply");
+		myBtnClick(doApply,'#0091cb',jumpUrl);
+		
+	}
+	
+	function ToProduct(prodid) {
+		window.location.href="./product.html?prod_id=" + prodid;
+	}
+	
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+
+</script>
+
+</html>

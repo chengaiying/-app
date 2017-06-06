@@ -1,0 +1,161 @@
+body {
+				    font-size: 32px;
+				    font-size: .32rem;
+				    margin: 0 auto;
+				    font-family: 'STHeiti','Microsoft YaHei',Helvetica,Arial,sans-serif;
+				}
+				.m_article {
+				    font-size: .24rem;
+				    padding: .2rem 0;
+				    border-bottom: 1px solid #e5e5e5;
+				    margin: 0 .3rem;
+				}
+				.clearfix:after {
+				    content: ".";
+				    display: block;
+				    height: 0;
+				    visibility: hidden;
+				    clear: both;
+				}
+				.m_article .m_article_img {
+				    float: left;
+				    width: 27%;
+				    height: 1.4rem;
+				    overflow: hidden;
+				    position: relative;
+				    margin-right: .2rem;
+				}
+				.m_article .m_article_img .m_article_mark {
+				    color: #fff;
+				    background: #5da3e9;
+				    font-size: .28rem;
+				    text-align: center;
+				    padding: .04rem;
+				    position: absolute;
+				    display: inline-block;
+				    left: 0;
+				    top: 0;
+				    width: .6rem;
+				    height: .4rem;
+				    line-height: .4rem;
+				    opacity: .9;
+				}
+				.m_article .m_article_img img {
+				    width: 100%;
+				    display: block;
+				    min-height: 1.4rem;
+				}
+				.content-list img {
+				    background-size: contain;
+				}
+				.m_article .m_article_info {
+				    overflow: hidden;
+				    padding-bottom: 4px;
+				}
+				.m_article {
+				    font-size: .24rem;
+				    padding: .2rem 0;
+				    border-bottom: 1px solid #e5e5e5;
+				    margin: 0 .3rem;
+				}
+				.m_article .m_article_info .m_article_title {
+				    font-size: .34rem;
+				    margin-bottom: .2rem;
+				    color: #404040;
+				    line-height: .42rem;
+				    width: 100%;
+				    display: -webkit-box;
+				    -webkit-line-clamp: 2;
+				    overflow: hidden;
+				    -webkit-line-break: auto;
+				    -webkit-box-orient: vertical;
+				}
+				.m_article .m_article_desc .m_article_desc_r {
+				    float: right;
+				    background-size: contain;
+				    background-position: left 0;
+				    background-repeat: no-repeat;
+				    color: #888;
+				    line-height: .37rem;
+				}
+				.m_article .m_article_desc .m_article_desc_r .iconfont {
+				    padding: 0 .1rem 0 0;
+				    display: inline-block;
+				    font-size: .28rem;
+				    color: #a8a8a8;
+				}
+				.iconfont {
+				    font-family: "iconfont" !important;
+				    font-size: 16px;
+				    font-style: normal;
+				    -webkit-font-smoothing: antialiased;
+				    -webkit-text-stroke-width: .2px;
+				    -moz-osx-font-smoothing: grayscale;
+				}
+				body,td,th {
+					font-family: STHeiti, "Microsoft YaHei", Helvetica, Arial, sans-serif;
+				}
+				.m_article .m_article_desc .m_article_time {
+				    font-size: .24rem;
+				    color: #888;
+				    display: inline-block;
+				}
+				.m_article .m_article_desc .m_article_channel {
+				    display: inline-block;
+				    color: rgba(255,51,51,0.9);
+				    font-size: 12px;
+				    padding: 2px;
+				    line-height: 12px;
+				    margin-right: .1rem;
+				    background: url(http://img2.cache.netease.com/f2e/wap/common/images/border_red.png) no-repeat;
+				    background-size: 100% 100%;
+				}
+					
+				.f_more_tips {
+				    padding: 0 10px;
+				}
+				.f_more_tips .more_btn {
+				    display: block;
+				    text-align: center;
+				    font-size: 14px;
+				    color: #129bf0;
+				    height: 35px;
+				    line-height: 35px;
+				    border-bottom: 1px solid #dfdfdf;
+				}
+				.f_more_tips .goTop_btn{
+					display: none;
+				    text-align: center;
+				    font-size: 14px;
+				    color: #129bf0;
+				    height: 35px;
+				    line-height: 35px;
+				    border-bottom: 1px solid #dfdfdf;
+				}
+				.f_more_tips .more_icon {
+				    color: #129bf0;
+				    display: inline-block;
+				    padding-left: 8px;
+				    vertical-align: -1px;
+				}		
+				#top{
+					width:100%;
+					height:44px;
+					position:fixed;
+					top:0px;left:0px;
+					display:-webkit-box;
+					background:#f5f5f5;
+					z-index:10;
+					border-bottom:1px solid #e9e9e9;
+				}
+				#top .menu{
+					height:44px;
+					padding:5px 0 0 0;
+					width:100%;
+				}				
+				#top .menu a{float:left;width:33%;height:34px;line-height:34px;text-align:center;}		
+				.hover{
+						color:#b91b21;
+						font-size:18px;
+						border-bottom: 2px solid #b91b21;
+					}

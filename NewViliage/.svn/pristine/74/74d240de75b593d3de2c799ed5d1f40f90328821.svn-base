@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="stylesheet" type="text/css" href="assets/css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="assets/css/payment.css"/>
+<title>记账查询</title>
+</head>
+
+<body>
+
+<form action="api/acct/query" method="post">
+开始时间:<input class="start_date" name="start_date" type="text" >格式：2016-06-08<br/> <br/>
+结束时间:<input class="end_date" name="end_date" type="text" >格式：2016-06-08<br/> <br/>
+收支类型:<input class="in_or_exp" name="in_or_exp" type="text" > <br/><br/>
+账目id:<input class="acct_type" name="acct_type" type="text" ><br/><br/>
+<input type="submit" value="查询">
+</form>
+</body>
+
+
+</html>
+

@@ -1,0 +1,906 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>农业信息采集</title>
+		<link rel="stylesheet" type="text/css" href="../css/code3.css" />
+		<link href="../css/style.css" rel="stylesheet" type="text/css" />
+		<link href="../css/info.css" rel="stylesheet" type="text/css" />
+		<script src="../js/buttonStyle.js"></script>
+		<style>
+			canvas {
+				width: 100%;
+				border: 1px solid #000000;
+			}
+			
+			.hided {
+				color: red;
+			}
+			
+			.span_select {
+				position: absolute;
+				left: 100px;
+				top: 1px;
+				font: normal 1.6em "微软雅黑";
+				z-index: 0;
+				/*display: none;*/
+			}
+			
+			.form_item_input {
+				position: relative;
+			}
+			
+			.form_item_input select {
+				position: relative;
+				z-index: 2;
+				opacity: 0;
+				width: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<!--
+<img src="../img/1.jpg" width="100%" />
+<div class="form_title">
+<span class="form_title_name">土地信息</span>
+<span class="form_help">填报帮助</span>
+</div>
+
+
+<form id="formInfo">
+<div class="form_group">
+</div>
+</form>
+<div class="border_1px_site"><div class="border_1px"></div></div>
+
+<div class="form_button1" onclick="myBtnClick(this,'#0091cb','/NewViliage/web/info/list.html')" onmouseout="myBtnClick(this,'#00AAEE','')"><div class="form_button_txt1">确定</div></div>
+
+</script>-->
+
+	</body>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-html5Validate.js"></script>
+	<script type="text/javascript" src="../js/swiper.min.js"></script>
+	<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+	<script type="text/javascript" src="../js/PictureCompress.js"></script>
+	<script type="text/javascript" src="../js/qswteckMap.js"></script>
+	<script type="text/javascript">
+		var imgMap = new Map();
+		var htmlMap = new Map();
+		//var imgUpdate = true;
+		$(document).ready(function() {
+			post_id = GetQueryString("post_id");
+
+			checkOauth()
+
+		});
+
+		//	function checkOauth() {
+		//		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+		//			if (textStatus == 'success' && data != null) {
+		//				if (data.code==0) {
+		//					checkFramer();
+		//					imgMap.clear();
+		//					getFormStructure();
+		//				} else if (data.code == -2) {
+		//					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/index.html";
+		//				}
+		//			}
+		//		}, 'json');
+		//	}
+
+		function GetQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if(r != null) return unescape(r[2]);
+			return null;
+		}
+
+		//Report again 再次上报回显信息功能
+		function reportAgain() {
+//			var htmlTmp = "";
+			$.post("/NewViliage/api/form/historyReportQuery?form_id=" + post_id, function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					var data = JSON.parse(data);
+					if(data.code == 0) {
+						var len = data.result.formWords.length;
+						$.each(data.result.formWords, function(n, value) {
+								if(n===len-1){
+									
+									if(value.group > 0 && value.group != undefined) {
+	//									AddForm(this,value.group)
+										for (var i = 1; i <= value.group; i++) {
+											var htmlgroup = htmlMap.get(i);
+											htmlgroup = "<div class=\"form_item_gap\"></div>" + htmlgroup;
+											$("#add_from").remove();
+											$("#add_gap").remove();
+											$(".form_group").append(htmlgroup);
+											//点击了,判断一下还有没有
+											addgroup++;
+											var htmltest = htmlMap.get(addgroup);
+											if(htmltest != null && htmltest != undefined) {
+												$(".form_group")
+													.append(
+														"<div id=\"add_gap\" class=\"form_item_gap\"></div><table id=\"add_from\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\" onClick=\"AddForm(this," +
+														addgroup +
+														")\"><tr valign=\"top\"><td class=\"form_item_margin\"></td><td class=\"form_item_name\" style=\"color:#FF8108\">+ 新增一项</td></tr></table>");
+											}
+										}
+										
+									};
+									$.each(data.result.formWords, function(n, value) {
+										if(value.dataType == 1){
+											$("#" + n + "").val(value.value);
+										};
+										if(value.dataType == 2){
+											$("#" + n + "").val(value.value);
+										};
+										if(value.dataType == 3){
+											$("#" + n + "").append("<option hidden='hidden' value='" + value.value + "' selected class=\"hided\"></option>");
+											$("#span" + n + "").html(value.value);
+										};
+										if(value.dataType == 4){
+											$("#J_photoHere_" + n + "").attr('url',value.value);
+											
+										};
+										if(value.dataType == 5){};
+										if(value.dataType == 6){
+											val = value.value
+											var a = val.substring(val.indexOf("[") + 1, val.indexOf("]"))
+											var b = a.split(",");
+											for(var i = 0; i <= b.length - 1; i++) {
+												str = b[i].replace("\"", "").replace("\"", "");
+												$("#check_" + n + " input[value='" + str + "']").attr("checked", true);
+											}
+										};
+									});
+								};
+						});
+					}
+				}
+			});
+		}
+
+		function checkOauth() {
+			$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					onCheckOauth(data.code);
+				}
+			}, 'json');
+		}
+
+		function onCheckOauth(code) {
+			if(code == 0) {
+				//checkFramer();
+				imgMap.clear();
+				getFormStructure();
+
+				return;
+			}
+			var userAgent = navigator.userAgent; //浏览器标识
+			if(userAgent.indexOf('AlipayClient') > -1) { // 支付宝内置浏览器
+				if(code == -2) {
+					//支付宝页面授权   参数ori_url 为授权完成后重定向到该页面，并携带参数alipay_user_id和access_token
+					location.href = "/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/index.html";
+				}
+			} else if((userAgent.indexOf("Android") > -1) &&
+				(userAgent.indexOf("MoaClient") > -1)) { //android 客户端
+				window.androidJsObj.onCheckOauth(code, '/web/info/index.html');
+			} else if((userAgent.indexOf("iPhone") > -1 || userAgent
+					.indexOf("iPad") > -1) &&
+				userAgent.indexOf("MoaClient") > -1) {
+				//alert("is IOS app");
+				if(code == -2) {
+					tmpBridge.callHandler('AuthCallback', {
+						'url': '/web/info/index.html'
+					}, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				}
+
+			} else { //PC 浏览器或手机浏览器器，注意：手机浏览器无法进行H5页面授权
+				//alert("is pc or other device");
+				if(code == -2) {
+					console.log("is pc or other device");
+					location.href = "/NewViliage/api/oauth/publicAppAuthorize?ori_url=/web/info/index.html";
+				}
+			}
+		}
+
+		function checkFramer() {
+			$.post("/NewViliage/api/farmer/checkAuth", function(data, textStatus) {
+				if(textStatus == 'success' && data != null) {
+					if(data.code == 0) {
+						imgMap.clear();
+						getFormStructure();
+					} else if(data.code == -1) {
+						alert("农业部新农直报平台数据库中未能匹配您的身份信息，请您继续关注平台数据完善和功能开放。");
+						location.href = "/NewViliage/web/auth/index.html"
+					}
+				}
+			}, 'json');
+		}
+
+		//获取URL中的活动id参数
+		function getUrlParam(paraName) {
+			var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+			var retStr = window.location.search.substr(1).match(reg); //匹配目标参数
+			var ret = unescape(retStr[2]);
+			return ret;
+		}
+
+		//获得表单中的结构信息
+		function getFormStructure() {
+			$
+				.post(
+					"/NewViliage/api/form/formDefDetail?form_id=" +
+					getUrlParam("form_id"),
+					function(data, textStatus) {
+						if(textStatus == 'success' && data != null) {
+							if(data.code == 0) {
+								var htmlTest;
+								$(document.body).empty();
+								$(document.body)
+									.append(
+										"<img id=\"bootImg\" src=\"../img/1.jpg\" width=\"100%\" /><div class=\"form_title\"><span class=\"form_title_name\">土地信息</span><span class=\"form_help\">填报帮助</span></div>");
+								$(document.body)
+									.append(
+										"<form id=\"formInfo\"><div class=\"form_group\"></div></form><div id=\"btn_gap\"  class=\"border_1px_site\"><div class=\"border_1px\"></div></div>");
+								$(document.body)
+									.append(
+										"<div class=\"form_button1\" id=\"mybtn\" onclick=\"myBtnClick(this,'#0091cb','');doSubmit()\"><div class=\"form_button_txt1\">提交</div></div>");
+								$(".form_title_name").html(
+									data.result.formName);
+								$("#bootImg").attr("src",
+									"/storage/" + data.result.bootImg);
+
+								$(".form_group").empty();
+								$(".form_group")
+									.append(
+										"<input type=\"hidden\" name=\"form_id\" value=" + data.result.id + "></input>");
+								
+							
+									$.each(data.result.formWords, function(n,
+										value) {
+										if(value != null) {
+											htmlTest = AddFormStructure(n, value);
+											$(".form_group").append(htmlTest);
+										}
+									});
+							
+
+								$(document.body).append("<br /><br />");
+								fixedInputBlur();
+								if(post_id){
+									reportAgain();
+								}
+							} else {
+								alert('表单结构获取失败' + data.desc);
+							}
+						}
+					}, 'json');
+		}
+
+		function fixedInputBlur() {
+			var beforeIpt = null;
+			$("input").on("focus", function(e) {
+				beforeIpt = this;
+			});
+			$(document).on("tap", function(e) {
+				if(e.target.nodeName.toLowerCase() != "input") {
+					if(beforeIpt) {
+						beforeIpt.blur();
+						beforeIpt = null;
+					}
+					// a标签也能获取焦点，但是用代码模拟点击事件却不能触发键盘隐藏
+				}
+			});
+		}
+		function delectStatus(n){
+				$("#" + n + " option[class='hided']").remove();
+		}
+		function changeStatus(name, n) {
+						$("#" + n + " option[class='hided']").remove();
+//			$("#" + n + "").find("option:selected").attr("hidden").remove();
+			var selecttype = 2;
+			$("#div1").hide()
+			$("#div1").empty();
+			if(name == null) {
+				return;
+			} else {
+				if(name == "其他") {
+					$("#div1").show();
+					$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOther('" + n + "')\">完成</div></form>");
+					$("#div1 button").click(function() {
+						$("#div1").hide();
+					})
+				} else {
+					$.post("/NewViliage/api/form/getMul?type=" + Number(selecttype) +
+						"&Name=" + name + "&form_id=" +
+						getUrlParam("form_id") + "&date=" + new Date().getTime(),
+						function(data, textStatus) {
+
+							if(textStatus == 'success' && data != null) {
+								if(data.code == 0) {
+									if(data.result.length > 0) {
+										$.each(data.result, function(x, value) {
+											if(value != null) {
+												$("#div1").show();
+												var tmphtml = "<div class=\"variety_list_sub_div\" onClick=\"changeStatus2('" + value.tableResourceName + "'," + n + ")\">";
+												tmphtml = tmphtml + value.tableResourceName;
+												tmphtml = tmphtml + "</div>";
+												$("#div1").append(tmphtml);
+											}
+										});
+									} else {
+										$("#" + n + "").append("<option hidden='hidden' value='" + name + "' selected class=\"hided\"></option>");
+
+										$("#span" + n + "").html($("#" + n + "").val());
+										$("#div1").hide();
+									}
+
+								} else {
+									alert(data.desc);
+								}
+							} else {
+								if(name == "其他") {
+									$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOther('" + n + "')\">完成</div></form>");
+									$("#div1 button").click(function() {
+										$("#div1").hide();
+									})
+								} else {
+									$("#" + n + "").append("<option hidden='hidden' value='" + name + "' selected class=\"hided\"></option>");
+									$("#span" + n + "").html($("#" + n + "").val());
+									$("#div1").hide();
+								}
+
+							}
+						}, 'json');
+				}
+
+			}
+		}
+
+		function changeStatus2(name, n) {
+
+			var selecttype = 3;
+			$("#div1").empty();
+			if(name == null) {
+				return;
+			} else {
+				$.post("/NewViliage/api/form/getMul?type=" + Number(selecttype) +
+					"&Name=" + name + "&form_id=" +
+					getUrlParam("form_id"),
+					function(data, textStatus) {
+
+						if(textStatus == 'success' && data.result != null && data.result != '') {
+							if(data.code == 0) {
+								$.each(data.result,
+									function(x, value) {
+										if(value != null) {
+											//													
+											var tmphtml = "<div class=\"variety_list_sub_div\" onClick=\"changeStatus3('" + value.tableResourceName + "'," + n + ")\">";
+											tmphtml = tmphtml + value.tableResourceName;
+											tmphtml = tmphtml + "</div>";
+											$("#div1").append(tmphtml);
+										}
+									});
+
+							} else {
+								alert(date.desc);
+							}
+						} else {
+							if(name == "其他") {
+								$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOther('" + n + "')\">完成</div></form>");
+								$("#div1 button").click(function() {
+									$("#div1").hide();
+								})
+							} else {
+								$("#" + n + "").append("<option hidden='hidden' value='" + name + "' selected class=\"hided\"></option>");
+								$("#span" + n + "").html(name);
+								$("#div1").hide();
+							}
+
+						}
+					}, 'json');
+			}
+		}
+
+		function changeStatus4(name, n) {
+			if(name == "其他") {
+				$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOther('" + n + "')\">确定</div></form>");
+				$("#div1 button").click(function() {
+					$("#div1").hide();
+				})
+			} else {
+				$("#" + n + "").append("<option hidden='hidden' value='" + name + "' selected class=\"hided\"></option>");
+				$("#span" + n + "").html(name);
+				$("#div1").hide();
+			}
+		}
+
+		function addOther(n) {
+			var textareaValue = $("#div1 textarea").val();
+			$("#" + n + "").append("<option hidden='hidden' value='" + textareaValue + "' selected class=\"hided\"></option>");
+			
+			$("#span" + n + "").html(textareaValue);
+			$("#div1").hide();
+		}
+
+		function changeStatus3(name, n) {
+
+			var selecttype = 4;
+			$("#div1").empty();
+			if(name == null) {
+				return;
+			} else {
+				$.post("/NewViliage/api/form/getMul?type=" + Number(selecttype) +
+					"&Name=" + name + "&form_id=" +
+					getUrlParam("form_id"),
+					function(data, textStatus) {
+
+						if(textStatus == 'success' && data.result != null && data.result != '') {
+							if(data.code == 0) {
+								$.each(data.result,
+									function(x, value) {
+										if(value != null) {
+											//													
+											var tmphtml = "<div class=\"variety_list_sub_div\" onClick=\"changeStatus4('" + value.tableResourceName + "'," + n + ")\">";
+											tmphtml = tmphtml + value.tableResourceName;
+											tmphtml = tmphtml + "</div>";
+											$("#div1").append(tmphtml);
+										}
+									});
+
+							} else {
+								alert(date.desc);
+							}
+						} else {
+							if(name == "其他") {
+								$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOther('" + n + "')\">完成</div></form>");
+								$("#div1 button").click(function() {
+									$("#div1").hide();
+								})
+							} else {
+								$("#" + n + "").append("<option hidden='hidden' value='" + name + "' selected class=\"hided\"></option>");
+								$("#span" + n + "").html(name);
+								$("#div1").hide();
+							}
+
+						}
+					}, 'json');
+			}
+		}
+		//根据不同的类型设置表单中的结构
+		function AddFormStructure(n, value) {
+			var htmlTmp = "<div id=\"" + "table_" + n + "\">";
+			htmlTmp = htmlTmp +
+				"<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\"><tr valign=\"top\"><td class=\"form_item_margin\"></td>";
+			htmlTmp = htmlTmp +
+				"<td id=\"" + "dispaly_" + n + "\" class=\"form_item_name\">" +
+				value.display + "</td>";
+			if(value.dataType == 1) {
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_input\" align=\"right\">";
+				htmlTmp = htmlTmp + "<input id=\"" + n + "\" type=\"text\" name=" +
+					value.paramName + " placeholder=\"请填写\" size=\"15\"";
+				if(value.required == 1) {
+					htmlTmp = htmlTmp + " required";
+				}
+				htmlTmp = htmlTmp + "  data-min=\"" + value.lenMinLimit + "\"";
+				htmlTmp = htmlTmp + "  data-max=\"" + value.lenMaxLimit + "\"";
+				htmlTmp = htmlTmp + " /></td>";
+				htmlTmp = htmlTmp + "<td class=\"form_item_no_unit\"></td>";
+				htmlTmp = htmlTmp + "</tr></table>";
+			}
+			if(value.dataType == 2) {
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_input\" align=\"right\">";
+				htmlTmp = htmlTmp + "<input id=\"" + n + "\" type=\"number\" name=" +
+					value.paramName + " placeholder=\"请填写\" size=\"15\"";
+				if(value.required == 1) {
+					htmlTmp = htmlTmp + " required";
+				}
+				htmlTmp = htmlTmp + " min=\"" + value.minLimit + "\"";
+				htmlTmp = htmlTmp + " max=\"" + value.maxLimit + "\"";
+				if(value.dotNum != null && value.dotNum != undefined) {
+					var ndotNum = 1;
+					for(var i = 0; i < value.dotNum; i++) {
+						ndotNum = ndotNum / 10;
+					}
+
+					htmlTmp = htmlTmp + " step=\"" + ndotNum + "\"";
+				}
+
+				htmlTmp = htmlTmp + " /></td>";
+				if(value.unit == null || value.unit == undefined) {
+					htmlTmp = htmlTmp + "<td class=\"form_item_no_unit\"></td>";
+				} else {
+					htmlTmp = htmlTmp + "<td class=\"form_item_unit\">" +
+						value.unit + "</td>";
+				}
+				htmlTmp = htmlTmp + "</tr></table>";
+			}
+			if(value.dataType == 3) {
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_input\" align=\"right\">";
+				//htmlTmp = htmlTmp + "<div class=\"container\">";
+				//htmlTmp = htmlTmp + "<section>";
+				//if(getUrlParam("form_id")==3||getUrlParam("form_id")==12||getUrlParam("form_id")==5||getUrlParam("form_id")==7){
+				htmlTmp = htmlTmp +
+					"<select class='selects'  name=" +
+					value.paramName + " id=\"" + n + "\"";
+				if(value.required == 1) {
+					htmlTmp = htmlTmp + " required";
+				}
+				htmlTmp = htmlTmp + " onclick=\"delectStatus("+n+")\" onchange=\"changeStatus($('#" + n + " option:selected').text()," + n + ")\">";
+				htmlTmp = htmlTmp +
+					"<option value=\"\" disabled selected>请选择</option>";
+
+				if(value.options != null) {
+					//遍历选项
+					$.each(value.options, function(n, valueArray) {
+						htmlTmp = htmlTmp + "<option value=\"" + valueArray + "\">" +
+							valueArray + "</option>";
+					});
+				}
+				htmlTmp = htmlTmp + "</select><span class='span_select' id='span" + n + "'>请选择</span>";
+				//htmlTmp = htmlTmp + "</section>";
+				//htmlTmp = htmlTmp + "</div>";
+				htmlTmp = htmlTmp +
+					"</td><td class=\"form_item_no_unit\"></td></tr></table><div id='div1'></div>";
+				/* }else{
+					htmlTmp = htmlTmp
+					+ "<select class='selects'  name="
+					+ value.paramName + " id=\"" + n + "\"";
+					if (value.required == 1) {
+						htmlTmp = htmlTmp + " required";
+					}
+					htmlTmp = htmlTmp + ">";
+					htmlTmp = htmlTmp
+							+ "<option value=\"\" disabled selected>请选择</option>";
+		
+					if (value.options != null) {
+						//遍历选项
+						$.each(value.options, function(n, valueArray) {
+							htmlTmp = htmlTmp + "<option value=\"" + valueArray + "\">"
+									+ valueArray + "</option>";
+						});
+					}
+					htmlTmp = htmlTmp + "</select>";
+					//htmlTmp = htmlTmp + "</section>";
+					//htmlTmp = htmlTmp + "</div>";
+					htmlTmp = htmlTmp
+							+ "</td><td class=\"form_item_no_unit\"></td></tr></table>";
+				} */
+			}
+
+			if(value.dataType == 4) {
+				if(value.required == 1) {
+					imgMap.put("J_imgHere_" + n, false);
+					//imgUpdate = false;
+				}
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_jump form_item_file\" align=\"right\">";
+				htmlTmp = htmlTmp + "<input id=" + "file_" + n;
+				var paramname = "form_" + getUrlParam("form_id") + "_" +
+					value.paramName;
+				htmlTmp = htmlTmp +
+					" class=\"form_input_file\" type=\"file\" name=\"" +
+					paramname + "\" onChange=\"ajaxfile('" + n + "','" +
+					paramname + "');\" />";
+				htmlTmp = htmlTmp +
+					"<span id=\"J_photoReplace_" + n + "\" class=\"form_input_file_img\" ><img id=\"J_imgHere_" + n + "\" src=\"../img/addphoto.png\" width=\"40px\" /></span>";
+				htmlTmp = htmlTmp +
+					"<span id=\"J_photoHere_wrap_" + n + "\" class=\"form_input_file_photo\" style=\"display: none;\"><img id=\"J_photoHere_" + n + "\" src=\"\" width=\"40px\" /></span>";
+				htmlTmp = htmlTmp + "</td></tr></table>";
+			}
+			if(value.dataType == 5) {
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_input\" align=\"right\"><input type=\"text\" id=\"" + n + "\" placeholder=\"请选择日期\" onfocus=\"(this.type='date')\"  onblur=\"if(this.value=='') this.type='text'\" name=\"" +
+					value.paramName + "\"";
+				if(value.required == 1) {
+					htmlTmp = htmlTmp + " required";
+				}
+				htmlTmp = htmlTmp + " /></td>";
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_no_unit\"></td></tr></table>";
+			}
+			if(value.dataType == 6) {
+				htmlTmp = htmlTmp +
+					"<td class=\"form_item_content\" align=\"right\" onclick=\"checkSel('" +
+					"check_" + n + "')\">请勾选</td>";
+				htmlTmp = htmlTmp + "<td class=\"form_item_no_unit\"></tr></table>";
+
+				htmlTmp = htmlTmp +
+					"<div id=\"" + "check_" + n + "\" class=\"form_check_group\">";
+
+				if(value.options != null) {
+					//遍历选项
+					$
+						.each(
+							value.options,
+							function(x, valueArray) {
+								htmlTmp = htmlTmp +
+									"<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_check_item\">";
+								htmlTmp = htmlTmp +
+									"<tr valign=\"top\"><td class=\"form_check_margin\"></td>";
+								htmlTmp = htmlTmp +
+									"<td class=\"form_check_name\">" +
+									valueArray + "</td>";
+								htmlTmp = htmlTmp +
+									"<td align=\"right\" class=\"form_check_input\" >";
+								//									if(valueArray=="其他补贴"){
+								//										htmlTmp = htmlTmp
+								//											+ "<input type=\"checkbox\" name=\"" + value.paramName + "\"" + "value=\"" + valueArray +"\" onClick=\"otherSubsidy('" + value.paramName + "',"+n+")\">";
+								//									}else{
+								htmlTmp = htmlTmp +
+									"<input type=\"checkbox\" name=\"" + value.paramName + "\"" + "value=\"" + valueArray + "\"";
+								//									}
+
+								htmlTmp = htmlTmp + "</td></tr></table>";
+							});
+				}
+				htmlTmp = htmlTmp + "</div>";
+
+			}
+			if(value.div == 1) {
+				htmlTmp = htmlTmp + "<div class=\"form_item_gap\"></div>";
+			}
+			htmlTmp = htmlTmp + "</div><div id='div1'></div>";
+
+			if(value.group > 0 && value.group != undefined) {
+				var htmlgroup = htmlMap.get(value.group);
+				if(htmlgroup == null || htmlgroup == undefined) {
+					htmlgroup = "";
+					htmlgroup = htmlgroup + htmlTmp;
+					if(value.group == 1) {
+						htmlTmp = "<div id=\"add_gap\" class=\"form_item_gap\"></div><table id=\"add_from\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\" onClick=\"AddForm(this," +
+							value.group +
+							")\"><tr valign=\"top\"><td class=\"form_item_margin\"></td><td class=\"form_item_name\" style=\"color:#FF8108\">+ 新增一项</td></tr></table>";
+					} else {
+						htmlTmp = "";
+					}
+				} else {
+					htmlgroup = htmlgroup + htmlTmp;
+					htmlTmp = "";
+				}
+
+				htmlMap.remove(value.group);
+				htmlMap.put(value.group, htmlgroup);
+
+			}
+
+			return htmlTmp;
+		}
+		//	点击其他补贴
+		function otherSubsidy(paramName, n) {
+			$("#div1").empty();
+			if($("#table_" + n + " input[value='其他补贴']").is(':checked')) {
+				$("#div1").append("<form action=''><textarea></textarea><div id='div2' onClick=\"addOtherSubsidy('" + paramName + "'," + n + ")\">完成</div></form>");
+				$("#div1").show();
+
+			} else {
+				$("#div1").hide();
+			}
+		}
+		//	添加其他补贴
+		function addOtherSubsidy(paramName, n) {
+			var textareaValue = $("#div1 textarea").val();
+			if(textareaValue == null || textareaValue == "") {
+				alert("名称不能为空")
+			} else {
+				var htmlTmp = "";
+				htmlTmp = htmlTmp +
+					"<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_check_item\">";
+				htmlTmp = htmlTmp +
+					"<tr valign=\"top\"><td class=\"form_check_margin\"></td>";
+				htmlTmp = htmlTmp +
+					"<td class=\"form_check_name\">" +
+					textareaValue + "</td>";
+				htmlTmp = htmlTmp +
+					"<td align=\"right\" class=\"form_check_input\" >";
+				htmlTmp = htmlTmp +
+					"<input checked=\"checked\" type=\"checkbox\" name=\"" + paramName + "\"" + "value=\"" + textareaValue + "\"";
+
+				htmlTmp = htmlTmp + "/>";
+				htmlTmp = htmlTmp + "</td></tr></table>";
+				$("#check_" + n + "").append(htmlTmp)
+				$("#div1").hide();
+				$("#table_" + n + " input[value='其他补贴']").attr("checked", false);
+			}
+
+		}
+
+		var addgroup = 1;
+
+		function AddForm(obj, group) {
+			myBtnClick(obj, '#f8f8f8', '');
+			var htmlgroup = htmlMap.get(group);
+			htmlgroup = "<div class=\"form_item_gap\"></div>" + htmlgroup;
+			$("#add_from").remove();
+			$("#add_gap").remove();
+			$(".form_group").append(htmlgroup);
+			//点击了,判断一下还有没有
+			addgroup++;
+			var htmltest = htmlMap.get(addgroup);
+			if(htmltest != null && htmltest != undefined) {
+				$(".form_group")
+					.append(
+						"<div id=\"add_gap\" class=\"form_item_gap\"></div><table id=\"add_from\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\" onClick=\"AddForm(this," +
+						addgroup +
+						")\"><tr valign=\"top\"><td class=\"form_item_margin\"></td><td class=\"form_item_name\" style=\"color:#FF8108\">+ 新增一项</td></tr></table>");
+			}
+			//		else {
+			//			$("#btn_gap").remove();
+			//		}
+
+		}
+
+		function checkSel(check_id) {
+			$("#" + check_id).slideToggle(100);
+		}
+		var selects = document.getElementsByClassName("selects");
+		console.log(selects.length)
+			//图片上传
+		function ajaxfile(upid, paramname) {
+			var fileid = "file_" + upid;
+			//得到文件
+			var files = document.getElementById(fileid).files;
+			for(var i = 0, f; f = files[i]; i++) {
+
+				if(!f.type.match('image.*')) {
+					continue;
+				}
+				console.log("size:" + f.size);
+				var fsize = f.size;
+				var reader = new FileReader();
+				reader.onload = (function(theFile) {
+					return function(e) {
+						//var i = document.getElementById("J_imgHere_" + upid);
+						var img = new Image();
+						img.src = event.target.result;
+						//$(i).css('width',$(i).width()/10+'px');
+						var imgsrc = img.src;
+						if(img.complete) {
+							callback();
+						} else {
+							img.onload = callback;
+						}
+
+						function callback() {
+							if(imgsrc.length > 102400) {
+								imgsrc = compress(img, 0.2);
+							}
+
+							$.post('/NewViliage/api/file/uploadByBase64', {
+								file: imgsrc,
+								file_param_name: paramname
+							}, function(data) {
+								if(data.code == 0) {
+									$("#J_photoHere_wrap_" + upid).show();
+									//var imgsrc = compress(i,quality).src;
+									$("#J_photoHere_" + upid).attr('src', imgsrc);
+									//									$("#J_photoReplace_" + upid).hide();
+									imgMap.remove("J_imgHere_" + upid);
+									imgMap.put("J_imgHere_" + upid, true);
+									//imgUpdate = true;
+									//alert('上传成功');
+								} else {
+									alert('上传失败');
+								}
+							}, "json");
+							img = null;
+						}
+
+						//i.src = compress(i,quality).src;
+						//i.style.display = "block";
+					};
+				})(f);
+				reader.readAsDataURL(f);
+			}
+		}
+
+		function doSubmit() {
+			if($.html5Validate.isAllpass($("#formInfo"))) {
+				for(var i = 0; i < imgMap.keys().length; i++) {
+					var sKey = imgMap.keys()[i];
+					if(!imgMap.get(sKey)) {
+						$("#" + sKey).testRemind("请上传文件!", {
+							align: "right"
+						});
+						return;
+					}
+				}
+				//			if (!imgUpdate) {
+				//				$("#mybtn").testRemind("请上传文件!");
+				//			}
+
+				$.post(
+					"/NewViliage/api/form/submit",
+					$("#formInfo").serialize(),
+					function(data, textStatus) {
+						if(textStatus == 'success' && data != null) {
+							if(data.code == 0) {
+								location.href = "/NewViliage/web/info/form_view.html?form_id=" +
+									getUrlParam("form_id");
+								//alert("提交成功!");
+							} else {
+								alert("submit failed：" + data.desc);
+							}
+						}
+					}, "json");
+
+			}
+
+		}
+
+		function formJumpSelBtn() {
+			var mydiv = document.getElementById('sel_btn');
+			mydiv.style.backgroundColor = "#f8f8f8";
+		}
+
+		//验证字符串长度
+		function CheckText(n, lenMinLimit, lenMaxLimit) {
+			if($("#" + n).val().length < lenMinLimit) {
+				alert("字符串长度过短");
+				$("#" + n).val("");
+			}
+			if($("#" + n).val().length > lenMaxLimit) {
+				alert("字符串长度过长");
+				$("#" + n).val("");
+			}
+
+		}
+
+		//验证数字的范围
+		function CheckNum(n, minLimit, maxLimit) {
+			if(isNaN($("#" + n).val())) {
+				alert("请输入数字");
+				$("#" + n).val("");
+			}
+			if($("#" + n).val() < minLimit) {
+				alert("数字太小");
+				$("#" + n).val("");
+			}
+			if($("#" + n).val().length > maxLimit) {
+				alert("数字太大");
+				$("#" + n).val("");
+			}
+
+		}
+
+		function setupWebViewJavascriptBridge(callback) {
+			if(window.WebViewJavascriptBridge) {
+				return callback(WebViewJavascriptBridge);
+			}
+			if(window.WVJBCallbacks) {
+				return window.WVJBCallbacks.push(callback);
+			}
+			window.WVJBCallbacks = [callback];
+			var WVJBIframe = document.createElement('iframe');
+			WVJBIframe.style.display = 'none';
+			WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+			document.documentElement.appendChild(WVJBIframe);
+			setTimeout(function() {
+				document.documentElement.removeChild(WVJBIframe)
+			}, 0)
+		}
+
+		var tmpBridge;
+
+		setupWebViewJavascriptBridge(function(bridge) {
+			tmpBridge = bridge;
+
+		})
+	</script>
+
+</html>

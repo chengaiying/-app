@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>农业部服务窗</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./css/menu.css" rel="stylesheet" type="text/css" />
+<script src="./js/jquery-2.1.4.min.js"></script>
+<script src="./js/buttonStyle.js"></script> 
+<style type="text/css">
+
+</style>
+</head>
+
+<body>
+<div id="SiteHeader">
+<span class="SiteHeaderLeft">
+<img src="img/home.png"><a href="index.html">直报管理平台</a></span>
+
+<span class="SiteHeaderRight">
+<a href="login.html"><img src="img/android-exit.png">退出登陆</a></span>
+</div><!--SiteHeader -->
+
+<div id="SiteMiddle">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr valign="top"><td id="NavMenu">
+<div class="nav_menu">
+<div class="type_name" onClick="navClick(this);">
+<a href="javascript:;"><img src="img/android-person.png">管理员管理</a></div>
+<ul class="nav_menu_sub">
+    <li><a href="building.html" target="main_iframe" >管理员列表</a></li>
+    <li><a href="building.html" target="main_iframe" >机构分组</a></li>
+    <li><a href="building.html" target="main_iframe" >机构成员</a></li>
+</ul>      
+</div>
+
+
+<div class="nav_menu">
+<div class="type_name" onClick="navClick(this);">
+<a href="javascript:;"><img src="img/document-text.png">直报管理</a></div>
+<ul class="nav_menu_sub">
+    <li><a href="building.html" target="main_iframe" >直报表单</a></li>
+    <li><a href="./html_/form_info.html" target="main_iframe" >直报信息</a></li>
+    <li><a href="./html_/form_stat.html" target="main_iframe" >统计报表</a></li>
+</ul>      
+</div>
+
+<div class="nav_menu">
+<div class="type_name" onClick="navClick(this);">
+<a href="javascript:;"><img src="img/card.png">贷款管理</a></div>
+<ul class="nav_menu_sub">
+    <li><a href="building.html" target="main_iframe" >贷款产品</a></li>
+    <li><a href="building.html" target="main_iframe" >贷款信息</a></li>
+    <li><a href="building.html" target="main_iframe" >统计报表</a></li>
+</ul>      
+</div>
+
+<div class="nav_menu">
+<div class="type_name" onClick="navClick(this);">
+<a href="javascript:;"><img src="img/chatbox-working.png">我要培训</a></div>
+<ul class="nav_menu_sub">
+    <li><a href="building.html" target="main_iframe" >留言列表</a></li>
+</ul>      
+</div>
+
+<div class="nav_menu">
+<div class="type_name" onClick="navClick(this);">
+<a href="javascript:;"><img src="img/gear.png">系统管理</a></div>
+<ul class="nav_menu_sub">
+    <li><a href="building.html" target="main_iframe" >系统设置</a></li>
+    <li><a href="building.html" target="main_iframe" >系统日志</a></li>
+</ul>      
+</div>
+<br /><br />
+</td><!--NavMenu -->
+
+<td id="SiteContent">
+‍<iframe src="welcome.html" id="main_iframe" name="main_iframe" width="100%" frameborder="0" scrolling="no" marginwidth="0" marginheight="0"></iframe>
+</td><!--SiteContent -->
+</tr></table><!--SiteMiddle -->
+
+
+
+
+
+<div id="SiteFooter">
+<a>©&nbsp;直报管理平台&nbsp;.&nbsp;版权信息</a>
+</div><!--SiteFooter -->
+
+
+
+</body>
+
+<script type="text/javascript">
+$(document).ready(function(){
+		
+});
+
+function navClick(obj){
+	if($(obj).next('.nav_menu_sub').hasClass('on'))
+	{		
+		$('.nav_menu_sub.on').slideUp();
+		$('.nav_menu_sub.on').removeClass('on');	
+	}
+	else
+	{
+		$('.nav_menu_sub.on').slideUp();
+		$('.nav_menu_sub.on').removeClass('on');		
+		$(obj).next('.nav_menu_sub').slideToggle();
+		$(obj).next('.nav_menu_sub').addClass('on');	
+
+	}
+}
+
+</script>	
+</html>

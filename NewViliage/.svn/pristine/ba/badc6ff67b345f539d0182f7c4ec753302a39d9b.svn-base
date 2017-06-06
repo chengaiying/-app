@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>农业信息采集</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<link href="./info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+</body>
+
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		checkOauth();
+    });
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					GetInfo();
+				} else if (data.code == -2) {
+					location.href="/NewViliage/api/oauth/publicAppAuthorize?ori_url=/info/index.html";
+				}
+			}
+		}, 'json');
+	}
+	
+	//获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	
+	//时间转换
+	function FormatDate(strTime) {
+    	//var date = new Date(strTime);
+		var date = new Date(Date.parse(strTime.replace(/-/g, "/")));
+   		//date = date.getTime();
+    	return date.getFullYear() + "-" + (date.getMonth() + 1 ) + "-" + date.getDate();
+	}
+	
+	//点击DIV跳转，带formid参数
+	function ClickDiv(formId) {
+		location.href="/NewViliage/info/form.html?form_id=" + formId;
+	}
+	
+	function GetInfo() {
+		$.post("/NewViliage/api/form/myReportedInfo", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$(document.body).empty();
+					$.each(data.result, function(n, value) {
+						if (value != null) {
+							var tmphtml;
+							tmphtml = "<div class=\"info_table\" onclick=" + "ClickDiv(" + value.formId + ")" + ">";
+							tmphtml = tmphtml + "<div class=\"info_img\"><center><img src=\"" + "/storage/" + value.icon + "\" width=\"40px\"/></center></div>";
+							tmphtml = tmphtml + "<div class=\"info_title\">";
+							tmphtml = tmphtml + "<span class=\"info_title_txt\">" + value.formName + "</span>";
+							if (value.fitFarmer == 0) {
+								tmphtml = tmphtml + "<div class=\"info_role\">种植户</div><div class=\"info_role\">养殖户</div>";
+							}
+							else if (value.fitFarmer == 1) {
+								tmphtml = tmphtml + "<div class=\"info_role\">种植户</div>";
+							}
+							else if (value.fitFarmer == 2) {
+								tmphtml = tmphtml + "<div class=\"info_role\">养殖户</div>";
+							}
+							tmphtml = tmphtml + "</div>";
+							tmphtml = tmphtml + "<div class=\"info_msg\">" + value.formDesc + "</div>";
+							tmphtml = tmphtml + "<div class=\"info_tips\">";
+							tmphtml = tmphtml + "<span class=\"info_tips_time\">截止 " + FormatDate(value.endDate) + "</span>";
+							if (value.count == 0) {
+								tmphtml = tmphtml + "<div class=\"info_state\">未填写</div></div></div>";
+							}
+							else {
+								tmphtml = tmphtml + "<div class=\"info_state\">已填写</div></div></div>";
+							}
+							$(document.body).append(tmphtml);
+						}
+					});
+					$(document.body).append("<br /><br />");
+				} 
+			}
+		}, 'json');
+	}
+</script>
+
+</html>

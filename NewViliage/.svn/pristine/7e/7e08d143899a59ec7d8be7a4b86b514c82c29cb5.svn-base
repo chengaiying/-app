@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>我要贷款</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/buttonStyle.js"></script>
+</head>
+
+<body>
+
+
+<div class="form_title">
+<span class="form_title_name_blue">填写贷款申请信息</span>
+</div>
+
+<div class="form_group">
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">贷款金额</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_unit">万元</td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">贷款期限</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_unit">月</td>
+</tr></table>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">联系手机</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">工商注册号</td>
+<td class="form_item_input" align="right"><input type="text" placeholder="请填写" size="15" /></td>
+<td class="form_item_no_unit"></td>
+</tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_item"><tr valign="top"><td class="form_item_margin"></td>
+<td class="form_item_name">贷款用途</td>
+<td class="form_item_content" align="right" onclick="checkSel()">请勾选</td></tr></table>
+
+<div id="form_check_group" class="form_check_group">
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">购买农具</td><td align="right" class="form_check_input"><input type="checkbox" name="checkbox2" value="layer1" /></td></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">偿还欠款</td><td align="right" class="form_check_input" ><input type="checkbox" name="checkbox2" value="layer2"/></td></tr></table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="form_check_item">
+<tr valign="top"><td class="form_check_margin"></td>
+<td class="form_check_name">其他</td><td align="right" class="form_check_input"><input type="checkbox" name="checkbox2" value="layer3" /></td></tr></table>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+function checkSel(){
+	 $("#form_check_group").slideToggle(100);
+}
+</script>
+
+
+
+
+
+
+</div>
+<div class="border_top_1px"></div>
+
+
+<div class="form_button1" id="mybtn" onclick="myBtnClick(this,'#0091cb','./result.html')"><div class="form_button_txt1">提交贷款申请</div></div>
+
+
+<br /><br />
+
+
+</body>
+</html>

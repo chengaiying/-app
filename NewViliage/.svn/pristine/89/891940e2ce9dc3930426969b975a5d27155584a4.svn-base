@@ -1,0 +1,157 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>表单预览</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+</body>
+
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/ajaxfileupload.js"></script>
+
+<script src="../js/buttonStyle.js"></script>
+<script src="../js/PublicFunc.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//如果进入到该页面说明已经进行了授权，直接获取信息直报的字段结构
+		checkOauth(); 
+		 
+    });
+	
+	function checkOauth() {
+		$.post("/NewViliage/api/oauth/checkOAuth", function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if(data.code==0)
+				{
+					QueryFormStruct();
+					return;
+				}
+				CheckOauthPublic(data.code,"/web/info/index.html");
+			}
+		}, 'json');
+	}
+	
+	//获得表单中的结构信息
+	function QueryFormStruct() {
+		$.post("/NewViliage/api/form/formDetail?form_id=" + getUrlParam("form_id"), function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					$(document.body).empty();
+					var htmlTest;
+					htmlTest = "<img id=\"bootImg\" src=\"../img/1.jpg\" width=\"100%\" /><div class=\"form_title\"><span class=\"form_title_name\">农业直报表单</span><span class=\"form_help\">填报帮助</span></div>";
+					htmlTest = htmlTest + "<div class=\"form_group\"></div>";
+					htmlTest = htmlTest + "<div class=\"border_top_1px\"></div>";
+					htmlTest = htmlTest + "<div class=\"form_button2\" id=\"sel_btn1\" onclick=\"myBtnClick1(this,'#f8f8f8')\"><div class=\"form_button_txt2\" >返回信息采集</div></div>";
+					htmlTest = htmlTest + "<div class=\"form_button2\" id=\"sel_btn\" onclick=\"myBtnClick(this,'#f8f8f8')\"><div class=\"form_button_txt2\" >再次上报</div></div>";
+					htmlTest = htmlTest + "<br /><br />";
+					$(document.body).append(htmlTest);
+					$(".form_title_name").html(data.result.formName);
+					$("#bootImg").attr("src","/storage/" + data.result.bootImg);
+					
+					$(".form_group").empty();
+					$.each(data.result.formWords, function(n, opt) {
+						if (opt != null) 
+						{
+							if((typeof(opt.group)!=undefined&&opt.group>0) && opt.value==undefined) //过滤未填的“新增一项”
+							{
+							}
+							else
+							{
+								htmlTest = QueryFormStructure(n,opt);
+								$(".form_group").append(htmlTest);
+							}
+						}
+					});
+					$(".form_group").append("<div class=\"form_item_history\"><a href=\"/NewViliage/web/info/form_history.html?form_id="+getUrlParam("form_id")+"\">历史修改</a></div>");
+					
+				}
+				else {
+					alert('表单结构获取失败' + data.desc);
+				}
+			}
+		}, 'json');
+	}
+	
+	function myBtnClick1(){
+		
+		window.location.href="index.html"
+	}
+	
+	function myBtnClick(){
+		var post_id=getUrlParam("form_id");
+		window.location.href="form.html?form_id=" + getUrlParam("form_id")+"&post_id=" + post_id;
+	}
+	
+	//根据不同的类型设置表单中的结构
+	function QueryFormStructure(n,opt) {		
+		var htmlTmp = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"form_item\"><tr valign=\"top\"><td class=\"form_item_margin\"></td>";
+		htmlTmp = htmlTmp + "<td class=\"form_item_name\">"+opt.display+"</td>";
+		
+		if (opt.dataType == 4) {//1:文本 2：数字 3：选项 4:文件 5:日期 6:多选
+			htmlTmp = htmlTmp + "<td class=\"form_item_img_view\" align=\"right\">";
+			if(opt.value != '' && opt.value!=undefined)
+				htmlTmp = htmlTmp + "<img src=\"" + "/storage/"+opt.value+"\" width=\"40px\" /></td>";
+			else
+				htmlTmp = htmlTmp + "<img src=\"../img/nophoto.png\" width=\"40px\" /></td>";	
+		}
+		else if (opt.dataType == 6) { 
+			var checkval = "";
+			var arrValue = eval(opt.value);
+			$.each(arrValue,function(n,valueArray) {
+				checkval = checkval + valueArray + "<br/>";
+			});
+			htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + checkval + "</td>";
+		}
+		else { 
+			if (opt.value == null || opt.value == undefined) {
+				htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + "</td>";
+			}
+			else {
+				htmlTmp = htmlTmp + "<td class=\"form_item_content_view\" align=\"right\">" + opt.value + "</td>";
+			}
+			
+			if (opt.unit == null || opt.unit == undefined) {
+				htmlTmp = htmlTmp + "<td class=\"form_item_no_unit\"></td>";
+			}
+			else {
+				htmlTmp = htmlTmp + "<td class=\"form_item_unit\">" + opt.unit +"</td>";
+			}
+		}
+		htmlTmp = htmlTmp + "</tr></table>";
+		if (opt.div == 1) {
+			htmlTmp = htmlTmp + "<div class=\"form_item_gap\"></div>";
+		}
+		return htmlTmp;
+		 
+	}
+	
+	function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+    
+    var tmpBridge;
+    
+    setupWebViewJavascriptBridge(function(bridge) {
+    	tmpBridge = bridge;
+        
+    })
+
+</script>
+
+</html>

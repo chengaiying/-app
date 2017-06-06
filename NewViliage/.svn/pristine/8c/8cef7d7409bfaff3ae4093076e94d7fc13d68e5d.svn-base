@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>保险详情</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/info.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/qswteckMap.js"></script>
+<script src="../js/buttonStyle.js"></script>
+<style>
+   #loanName{    
+    padding-top: 7px;
+    font-size: 16px;}
+    .loan_product_bank{padding-top:20px}
+</style>
+</head>
+
+<body>
+
+<table cellpadding="0" cellspacing="0" border="0" class="loan_table_noborder" width="100%">
+<tr valign="top"><td></td>
+  <td rowspan="2" class="loan_margin"></td>
+  <td rowspan="2" class="loan_prod_img">
+  <img id="loanImg" src="../img/blank.png" /></td>
+  <td class="loan_right_txt">
+  <div id="loanName" class="loan_name"></div>
+  <div class="loan_prod_score"><img id="starImg" src="../img/star_5.png"/></div>
+  <div class="loan_product_bank">
+  <img id="bankImg" src="../img/blank.png" />
+  <div id="bankName" class="loan_product_bank_name"></div>
+  </div>
+</td></tr>
+<tr valign="bottom"><td></td>
+<td class="loan_prod_price">保障金额：<font id="loanPrice" ></font>&nbsp;</td>
+</tr>
+</table>
+
+<table cellpadding="0" cellspacing="0" border="0" class="loan_product_table" width="100%"><tr valign="top">
+<td class="loan_margin"></td>
+<td id="prodInfo">
+<h1>适用对象：</h1>
+1、	生产经营达到一定规模的家庭农场主、专业大户；
+2、	20周岁（含20周岁）至60周岁（含60周岁）之间，具有完全民事行为能力的自然人；
+3、	具有当地户口或在当地连续居住一年以上；
+4、	必须已婚（含离异、丧偶），家庭成员中有两名（含两名）以上的劳动力；
+
+<h1>产品简介：</h1>
+针对农民专业合作社法人、实际控制人、社员，额度最高可达1000万元，担保方式可为保证、抵质押和组合担保
+<h1>产品额度：</h1>
+额度最高可达50万元
+<h1>产品利率：</h1>
+基准利率上浮10%起
+</td>
+<td class="loan_margin"></td>
+</tr>
+</table>
+
+<div class="form_button1" id="mybtn" onclick="doApply()"><div class="form_button_txt1">申请</div></div>
+<script type = "text/javascript">
+
+	function doApply() {
+		
+		if (prodId == null || prodId == undefined) {
+			alert("获得产品失败,无法提交");
+			return false;
+		}
+		var pid = "id=" + prodId;
+//		var price = "price_unit="+price_unit
+		
+		var jumpUrl = "./sumbit.html?" + pid;
+		
+		var doApply = document.getElementById("mybtn");
+		myBtnClick(doApply,'#0091cb',jumpUrl);
+		
+	}
+
+</script>
+<br /><br />
+
+</body>
+
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	var prodId;
+//	var price_unit;
+	var bankMapArr = JSON.parse(localStorage.getItem("company_info"));
+	var bankMap = new Map();
+	bankMap.elements = bankMapArr;
+	$(document).ready(function() {
+		GetBankList();
+    });
+	
+	//获取URL中的活动id参数
+    function getUrlParam(paraName) {
+        var reg = new RegExp("(^|&)" + paraName + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var retStr = window.location.search.substr(1).match(reg);  //匹配目标参数
+        var ret = unescape(retStr[2]);
+        return ret;
+    }
+	
+	function GetBankList() {
+		$.post("/NewViliage/api/insurer/prodDetail?id=" + getUrlParam("prod_id"), function(data, textStatus) {
+			if (textStatus == 'success' && data != null) {
+				if (data.code==0) {
+					value = data.result;
+					var tmphtml="";
+					if (value != null) {
+						var bank = bankMap.get(value.ins_id);
+						prodId = value.id;
+//						price_unit = value.price_unit;
+						$("#loanName").html(value.ins_name);
+						//$("#starImg").src = "/storage/" + value.prodIcon;
+						$("#loanImg").attr("src","/storage/" + value.ins_icon);
+						$("#bankImg").attr("src","/storage/" + bank.insurer_icon);
+						$("#bankName").html(bank.insurer_name);
+						$("#loanPrice").html(value.claim_amount);
+						//$("#loanRate").html(value.rate);
+						$("#prodInfo").empty();
+						if(value.ins_features == undefined||value.ins_features==null||value.ins_features==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>产品特点</h1><p>"+value.ins_features+"</p>";
+						}						
+						if(value.fitpeople == undefined||value.fitpeople==null||value.fitpeople==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>产品适用人群</h1><p>"+value.fitpeople+"</p>";
+						}						
+						if(value.ins_term == undefined||value.ins_term==null||value.ins_term==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>保险期限</h1><p>"+value.ins_term+"</p>";
+						}						
+						if(value.telphone == undefined||value.telphone==null||value.telphone==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>联系电话</h1><p>"+value.telphone+"</p>";
+						}						
+						if(value.email == undefined||value.email==null||value.email==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>邮箱</h1><p>"+value.email+"</p>";
+						}
+						if(value.link_url == undefined||value.link_url==null||value.link_url==""){
+							tmphtml += "";
+						}else{
+							tmphtml += "<h1>链接地址</h1><p><a href="+value.link_url+">"+value.link_url+"</a></p>";
+						}
+						
+						$("#prodInfo").append(tmphtml);
+						$("#prodInfo").append(value.ins_content);
+					}
+					
+				}
+			}
+		}, 'json');
+	}
+
+</script>
+</html>
